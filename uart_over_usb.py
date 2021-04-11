@@ -34,15 +34,15 @@ class Plotter(ABC):
 
 class MatPlotter(Plotter):
     def __init__(self):
-        num = 20
-        self._x1 = np.zeros(num)
-        self._y1 = np.zeros(num)
-        self._x2 = np.zeros(num)
-        self._y2 = np.zeros(num)
-        self._x3 = np.zeros(num)
-        self._y3 = np.zeros(num)
-        self._x4 = np.zeros(num)
-        self._y4 = np.zeros(num)
+        self.num = 100
+        self._x1 = np.zeros(self.num, dtype=int)
+        self._y1 = np.zeros(self.num)
+        self._x2 = np.zeros(self.num, dtype=int)
+        self._y2 = np.zeros(self.num)
+        self._x3 = np.zeros(self.num, dtype=int)
+        self._y3 = np.zeros(self.num)
+        self._x4 = np.zeros(self.num, dtype=int)
+        self._y4 = np.zeros(self.num)
         self.iter = iter(Numbers())
         #turns on the interactive mode
         plt.ion()
@@ -69,20 +69,21 @@ class MatPlotter(Plotter):
 
     def update(self, Y):
         try:
+            index = next(self.iter)
             self._y1 = np.delete(self._y1, 0)
             self._x1 = np.delete(self._x1, 0)
             self._y1 = np.append(self._y1, Y[0])
-            self._x1 = np.append(self._x1, next(self.iter))
+            self._x1 = np.append(self._x1, index)
 
             self._y2 = np.delete(self._y2, 0)
             self._x2 = np.delete(self._x2, 0)
             self._y2 = np.append(self._y2, Y[1])
-            self._x2 = np.append(self._x2, next(self.iter))
+            self._x2 = np.append(self._x2, index)
 
             self._y3 = np.delete(self._y3, 0)
             self._x3 = np.delete(self._x3, 0)
             self._y3 = np.append(self._y3, Y[2])
-            self._x3 = np.append(self._x3, next(self.iter))
+            self._x3 = np.append(self._x3, index)
 
             self.line1.set_xdata(self._x1)
             self.line1.set_ydata(self._y1)
@@ -91,13 +92,13 @@ class MatPlotter(Plotter):
             self.line3.set_xdata(self._x3)
             self.line3.set_ydata(self._y3)
 
-            dx, dy = ( .5, .5 )
+            dy = .5
             self.ax1.set_ylim([np.min(self._y1)-dy, np.max(self._y1)+dy])
-            self.ax1.set_xlim([np.min(self._x1), np.max(self._x1)])
+            self.ax1.set_xlim([self._x1[0], self._x1[self.num-1]])
             self.ax2.set_ylim([np.min(self._y2)-dy, np.max(self._y2)+dy])
-            self.ax2.set_xlim([np.min(self._x2), np.max(self._x2)])
+            self.ax2.set_xlim([self._x2[0], self._x2[self.num-1]])
             self.ax3.set_ylim([np.min(self._y3)-dy, np.max(self._y3)+dy])
-            self.ax3.set_xlim([np.min(self._x3), np.max(self._x3)])
+            self.ax3.set_xlim([self._x3[0], self._x3[self.num-1]])
 
             self.figure.canvas.draw()
             plt.pause(0.001)
