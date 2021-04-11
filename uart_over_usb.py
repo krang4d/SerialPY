@@ -10,6 +10,7 @@ import io
 import numpy as np
 import matplotlib.pyplot as plt
 
+from abc import ABC, abstractmethod
 from datetime import datetime
 # Create an Iterator for scale X on plot
 class Numbers:
@@ -22,9 +23,18 @@ class Numbers:
         self.a += 1
         return x
 
-class Uart_ploter():
+class Plotter(ABC):
+
+    _figure = None
+    _ax1, _ax2, _ax3 = None, None, None
+
+    @abstractmethod
+    def update(line: str):
+        ...
+
+class MatPlotter(Plotter):
     def __init__(self):
-        num =800
+        num = 20
         self._x1 = np.zeros(num)
         self._y1 = np.zeros(num)
         self._x2 = np.zeros(num)
@@ -83,61 +93,97 @@ class Uart_ploter():
 
             dx, dy = ( .5, .5 )
             self.ax1.set_ylim([np.min(self._y1)-dy, np.max(self._y1)+dy])
-            self.ax1.set_xlim([np.min(self._x1)-dx, np.max(self._x1)+dx])
+            self.ax1.set_xlim([np.min(self._x1), np.max(self._x1)])
             self.ax2.set_ylim([np.min(self._y2)-dy, np.max(self._y2)+dy])
-            self.ax2.set_xlim([np.min(self._x2)-dx, np.max(self._x2)+dx])
+            self.ax2.set_xlim([np.min(self._x2), np.max(self._x2)])
             self.ax3.set_ylim([np.min(self._y3)-dy, np.max(self._y3)+dy])
-            self.ax3.set_xlim([np.min(self._x3)-dx, np.max(self._x3)+dx])
+            self.ax3.set_xlim([np.min(self._x3), np.max(self._x3)])
 
             self.figure.canvas.draw()
+            plt.pause(0.001)
             self.figure.canvas.flush_events()
             #time.sleep(0.1)
         except Exception as e:
             print(e)
             exit()
 
-# Define UART settings
-baudrate = 115200
-timeout = 3
+class DrawPlotter(Plotter):
+
+    def update(self, line):
+        print(line)
+
+class Logger(ABC):
+    @abstractmethod
+    def addLine():
+        ...
+
+class FileLogger(Logger):
+    def addLine(self, data: str):
+        with open("uart.log", 'a') as f:
+            f.write('%s %.3f;%.3f;%.3f\n'%(datetime.now(), data[0], data[1], data[2]))
+
+class UDevice:
+    _port = None
+    #_logger = None
+    def __init__(self, baudrate: int, timeout: int, logger: Logger):
+        UDevice._logger = logger
+        UDevice._port = serial.Serial(port=self._get_device(), baudrate=baudrate, timeout=timeout)
+
+    def __del__(self):
+        print("UDevice.__del__")
+        if UDevice._port is not None:
+            print('close port')
+            UDevice._port.close()
+
+    def _get_device(self):
+        devices = list()
+        pts= prtlst.comports()
+
+        for index, pt in enumerate(pts):
+            #print(pt)
+            if 'USB' or 'ACM'  in pt[1]:
+                devices.append(pt)
+                print('%d. %s %s'%(index, pt[1], pt[0]))
+
+        if len(devices)==0:
+            print('No USB device found.')
+            exit()
+
+        elif len(devices)==1:
+            x=0
+        elif len(devices)>1:
+            x=int(input('Input the device number: '))
+
+        return devices[x][0]
+
+    def readline(self) ->str:
+        data = UDevice._port.readline()
+        if data == b'': print('timeout %.1fs'%timeout)
+        line = [ float(x) for x in data.decode('utf-8')[:-2].split(';') ]
+        self._logger.addLine(line)
+        return line
 
 if __name__ == "__main__":
 
-    devices = list()
-    pts= prtlst.comports()
-    i=0
-    for pt in pts:
-        #print(pt)
-        if 'USB'or 'ACM'  in pt[1]:
-            devices.append(pt)
-            print('%d. %s %s'%(i, pt[1], pt[0]))
-            i+=1
+    # Define UART settings
+    baudrate = 9200
+    timeout = 3
+    chp = MatPlotter()
 
-    if len(devices)==0:
-            print('No USB device found.')
-            exit()
-    elif len(devices)==1:
-            x=0
-    elif len(devices)>1:
-        x=int(input('Input the device number: '))
+    device = UDevice(baudrate, timeout, FileLogger())
+    while(True):
+        line = device.readline()
+        print(line)
+        chp.update(line)
+    del device
 
-    uplot = Uart_ploter()
 
-    try:
-        with serial.Serial(port=devices[x][0], baudrate=baudrate, timeout=timeout) as port:
-            while port.is_open:
-                read_data = port.readline()
-                if read_data == b'': print('timeout %.1fs'%timeout)
-                data = [ float(x) for x in read_data.decode('utf-8')[:-2].split(';') ]
-                uplot.update(data)
-                with open("uart.log", 'a') as f:
-                    f.write('%s %.3f;%.3f;%.3f\n'%(datetime.now(), data[0], data[1], data[2]))
+    # except serial.SerialException as e:
+    #     print('error open serial port: ' + str(e))
+    #     exit()
 
-    except serial.SerialException as e:
-        print('error open serial port: ' + str(e))
-        exit()
+    # except serial.SerialTimeoutException:
+    #     print('Timeout Exception')
 
-    except serial.SerialTimeoutException:
-        print('Timeout Exception')
-
-    finally:
-        port.close()
+    # finally:
+    #     port.close()
