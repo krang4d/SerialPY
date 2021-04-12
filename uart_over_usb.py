@@ -10,7 +10,7 @@ import io
 import numpy as np
 import matplotlib.pyplot as plt
 
-from abc import ABC, abstractmethod
+from abc import ABCMeta, abstractmethod
 from datetime import datetime
 # Create an Iterator for scale X on plot
 class Numbers:
@@ -23,7 +23,7 @@ class Numbers:
         self.a += 1
         return x
 
-class Plotter(ABC):
+class Plotter(metaclass=ABCMeta):
 
     _figure = None
     _ax1, _ax2, _ax3 = None, None, None
@@ -113,27 +113,26 @@ class DrawPlotter(Plotter):
     def update(self, line):
         print(line)
 
-class Logger(ABC):
+class _LoggerCallback(metaclass=ABCMeta):
     @abstractmethod
-    def addLine():
+    def __call__():
         ...
 
-class FileLogger(Logger):
-    def addLine(self, data: str):
+class _FileLoggerCallback(_LoggerCallback):
+    def __call__(self, data: str):
         with open("uart.log", 'a') as f:
             f.write('%s %.3f;%.3f;%.3f\n'%(datetime.now(), data[0], data[1], data[2]))
 
 class UDevice:
     _port = None
     #_logger = None
-    def __init__(self, baudrate: int, timeout: int, logger: Logger):
+    def __init__(self, baudrate: int, timeout: int, logger : _LoggerCallback):
         UDevice._logger = logger
         UDevice._port = serial.Serial(port=self._get_device(), baudrate=baudrate, timeout=timeout)
 
     def __del__(self):
-        print("UDevice.__del__")
         if UDevice._port is not None:
-            print('close port')
+            print('Close port')
             UDevice._port.close()
 
     def _get_device(self):
@@ -159,9 +158,11 @@ class UDevice:
 
     def readline(self) ->str:
         data = UDevice._port.readline()
-        if data == b'': print('timeout %.1fs'%timeout)
+        if data == b'': 
+            print('Device did not respond, timeout %.1fs'%timeout)
+            exit()
         line = [ float(x) for x in data.decode('utf-8')[:-2].split(';') ]
-        self._logger.addLine(line)
+        self._logger(line)
         return line
 
 if __name__ == "__main__":
@@ -171,7 +172,7 @@ if __name__ == "__main__":
     timeout = 3
     chp = MatPlotter()
 
-    device = UDevice(baudrate, timeout, FileLogger())
+    device = UDevice(baudrate, timeout, _FileLoggerCallback())
     while(True):
         line = device.readline()
         print(line)
