@@ -1,5 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# Serial Port Reader by Pavel Golovkin, aka pgg (14.04.2021).
+# Feel free to use. No warranty
+'''
+Установка и запуск
+1) Установите Python3 (https://www.python.org/downloads/)
+2) Далее установите небходимые пакеты командой: python -m pip install numpy matplotlib pyserial
+3) Запустите программу командой: python uart_over_usb.py
+'''
 import signal
 signal.signal(signal.SIGINT, signal.SIG_DFL)
 
