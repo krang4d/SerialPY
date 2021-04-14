@@ -59,7 +59,7 @@ class MatPlotter(Plotter):
 
         self._figure, (self._ax1, self._ax2 ) = plt.subplots( 1, 2, figsize=(8,4) )
 
-        self._figure.canvas.set_window_title("Dynamic serial port")
+        #self._figure.canvas.set_window_title("Dynamic serial port")
         self._figure.suptitle(title,fontsize=14)
 
         self._figure.canvas.mpl_connect('close_event', self._on_close)
