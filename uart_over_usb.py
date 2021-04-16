@@ -28,25 +28,20 @@ from PyQt5.QtWidgets import QWidget
 from abc import ABCMeta, abstractmethod
 from datetime import datetime
 
-class _LoggerCallback(metaclass=ABCMeta):
-    @abstractmethod
-    def __call__():
-        ...
-
-class _FileLoggerCallback(_LoggerCallback):
+def _FileLogger(func):
     _file_name = "uart.log" # имя лог файла
-
-    def __call__(self, data: str):
-        with open(self._file_name, 'a') as f:
-            f.write('%s %.3f;%.3f;%.3f\n'%(datetime.now(), data[0], data[1], data[2]))
+    def wrapper(*args, **kwargs):
+        data = func(*args, **kwargs)
+        with open(_file_name, 'a') as f:
+            f.write('%s %s\n'%(datetime.now(), ' '.join(map(str,data))))
+        return data
+    return wrapper
 
 class UDevice:
     _port = None
-    _logger = None
     _name = None
 
-    def __init__(self, baudrate: int, timeout: int, logger : _LoggerCallback):
-        UDevice._logger = logger
+    def __init__(self, baudrate: int, timeout: int):
         try:
             UDevice._port = serial.Serial(port=self._get_device(), baudrate=baudrate, timeout=timeout)
         except Exception as e:
@@ -80,20 +75,20 @@ class UDevice:
         self._name = devices[x][0]
         return self._name
 
+    @_FileLogger
     def readline(self) ->str:
         data = UDevice._port.readline()
         if data == b'': 
             print('Device did not respond, timeout %.1fs'%timeout)
             exit()
         line = [ float(x) for x in data.decode('utf-8')[:-2].split(';') ]
-        self._logger(line)
         return line
 
 # Объект, который будет перенесён в другой поток для выполнения кода
 class DeviceHandler(QObject):
     #running = False
     newTextAndColor = pyqtSignal(list)
-    device = UDevice(baudrate=9200, timeout=3, logger=_FileLoggerCallback())
+    device = UDevice(baudrate=9200, timeout=3)
 
     # метод, который будет выполнять алгоритм в другом потоке
     def run(self):
