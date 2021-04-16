@@ -33,7 +33,7 @@ def _FileLogger(func):
     def wrapper(*args, **kwargs):
         data = func(*args, **kwargs)
         with open(_file_name, 'a') as f:
-            f.write('%s %s\n'%(datetime.now(), ' '.join(map(str,data))))
+            f.write('%s;%s\n'%(datetime.now(), ';'.join(map(str,data))))
         return data
     return wrapper
 
@@ -81,7 +81,7 @@ class UDevice:
         if data == b'': 
             print('Device did not respond, timeout %.1fs'%timeout)
             exit()
-        line = [ float(x) for x in data.decode('utf-8')[:-2].split(';') ]
+        line = [ int(x) for x in data.decode('utf-8')[:-2].split(';') ]
         return line
 
 # Объект, который будет перенесён в другой поток для выполнения кода
