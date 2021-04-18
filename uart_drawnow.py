@@ -119,9 +119,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         # plot data: x, y values
         pen = pg.mkPen(color=(0, 0, 0), width=2, style=QtCore.Qt.SolidLine)
-        self.graphWidget1.plot(hour, temperature1, name="Sensor1", symbolBrush='r', pen=pen)
-        self.graphWidget2.plot(hour, temperature2, name="Sensor3", symbolBrush='b', pen=pen)
-        self.graphWidget2.plot(hour, temperature3, name="Sensor4", symbolBrush='y', pen=pen)
+        self.data_line1 = self.graphWidget1.plot(hour, temperature1, name="Sensor1", symbolBrush='r', pen=pen)
+        self.data_line2 = self.graphWidget2.plot(hour, temperature2, name="Sensor3", symbolBrush='b', pen=pen)
+        self.data_line3 = self.graphWidget2.plot(hour, temperature3, name="Sensor4", symbolBrush='y', pen=pen)
 
         self.initUI()
 
@@ -141,6 +141,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def set_dev(self, devs):
         for dev in devs:
             self.serial_comboBox.addItem(dev)
+
+    def update_plot_data(self, data):
+        print(data)
+        self.x = self.x[1:]  # Remove the first y element.
+        self.x.append(self.x[-1] + 1)  # Add a new value 1 higher than the last.
+
+        self.y = self.y[1:]  # Remove the first 
+        self.y.append( data[4])  # Add a new random value.
+
+        self.data_line1.setData(self.x, self.y)  # Update the data.
 
 def main():
     app = QtWidgets.QApplication(sys.argv)
