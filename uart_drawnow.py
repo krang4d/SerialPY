@@ -6,11 +6,24 @@ from pyqtgraph import PlotWidget, plot
 import pyqtgraph as pg
 import sys  # We need sys so that we can pass argv to QApplication
 import os
+from datetime import datetime
+import numpy as np
 import serial
 import serial.tools.list_ports as prtlst
 from abc import ABCMeta, abstractmethod
 from ui.MainWindow import Ui_MainWindow
 from ui.AboutForm import Ui_AboutForm
+
+# Create an Iterator for scale X on plot
+class NumbersIterator:
+    def __iter__(self):
+        self.a = 1
+        return self
+
+    def __next__(self):
+        x = self.a
+        self.a += 1
+        return x
 
 def _FileLogger(func):
     _file_name = "uart.log" # имя лог файла
@@ -23,31 +36,43 @@ def _FileLogger(func):
 
 class IDevice(metaclass=ABCMeta):
     @abstractmethod
-    def open():
+    def open() -> None:
         ...
     @abstractmethod
-    def get_devs():
+    def close() -> None:
+        ...
+    @abstractmethod
+    def get_devs() -> list:
+        ...
+    @abstractmethod
+    def readline() -> str:
         ...
 
 class UDevice(IDevice):
+    _dev = None
     _port = None
-    _name = None
 
     def __init__(self):
         ...
-
     def __del__(self):
-        if UDevice._port is not None:
-            print('Closed Port!')
-            UDevice._port.close()
+        self.close()
 
     def open(self, dev: str, baudrate: int, timeout: int):
         try:
-            UDevice._port = serial.Serial(port=dev, baudrate=baudrate, timeout=timeout)
+            if self._dev is None:
+                UDevice._port = serial.Serial(port=dev, baudrate=baudrate, timeout=timeout)
+                print('Open Port '+ dev)
+                self._dev = dev
+            else: print('The Port '+ dev + ' has been open')
         except Exception as e:
-           print(e.strerror)
-           exit()
+            print(e)
+            exit()
 
+    def close(self):
+        if UDevice._port is not None:
+            print('Closed Port '+ self._dev)
+            UDevice._port.close()
+            self._dev = None
 
     def get_devs(self):
         devices = list()
@@ -73,17 +98,26 @@ class UDevice(IDevice):
             exit()
         line = [ int(x) for x in data.decode('utf-8')[:-2].split(';') ]
         return line
+
 class AboutForm(QtWidgets.QDialog, Ui_AboutForm):
     def __init__(self, *args, obj=None, **kwargs):
         super(AboutForm, self).__init__(*args, **kwargs)
         self.setupUi(self)
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
+    _num = 100
+
     def __init__(self, *args, obj=None, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
         self.setupUi(self)
 
         self.aboutForm = AboutForm()
+
+        self._iter = iter(NumbersIterator())
+        self._y1 = np.zeros(self._num)
+        self._y2 = np.zeros(self._num)
+        self._y3 = np.zeros(self._num)
+        self._x = np.zeros(self._num, dtype=int)
 
         self.graphWidget1 = pg.PlotWidget()
         self.graphWidget2 = pg.PlotWidget()
@@ -97,11 +131,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         graphsLayout.addWidget(self.graphWidget2)
 
         self.widget.setLayout(graphsLayout)
-
-        hour = [1,2,3,4,5,6,7,8,9,10]
-        temperature1 = [30,32,34,32,33,31,29,32,35,45]
-        temperature2 = [30,32,34,32,33,31,29,32,35,45]
-        temperature3 = [1,1,1,1,2,2,2,3,3,3]
 
         #Add legend
         self.graphWidget1.addLegend()
@@ -119,15 +148,17 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         # plot data: x, y values
         pen = pg.mkPen(color=(0, 0, 0), width=2, style=QtCore.Qt.SolidLine)
-        self.data_line1 = self.graphWidget1.plot(hour, temperature1, name="Sensor1", symbolBrush='r', pen=pen)
-        self.data_line2 = self.graphWidget2.plot(hour, temperature2, name="Sensor3", symbolBrush='b', pen=pen)
-        self.data_line3 = self.graphWidget2.plot(hour, temperature3, name="Sensor4", symbolBrush='y', pen=pen)
+        self.data_line1 = self.graphWidget1.plot(self._x, self._y1, name="Sensor1", symbolBrush='r', pen=pen)
+        self.data_line2 = self.graphWidget2.plot(self._x, self._y2, name="Sensor3", symbolBrush='b', pen=pen)
+        self.data_line3 = self.graphWidget2.plot(self._x, self._y3, name="Sensor4", symbolBrush='y', pen=pen)
 
         self.initUI()
 
     def initUI(self):
         # self.buttonBox.button(QtWidgets.QDialogButtonBox.Ok).clicked.connect(self._presed_ok)
         # self.buttonBox.button(QtWidgets.QDialogButtonBox.Reset).clicked.connect(dev.set_dev)
+        #self.open_pushButton.clicked.connect(lambda: self.statusbar.showMessage('open_pushButton'))
+        self.close_pushButton.clicked.connect(lambda: self.statusbar.showMessage('close_pushButton'))
         self.actionAbout.triggered.connect(self.aboutForm.show)
         pass
 
@@ -143,20 +174,36 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.serial_comboBox.addItem(dev)
 
     def update_plot_data(self, data):
+        data[2] = data[2]/16
         print(data)
-        self.x = self.x[1:]  # Remove the first y element.
-        self.x.append(self.x[-1] + 1)  # Add a new value 1 higher than the last.
+        self._x = self._x[1:]  # Remove the first y element.
+        self._x.append(self._x[-1] + 1)  # Add a new value 1 higher than the last.
 
-        self.y = self.y[1:]  # Remove the first 
-        self.y.append( data[4])  # Add a new random value.
+        self._y1 = self._y1[1:]  # Remove the first 
+        self._y1.append( data[0])  # Add a new value.
 
-        self.data_line1.setData(self.x, self.y)  # Update the data.
+        self._y2 = self._y2[1:]  # Remove the first 
+        self._y2.append( data[2])  # Add a new value.
+
+        self._y3 = self._y3[1:]  # Remove the first 
+        self._y3.append( data[3])  # Add a new value.
+
+        self.data_line1.setData(self._x, self._y1)  # Update the data.
+        self.data_line2.setData(self._x, self._y2)  # Update the data.
+        self.data_line3.setData(self._x, self._y3)  # Update the data.
 
 def main():
     app = QtWidgets.QApplication(sys.argv)
     window = MainWindow()
     device = UDevice()
     window.set_dev(device.get_devs())
+
+    window.open_pushButton.clicked.connect(
+        lambda: { device.open(window.serial_comboBox.currentText(), int(window.baudrate_comboBox.currentText()), 3), print(device.readline()) } )
+        # lambda: window.statusbar.showMessage(
+        # window.baudrate_comboBox.currentText() + window.serial_comboBox.currentText()))
+    window.close_pushButton.clicked.connect(lambda: device.close())
+
     print(device.get_devs())
     window.show()
     sys.exit(app.exec_())
