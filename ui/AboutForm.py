@@ -15,7 +15,7 @@ class Ui_AboutForm(object):
     def setupUi(self, AboutForm):
         AboutForm.setObjectName("AboutForm")
         AboutForm.setWindowModality(QtCore.Qt.ApplicationModal)
-        AboutForm.resize(521, 131)
+        AboutForm.resize(479, 131)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -41,7 +41,7 @@ class Ui_AboutForm(object):
     def retranslateUi(self, AboutForm):
         _translate = QtCore.QCoreApplication.translate
         AboutForm.setWindowTitle(_translate("AboutForm", "About"))
-        self.label.setText(_translate("AboutForm", "The Serial Port Reader programm by Pavel Golovkin, aka pgg.\n"
-"Feel free to use. No warranty\n"
-"Version 1.1.1"))
+        self.label.setText(_translate("AboutForm", "The Serial Port Reader program by Pavel Golovkin (jzi@inbox.ru).\n"
+"Feel free to use. No warranty.\n"
+"Version 1.1.3"))
         self.pushButton.setText(_translate("AboutForm", "Ok"))

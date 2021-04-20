@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>521</width>
+    <width>479</width>
     <height>131</height>
    </rect>
   </property>
@@ -28,9 +28,9 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>The Serial Port Reader programm by Pavel Golovkin, aka pgg.
-Feel free to use. No warranty
-Version 1.1.1</string>
+        <string>The Serial Port Reader program by Pavel Golovkin (jzi@inbox.ru).
+Feel free to use. No warranty.
+Version 1.1.3</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>

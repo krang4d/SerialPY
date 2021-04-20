@@ -11,8 +11,22 @@ import numpy as np
 import serial
 import serial.tools.list_ports as prtlst
 from abc import ABCMeta, abstractmethod
+
 from ui.MainWindow import Ui_MainWindow
 from ui.AboutForm import Ui_AboutForm
+# Create an Iterator for scale X on plot
+class NumbersIterator:
+    def __iter__(self):
+        self.a = 1
+        return self
+
+    def reset(self):
+        self.a = 1
+
+    def __next__(self):
+        x = self.a
+        self.a += 1
+        return x
 
 def _FileLogger(func):
     _file_name = "uart.log" # имя лог файла
@@ -80,7 +94,6 @@ class UDevice(QtCore.QThread):
             print(e)
             UDevice._dev = None
             line = ['error']
-            #return line
         return line
 
     def run(self):
@@ -104,21 +117,23 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self, *args, obj=None, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
         self.setupUi(self)
-
+        self._index = iter(NumbersIterator())
         self.aboutForm = AboutForm()
 
-        #self._iter = iter(NumbersIterator())
-        ll = [ 0 for _ in range(self._num) ]
-        self._y1 = ll #np.zeros(self._num)
-        self._y2 = ll #np.zeros(self._num)
-        self._y3 = ll #np.zeros(self._num)
-        self._x  = ll  #np.zeros(self._num, dtype=int)
+        self._y1 = list()
+        self._y2 = list()
+        self._y3 = list()
+        self._x  = list()
 
         self.graphWidget1 = pg.PlotWidget()
         self.graphWidget2 = pg.PlotWidget()
 
         self.graphWidget1.setBackground((100,50,255,0))
         self.graphWidget2.setBackground((100,50,255,0))
+
+        styles = {'color':'b', 'font-size':'14px'}
+        self.graphWidget1.setLabel('left', 'RPM', **styles)
+        self.graphWidget2.setLabel('left', 'ADC, T (C)', **styles)
 
         # Create a QHBoxLayout instance
         graphsLayout = QtWidgets.QVBoxLayout()
@@ -141,18 +156,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         # self.graphWidget1.setYRange(20, 55, padding=0)
         # self.graphWidget2.setYRange(20, 55, padding=0)
 
-        # plot data: x, y values
-        pen = pg.mkPen(color=(0, 0, 0), width=2, style=QtCore.Qt.SolidLine)
-        self._line1 = self.graphWidget1.plot(self._x, self._y1, name="Sensor1", symbolBrush='g', pen=pen)
-        self._line2 = self.graphWidget2.plot(self._x, self._y2, name="Sensor3/16", symbolBrush='b', pen=pen)
-        self._line3 = self.graphWidget2.plot(self._x, self._y3, name="Sensor4", symbolBrush='y', pen=pen)
+        #Plot data: x, y values
+        pen = pg.mkPen(color=(0, 180, 0), width=2, style=QtCore.Qt.SolidLine)
+        self._line1 = self.graphWidget1.plot(self._x, self._y1, name='RPM', symbolBrush=(0, 180, 0), symbolSize=6, pen=pen)
+        pen = pg.mkPen(color='b', width=2, style=QtCore.Qt.SolidLine)
+        self._line2 = self.graphWidget2.plot(self._x, self._y2, name='T(C)/16', symbolBrush='b', symbolSize=6, pen=pen)
+        pen = pg.mkPen(color=(196, 160, 0), width=2, style=QtCore.Qt.SolidLine)
+        self._line3 = self.graphWidget2.plot(self._x, self._y3, name='ADC', symbolBrush=(196, 160, 0), symbolSize=6, pen=pen)
 
         self.initUI()
 
     def initUI(self):
         # self.buttonBox.button(QtWidgets.QDialogButtonBox.Ok).clicked.connect(self._presed_ok)
-        # self.buttonBox.button(QtWidgets.QDialogButtonBox.Reset).clicked.connect(dev.set_dev)
-        #self.open_pushButton.clicked.connect(lambda: self.statusbar.showMessage('open_pushButton'))
+        #self.openButton.clicked.connect(lambda: self.statusbar.showMessage('open_pushButton'))
         self.actionAbout.triggered.connect(self.aboutForm.show)
 
     def set_dev(self, devs):
@@ -161,47 +177,43 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.serialCBox.addItem(dev)
             self.statusbar.showMessage('update')
 
-    def update_plot_data(self, data):
-        if data[0] == 'timeout':
+    def update_plot_data(self, data=None):
+        if data is None:
+            self._line1.setData(self._x, self._y1)  # Update the data.
+            self._line2.setData(self._x, self._y2)  # Update the data.
+            self._line3.setData(self._x, self._y3)  # Update the data.
+        elif data[0] == 'timeout':
             self.statusbar.showMessage('timeout')
-        if data[0] == 'error':
+        elif data[0] == 'error':
             self.statusbar.showMessage('error')
         else:
-            self.statusbar.showMessage('read')
-            self.label_1.setText(str(data[0]))
-            self.label_2.setText(str(data[1]))
-            self.label_3.setText(str(data[2]))
-            self.label_4.setText(str(data[3]))
-            self.label_5.setText(str(data[4]))
-            self.label_6.setText(str(data[5]))
+            self.statusbar.showMessage(str(data))
+            if len(self._x) >= self._num:
+                self._x = self._x[1:]       # Remove the first
+                self._y1 = self._y1[1:]     # Remove the first
+                self._y2 = self._y2[1:]     # Remove the first
+                self._y3 = self._y3[1:]     # Remove the first
 
             data[2] = data[2]/16
-            self._x = self._x[1:]  # Remove the first y element.
-            self._x.append(self._x[-1] + 1)  # Add a new value 1 higher than the last.
-
-            self._y1 = self._y1[1:]  # Remove the first 
-            self._y1.append( data[0])  # Add a new value.
-
-            self._y2 = self._y2[1:]  # Remove the first 
-            self._y2.append( data[2])  # Add a new value.
-
-            self._y3 = self._y3[1:]  # Remove the first 
-            self._y3.append( data[3])  # Add a new value.
+            self._x.append(next(self._index)) #self._x[-1] + 1)   # Add a new value 1 higher than the last.
+            self._y1.append( data[0])   # Add a new value.
+            self._y2.append( data[2])   # Add a new value.
+            self._y3.append( data[3])   # Add a new value.
 
             self._line1.setData(self._x, self._y1)  # Update the data.
             self._line2.setData(self._x, self._y2)  # Update the data.
             self._line3.setData(self._x, self._y3)  # Update the data.
-
 
 def main():
     app = QtWidgets.QApplication(sys.argv)
     window = MainWindow()
     window.set_dev(UDevice.get_devs())
 
-    #window.openButton.clicked.connect( lambda: { device.open(window.serial_comboBox.currentText(), int(window.baudrate_comboBox.currentText()), 3), print(device.readline()) } )
+    # window.openButton.clicked.connect( lambda: { device.open(window.serial_comboBox.currentText(), int(window.baudrate_comboBox.currentText()), 3), print(device.readline()) } )
         # lambda: window.statusbar.showMessage(
         # window.baudrate_comboBox.currentText() + window.serial_comboBox.currentText()))
-    #window.closeButton.clicked.connect(lambda: device.close())
+    # window.closeButton.clicked.connect(lambda: device.close())
+
     thread = UDevice()
     thread.newData.connect(window.update_plot_data)
 
@@ -214,6 +226,16 @@ def main():
     window.updateButton.clicked.connect(lambda: {
         window.set_dev(UDevice.get_devs())
         })
+
+    window.cleanButton.clicked.connect(lambda: {
+        window._index.reset(),
+        window._x.clear(),
+        window._y1.clear(),
+        window._y2.clear(),
+        window._y3 .clear(),
+        window.update_plot_data()
+        })
+
     thread.start()
     window.show()
     sys.exit(app.exec_())

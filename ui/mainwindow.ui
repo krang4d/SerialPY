@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>640</height>
+    <height>814</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -28,24 +28,11 @@
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <layout class="QHBoxLayout" name="serialHLayout">
-         <item>
-          <widget class="QLabel" name="serialLabel">
-           <property name="text">
-            <string>Serial Port</string>
-           </property>
-           <property name="margin">
-            <number>10</number>
-           </property>
-           <property name="buddy">
-            <cstring>serialCBox</cstring>
-           </property>
-          </widget>
-         </item>
-         <item>
+        <layout class="QGridLayout" name="gridLayout">
+         <item row="0" column="1">
           <widget class="QComboBox" name="serialCBox"/>
          </item>
-         <item>
+         <item row="0" column="2">
           <widget class="QLabel" name="baudrateLabel">
            <property name="text">
             <string>BaudRate (bps)</string>
@@ -58,7 +45,21 @@
            </property>
           </widget>
          </item>
-         <item>
+         <item row="0" column="8">
+          <widget class="QPushButton" name="cleanButton">
+           <property name="text">
+            <string>Clean</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1" colspan="6">
+          <widget class="QSlider" name="bufferSlider">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="3">
           <widget class="QComboBox" name="baudrateCBox">
            <item>
             <property name="text">
@@ -87,7 +88,24 @@
            </item>
           </widget>
          </item>
-         <item>
+         <item row="0" column="5">
+          <widget class="QPushButton" name="openButton">
+           <property name="text">
+            <string>Open</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="bufferlabel">
+           <property name="text">
+            <string>Buffer</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="4">
           <spacer name="horizontalSpacer">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
@@ -100,139 +118,40 @@
            </property>
           </spacer>
          </item>
-         <item>
+         <item row="0" column="6">
           <widget class="QPushButton" name="updateButton">
            <property name="text">
-            <string>update</string>
+            <string>Update</string>
            </property>
           </widget>
          </item>
-         <item>
-          <widget class="QPushButton" name="openButton">
-           <property name="text">
-            <string>Open</string>
-           </property>
-          </widget>
-         </item>
-         <item>
+         <item row="0" column="7">
           <widget class="QPushButton" name="closeButton">
            <property name="text">
             <string>Close</string>
            </property>
           </widget>
          </item>
-        </layout>
-       </item>
-      </layout>
-     </widget>
-    </item>
-    <item>
-     <widget class="QGroupBox" name="sensorsGBox">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="title">
-       <string/>
-      </property>
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <item>
-        <layout class="QGridLayout" name="gridLayout">
-         <item row="0" column="3">
-          <widget class="QLabel" name="label_4">
-           <property name="styleSheet">
-            <string notr="true">color: rgb(196, 160, 0);</string>
-           </property>
-           <property name="frameShape">
-            <enum>QFrame::Box</enum>
-           </property>
-           <property name="text">
-            <string>Sensor 4</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="4">
-          <widget class="QLabel" name="label_5">
-           <property name="styleSheet">
-            <string notr="true">color: brown;</string>
-           </property>
-           <property name="frameShape">
-            <enum>QFrame::Box</enum>
-           </property>
-           <property name="text">
-            <string>Sensor 5</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-          </widget>
-         </item>
          <item row="0" column="0">
-          <widget class="QLabel" name="label_1">
-           <property name="styleSheet">
-            <string notr="true">color: green;</string>
-           </property>
-           <property name="frameShape">
-            <enum>QFrame::Box</enum>
-           </property>
+          <widget class="QLabel" name="serialLabel">
            <property name="text">
-            <string>Sensor 1</string>
+            <string>Serial Port</string>
            </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
+           <property name="margin">
+            <number>10</number>
+           </property>
+           <property name="buddy">
+            <cstring>serialCBox</cstring>
            </property>
           </widget>
          </item>
-         <item row="0" column="2">
-          <widget class="QLabel" name="label_3">
-           <property name="styleSheet">
-            <string notr="true">color: blue;</string>
+         <item row="1" column="7" colspan="2">
+          <widget class="QSpinBox" name="spinBox">
+           <property name="enabled">
+            <bool>false</bool>
            </property>
-           <property name="frameShape">
-            <enum>QFrame::Box</enum>
-           </property>
-           <property name="text">
-            <string>Sensor 3</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QLabel" name="label_2">
-           <property name="styleSheet">
-            <string notr="true">color: orange;</string>
-           </property>
-           <property name="frameShape">
-            <enum>QFrame::Box</enum>
-           </property>
-           <property name="text">
-            <string>Sensor 2</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="5">
-          <widget class="QLabel" name="label_6">
-           <property name="styleSheet">
-            <string notr="true">color: violet;</string>
-           </property>
-           <property name="frameShape">
-            <enum>QFrame::Box</enum>
-           </property>
-           <property name="text">
-            <string>Sensor 6</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
+           <property name="readOnly">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -310,6 +229,22 @@
     <hint type="destinationlabel">
      <x>772</x>
      <y>468</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>bufferSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBox</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>362</x>
+     <y>119</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>694</x>
+     <y>119</y>
     </hint>
    </hints>
   </connection>
