@@ -1,1 +1,2 @@
-# SerialPY
+# Serial Port Reader 
+Linuix, Windows

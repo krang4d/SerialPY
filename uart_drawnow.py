@@ -1,20 +1,212 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from PyQt5 import QtWidgets, QtCore, uic
-from pyqtgraph import PlotWidget, plot
-import pyqtgraph as pg
-import sys  # We need sys so that we can pass argv to QApplication
-import os
-from datetime import datetime
-import numpy as np
-import serial
-import serial.tools.list_ports as prtlst
-from abc import ABCMeta, abstractmethod
+'''
+Установка и запуск
+1) Установите Python3 (https://www.python.org/downloads/)
+2) Далее установите небходимые пакеты командой: python -m pip install pyserial PyQt5
+3) Запустите программу командой: python uart_over_usb.py
+'''
 
-from ui.MainWindow import Ui_MainWindow
-from ui.AboutForm import Ui_AboutForm
-# Create an Iterator for scale X on plot
+import sys, os
+from datetime import datetime
+from PyQt5 import QtCore, QtGui, QtWidgets, uic
+import pyqtgraph
+import serial
+import serial.tools.list_ports
+
+class Ui_AboutForm(object):
+    def setupUi(self, AboutForm):
+        AboutForm.setObjectName("AboutForm")
+        AboutForm.setWindowModality(QtCore.Qt.ApplicationModal)
+        AboutForm.resize(479, 131)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(AboutForm.sizePolicy().hasHeightForWidth())
+        AboutForm.setSizePolicy(sizePolicy)
+        self.main_verticalLayout = QtWidgets.QVBoxLayout(AboutForm)
+        self.main_verticalLayout.setObjectName("main_verticalLayout")
+        self.verticalLayout = QtWidgets.QVBoxLayout()
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.label = QtWidgets.QLabel(AboutForm)
+        self.label.setAlignment(QtCore.Qt.AlignCenter)
+        self.label.setObjectName("label")
+        self.verticalLayout.addWidget(self.label)
+        self.pushButton = QtWidgets.QPushButton(AboutForm)
+        self.pushButton.setObjectName("pushButton")
+        self.verticalLayout.addWidget(self.pushButton)
+        self.main_verticalLayout.addLayout(self.verticalLayout)
+
+        self.retranslateUi(AboutForm)
+        self.pushButton.clicked.connect(AboutForm.close)
+        QtCore.QMetaObject.connectSlotsByName(AboutForm)
+
+    def retranslateUi(self, AboutForm):
+        _translate = QtCore.QCoreApplication.translate
+        AboutForm.setWindowTitle(_translate("AboutForm", "About"))
+        self.label.setText(_translate("AboutForm", "The Serial Port Reader program by Pavel Golovkin (jzi@inbox.ru).\n"
+"Feel free to use. No warranty.\n"
+"Version 1.1.10"))
+        self.pushButton.setText(_translate("AboutForm", "Ok"))
+
+class Ui_MainWindow(object):
+    def setupUi(self, MainWindow):
+        MainWindow.setObjectName("MainWindow")
+        MainWindow.resize(842, 854)
+        MainWindow.setWindowTitle("Serial Port Reader")
+        self.centralwidget = QtWidgets.QWidget(MainWindow)
+        self.centralwidget.setObjectName("centralwidget")
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.centralwidget)
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.settingsGBox = QtWidgets.QGroupBox(self.centralwidget)
+        self.settingsGBox.setEnabled(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.settingsGBox.sizePolicy().hasHeightForWidth())
+        self.settingsGBox.setSizePolicy(sizePolicy)
+        self.settingsGBox.setObjectName("settingsGBox")
+        self.verticalLayout = QtWidgets.QVBoxLayout(self.settingsGBox)
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.gridLayout = QtWidgets.QGridLayout()
+        self.gridLayout.setObjectName("gridLayout")
+        self.baudrateLabel = QtWidgets.QLabel(self.settingsGBox)
+        self.baudrateLabel.setObjectName("baudrateLabel")
+        self.gridLayout.addWidget(self.baudrateLabel, 0, 2, 1, 1)
+        self.serialLabel = QtWidgets.QLabel(self.settingsGBox)
+        self.serialLabel.setObjectName("serialLabel")
+        self.gridLayout.addWidget(self.serialLabel, 0, 0, 1, 1)
+        self.serialCBox = QtWidgets.QComboBox(self.settingsGBox)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.serialCBox.sizePolicy().hasHeightForWidth())
+        self.serialCBox.setSizePolicy(sizePolicy)
+        self.serialCBox.setMinimumSize(QtCore.QSize(140, 0))
+        self.serialCBox.setObjectName("serialCBox")
+        self.gridLayout.addWidget(self.serialCBox, 0, 1, 1, 1)
+        self.baudrateCBox = QtWidgets.QComboBox(self.settingsGBox)
+        self.baudrateCBox.setObjectName("baudrateCBox")
+        self.baudrateCBox.addItem("")
+        self.baudrateCBox.addItem("")
+        self.baudrateCBox.addItem("")
+        self.baudrateCBox.addItem("")
+        self.baudrateCBox.addItem("")
+        self.gridLayout.addWidget(self.baudrateCBox, 0, 3, 1, 1)
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout.addItem(spacerItem, 0, 4, 1, 1)
+        self.verticalLayout.addLayout(self.gridLayout)
+        self.verticalLayout_2.addWidget(self.settingsGBox)
+        self.graphsGBox = QtWidgets.QGroupBox(self.centralwidget)
+        self.graphsGBox.setEnabled(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.graphsGBox.sizePolicy().hasHeightForWidth())
+        self.graphsGBox.setSizePolicy(sizePolicy)
+        self.graphsGBox.setTitle("")
+        self.graphsGBox.setObjectName("graphsGBox")
+        self.gridLayout_3 = QtWidgets.QGridLayout(self.graphsGBox)
+        self.gridLayout_3.setObjectName("gridLayout_3")
+        self.bufferSlider = QtWidgets.QSlider(self.graphsGBox)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.bufferSlider.sizePolicy().hasHeightForWidth())
+        self.bufferSlider.setSizePolicy(sizePolicy)
+        self.bufferSlider.setMinimum(100)
+        self.bufferSlider.setMaximum(1000)
+        self.bufferSlider.setPageStep(100)
+        self.bufferSlider.setProperty("value", 100)
+        self.bufferSlider.setSliderPosition(100)
+        self.bufferSlider.setOrientation(QtCore.Qt.Horizontal)
+        self.bufferSlider.setTickPosition(QtWidgets.QSlider.TicksBelow)
+        self.bufferSlider.setTickInterval(100)
+        self.bufferSlider.setObjectName("bufferSlider")
+        self.gridLayout_3.addWidget(self.bufferSlider, 2, 2, 1, 1)
+        self.widget = QtWidgets.QWidget(self.graphsGBox)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.widget.sizePolicy().hasHeightForWidth())
+        self.widget.setSizePolicy(sizePolicy)
+        self.widget.setObjectName("widget")
+        self.gridLayout_3.addWidget(self.widget, 0, 0, 1, 3)
+        self.bufferlabel = QtWidgets.QLabel(self.graphsGBox)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.bufferlabel.sizePolicy().hasHeightForWidth())
+        self.bufferlabel.setSizePolicy(sizePolicy)
+        self.bufferlabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.bufferlabel.setObjectName("bufferlabel")
+        self.gridLayout_3.addWidget(self.bufferlabel, 2, 0, 1, 1)
+        self.label = QtWidgets.QLabel(self.graphsGBox)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.label.sizePolicy().hasHeightForWidth())
+        self.label.setSizePolicy(sizePolicy)
+        self.label.setObjectName("label")
+        self.gridLayout_3.addWidget(self.label, 2, 1, 1, 1)
+        self.verticalLayout_2.addWidget(self.graphsGBox)
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.startButton = QtWidgets.QPushButton(self.centralwidget)
+        self.startButton.setObjectName("startButton")
+        self.horizontalLayout.addWidget(self.startButton)
+        self.stopButton = QtWidgets.QPushButton(self.centralwidget)
+        self.stopButton.setObjectName("stopButton")
+        self.horizontalLayout.addWidget(self.stopButton)
+        self.cleanButton = QtWidgets.QPushButton(self.centralwidget)
+        self.cleanButton.setObjectName("cleanButton")
+        self.horizontalLayout.addWidget(self.cleanButton)
+        self.exitButton = QtWidgets.QPushButton(self.centralwidget)
+        self.exitButton.setStyleSheet("color: red;")
+        self.exitButton.setObjectName("exitButton")
+        self.horizontalLayout.addWidget(self.exitButton)
+        self.verticalLayout_2.addLayout(self.horizontalLayout)
+        MainWindow.setCentralWidget(self.centralwidget)
+        self.menubar = QtWidgets.QMenuBar(MainWindow)
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 842, 22))
+        self.menubar.setLayoutDirection(QtCore.Qt.RightToLeft)
+        self.menubar.setObjectName("menubar")
+        self.menuAbout = QtWidgets.QMenu(self.menubar)
+        self.menuAbout.setObjectName("menuAbout")
+        MainWindow.setMenuBar(self.menubar)
+        self.statusbar = QtWidgets.QStatusBar(MainWindow)
+        self.statusbar.setObjectName("statusbar")
+        MainWindow.setStatusBar(self.statusbar)
+        self.actionAbout = QtWidgets.QAction(MainWindow)
+        self.actionAbout.setObjectName("actionAbout")
+        self.menuAbout.addAction(self.actionAbout)
+        self.menubar.addAction(self.menuAbout.menuAction())
+        self.baudrateLabel.setBuddy(self.baudrateCBox)
+        self.serialLabel.setBuddy(self.serialCBox)
+
+        self.retranslateUi(MainWindow)
+        self.exitButton.clicked.connect(MainWindow.close)
+        self.bufferSlider.valueChanged['int'].connect(self.label.setNum)
+        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+    def retranslateUi(self, MainWindow):
+        _translate = QtCore.QCoreApplication.translate
+        self.baudrateLabel.setText(_translate("MainWindow", "BaudRate (bps)"))
+        self.serialLabel.setText(_translate("MainWindow", "Serial Port"))
+        self.baudrateCBox.setItemText(0, _translate("MainWindow", "9600"))
+        self.baudrateCBox.setItemText(1, _translate("MainWindow", "19200"))
+        self.baudrateCBox.setItemText(2, _translate("MainWindow", "38400"))
+        self.baudrateCBox.setItemText(3, _translate("MainWindow", "57600"))
+        self.baudrateCBox.setItemText(4, _translate("MainWindow", "115200"))
+        self.bufferlabel.setText(_translate("MainWindow", "Buffer"))
+        self.label.setText(_translate("MainWindow", "100"))
+        self.startButton.setText(_translate("MainWindow", "Start"))
+        self.stopButton.setText(_translate("MainWindow", "Stop"))
+        self.cleanButton.setText(_translate("MainWindow", "Clean"))
+        self.exitButton.setText(_translate("MainWindow", "Exit"))
+        self.menuAbout.setTitle(_translate("MainWindow", "Help"))
+        self.actionAbout.setText(_translate("MainWindow", "About"))
 
 class FixedSerial( serial.Serial ):
     def _reconfigure_port( self, *args, **kwargs ):
@@ -77,7 +269,7 @@ class UDevice(QtCore.QThread):
     @staticmethod
     def get_devs():
         devices = list()
-        pts= prtlst.comports()
+        pts= serial.tools.list_ports.comports()
         for index, pt in enumerate(pts):
             #print(pt)
             if 'USB' or 'ACM'  in pt[1]:
@@ -137,8 +329,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self._y3 = list()
         self._x  = list()
 
-        self.graphWidget1 = pg.PlotWidget()
-        self.graphWidget2 = pg.PlotWidget()
+        self.graphWidget1 = pyqtgraph.PlotWidget()
+        self.graphWidget2 = pyqtgraph.PlotWidget()
 
         self.graphWidget1.setBackground((100,50,255,0))
         self.graphWidget2.setBackground((100,50,255,0))
@@ -169,11 +361,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         # self.graphWidget2.setYRange(20, 55, padding=0)
 
         #Plot data: x, y values
-        pen = pg.mkPen(color=(0, 180, 0), width=2, style=QtCore.Qt.SolidLine)
+        pen = pyqtgraph.mkPen(color=(0, 180, 0), width=2, style=QtCore.Qt.SolidLine)
         self._line1 = self.graphWidget1.plot(self._x, self._y1, name='RPM', symbolBrush=(0, 180, 0), symbolSize=6, pen=pen)
-        pen = pg.mkPen(color='b', width=2, style=QtCore.Qt.SolidLine)
+        pen = pyqtgraph.mkPen(color='b', width=2, style=QtCore.Qt.SolidLine)
         self._line2 = self.graphWidget2.plot(self._x, self._y2, name='T(C)/16', symbolBrush='b', symbolSize=6, pen=pen)
-        pen = pg.mkPen(color=(196, 160, 0), width=2, style=QtCore.Qt.SolidLine)
+        pen = pyqtgraph.mkPen(color=(196, 160, 0), width=2, style=QtCore.Qt.SolidLine)
         self._line3 = self.graphWidget2.plot(self._x, self._y3, name='ADC', symbolBrush=(196, 160, 0), symbolSize=6, pen=pen)
 
     def set_dev(self, devs):

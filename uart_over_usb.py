@@ -28,6 +28,13 @@ from PyQt5.QtWidgets import QWidget
 from abc import ABCMeta, abstractmethod
 from datetime import datetime
 
+class FixedSerial( serial.Serial ):
+    def _reconfigure_port( self, *args, **kwargs ):
+        try:
+            super()._reconfigure_port( *args, **kwargs )
+        except serial.SerialException:
+            pass
+
 def _FileLogger(func):
     _file_name = "uart.log" # имя лог файла
     def wrapper(*args, **kwargs):
@@ -43,7 +50,7 @@ class UDevice:
 
     def __init__(self, baudrate: int, timeout: int):
         try:
-            UDevice._port = serial.Serial(port=self._get_device(), baudrate=baudrate, timeout=timeout)
+            UDevice._port = FixedSerial(port=self._get_device(), baudrate=baudrate, timeout=timeout)
         except Exception as e:
            print(e.strerror)
            exit()
