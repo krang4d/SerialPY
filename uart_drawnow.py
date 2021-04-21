@@ -66,6 +66,7 @@ class UDevice(QtCore.QThread):
             #else: print('The Port '+ dev + ' has been open')
         except Exception as e:
             print(e)
+            self.newData.emit(['error', str(e)])
 
     def close(self):
         if UDevice._dev is not None:
@@ -81,10 +82,10 @@ class UDevice(QtCore.QThread):
             #print(pt)
             if 'USB' or 'ACM'  in pt[1]:
                 devices.append(pt[0])
-                print('%d. %s %s'%(index, pt[0], pt[1]))
+                #print('%d. %s %s'%(index, pt[0], pt[1]))
 
         if len(devices)==0:
-            print('No USB device found.')
+            #print('No USB device found.')
             devices.append('no device')
 
         return devices
@@ -102,6 +103,7 @@ class UDevice(QtCore.QThread):
             print(e)
             UDevice._dev = None
             line = ['error']
+            line.append(str(e))
         return line
 
     def run(self):
@@ -125,8 +127,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self, *args, obj=None, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
         self.setupUi(self)
+
         self._index = iter(NumbersIterator())
         self.aboutForm = AboutForm()
+        self.actionAbout.triggered.connect(self.aboutForm.show)
 
         self._y1 = list()
         self._y2 = list()
@@ -172,18 +176,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         pen = pg.mkPen(color=(196, 160, 0), width=2, style=QtCore.Qt.SolidLine)
         self._line3 = self.graphWidget2.plot(self._x, self._y3, name='ADC', symbolBrush=(196, 160, 0), symbolSize=6, pen=pen)
 
-        self.initUI()
-
-    def initUI(self):
-        # self.buttonBox.button(QtWidgets.QDialogButtonBox.Ok).clicked.connect(self._presed_ok)
-        #self.openButton.clicked.connect(lambda: self.statusbar.showMessage('open_pushButton'))
-        self.actionAbout.triggered.connect(self.aboutForm.show)
-
     def set_dev(self, devs):
         self.serialCBox.clear()
         for dev in devs:
             self.serialCBox.addItem(dev)
-            self.statusbar.showMessage('update')
+            #self.statusbar.showMessage('device list updated')
+
+    @staticmethod
+    def set_num(i: int):
+        MainWindow._num = i
 
     def update_plot_data(self, data=None):
         if data is None:
@@ -193,14 +194,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         elif data[0] == 'timeout':
             self.statusbar.showMessage('timeout')
         elif data[0] == 'error':
-            self.statusbar.showMessage('error')
+            self.statusbar.showMessage('error: '+ data[1])
         else:
-            self.statusbar.showMessage(str(data))
+            self.statusbar.showMessage('data: '+str(data))
             if len(self._x) >= self._num:
-                self._x = self._x[1:]       # Remove the first
-                self._y1 = self._y1[1:]     # Remove the first
-                self._y2 = self._y2[1:]     # Remove the first
-                self._y3 = self._y3[1:]     # Remove the first
+                cut = len(self._x) - self._num + 1
+                self._x = self._x[cut:]       # Remove the first
+                self._y1 = self._y1[cut:]     # Remove the first
+                self._y2 = self._y2[cut:]     # Remove the first
+                self._y3 = self._y3[cut:]     # Remove the first
 
             data[2] = data[2]/16
             self._x.append(next(self._index)) #self._x[-1] + 1)   # Add a new value 1 higher than the last.
@@ -215,7 +217,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 def main():
     app = QtWidgets.QApplication(sys.argv)
     window = MainWindow()
-    window.set_dev(UDevice.get_devs())
+
+    timer=QtCore.QTimer()
+    timer.timeout.connect( lambda: window.set_dev(UDevice.get_devs()))
+    timer.start(1000)
 
     # window.openButton.clicked.connect( lambda: { device.open(window.serial_comboBox.currentText(), int(window.baudrate_comboBox.currentText()), 3), print(device.readline()) } )
         # lambda: window.statusbar.showMessage(
@@ -225,14 +230,11 @@ def main():
     thread = UDevice()
     thread.newData.connect(window.update_plot_data)
 
-    window.openButton.clicked.connect( lambda: {
+    window.startButton.clicked.connect( lambda: {
         thread.open(window.serialCBox.currentText(), int(window.baudrateCBox.currentText()), 3)
         })
-    window.closeButton.clicked.connect(lambda: {
+    window.stopButton.clicked.connect(lambda: {
         thread.close()
-        })
-    window.updateButton.clicked.connect(lambda: {
-        window.set_dev(UDevice.get_devs())
         })
 
     window.cleanButton.clicked.connect(lambda: {
@@ -244,6 +246,7 @@ def main():
         window.update_plot_data()
         })
 
+    window.bufferSlider.valueChanged['int'].connect(lambda i: MainWindow.set_num(i))
     thread.start()
     window.show()
     sys.exit(app.exec_())

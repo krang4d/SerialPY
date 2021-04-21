@@ -30,7 +30,7 @@
        <property name="text">
         <string>The Serial Port Reader program by Pavel Golovkin (jzi@inbox.ru).
 Feel free to use. No warranty.
-Version 1.1.3</string>
+Version 1.1.10</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
