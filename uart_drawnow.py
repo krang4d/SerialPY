@@ -15,6 +15,14 @@ from abc import ABCMeta, abstractmethod
 from ui.MainWindow import Ui_MainWindow
 from ui.AboutForm import Ui_AboutForm
 # Create an Iterator for scale X on plot
+
+class FixedSerial( serial.Serial ):
+    def _reconfigure_port( self, *args, **kwargs ):
+        try:
+            super()._reconfigure_port( *args, **kwargs )
+        except serial.SerialException:
+            pass
+
 class NumbersIterator:
     def __iter__(self):
         self.a = 1
@@ -51,7 +59,7 @@ class UDevice(QtCore.QThread):
     def open(self, dev: str, baudrate: int, timeout: int):
         try:
             #if UDevice._dev is None:
-            UDevice._port = serial.Serial(port=dev, baudrate=baudrate, timeout=timeout)
+            UDevice._port = FixedSerial(port=dev, baudrate=baudrate, timeout=timeout)
             print('Open Port '+ dev)
             self.timeout = timeout
             UDevice._dev = dev
