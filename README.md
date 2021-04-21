@@ -1,2 +1,2 @@
 # Serial Port Reader 
-Linuix, Windows
+Linux, Windows
