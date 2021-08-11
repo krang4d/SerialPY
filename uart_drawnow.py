@@ -295,7 +295,7 @@ class UDevice(QtCore.QThread):
             if data == b'':
                 line = ['timeout']
                 print(line)
-            else: line = [ int(x) for x in data.decode('utf-8')[:-2].split(';') ]
+            else: line = [ float(x) for x in data.decode('utf-8')[:-2].split(';') ]
         except Exception as e:
             print(e)
             UDevice._dev = None
@@ -414,11 +414,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self._y2 = self._y2[cut:]     # Remove the first
                 self._y3 = self._y3[cut:]     # Remove the first
 
-            data[2] = data[2]/16
+            # data[2] = data[2]/16
             self._x.append(next(self._index)) #self._x[-1] + 1)   # Add a new value 1 higher than the last.
             self._y1.append( data[0])   # Add a new value.
-            self._y2.append( data[2])   # Add a new value.
-            self._y3.append( data[3])   # Add a new value.
+            self._y2.append( data[1])   # Add a new value.
+            self._y3.append( data[2])   # Add a new value.
 
             self._line1.setData(self._x, self._y1)  # Update the data.
             self._line2.setData(self._x, self._y2)  # Update the data.
