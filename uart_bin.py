@@ -8,6 +8,7 @@ from datetime import datetime
 import numpy as np
 import serial
 import serial.tools.list_ports as prtlst
+import libscrc
 
 from PyQt5 import QtWidgets, QtCore, uic
 
@@ -110,11 +111,24 @@ class UDevice(QtCore.QThread):
             else:
                 QtCore.QThread.msleep(300)
 
+def add_CRC16(newData: bytes):
+    crc16 = libscrc.modbus(newData)
+    b78 = crc16.to_bytes(2, byteorder='little')
+    l = list(newData)
+    l.append(int(b78[0]))
+    l.append(int(b78[1]))
+    return bytes(l)
+
 if __name__ == '__main__':
     device_list = UDevice.get_devs();
     print(device_list)
     device_thread = UDevice()
     device_thread.open(device_list[0], 9600, 3)
-    code = b'\x01\x02\x03\x04\x05\x06\x07\x08'
+    code = b'\x01\x02\x03\x04\x05\x06\xd3\x7b'
+    print('write: ', code)
     device_thread.writebincode(code)
     print('read', device_thread.readbincode());
+
+    b1 = b'\x20\x03\x00\x01\x00\x01'
+    b2 = add_CRC16(b1)
+    print('sum: ', b2)
