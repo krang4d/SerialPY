@@ -1,11 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
+# Serial Port Reader with Qt interface by Pavel Golovkin, aka pgg (14.04.2021).
+# Feel free to use. No warranty
+# Version 1.0.3
 '''
 Установка и запуск
-1) Установите Python3 (https://www.python.org/downloads/)
-2) Далее установите небходимые пакеты командой: python -m pip install pyserial PyQt5
-3) Запустите программу командой: python uart_over_usb.py
+------------------
+
+1. Установите Python3 (https://www.python.org/downloads/)
+2. Далее установите небходимые пакеты командой:
+    python -m pip install pyserial PyQt5
+3. Запустите программу командой: python uart_over_usb.py
 '''
 
 import sys, os
@@ -309,11 +314,24 @@ class UDevice(QtCore.QThread):
                 QtCore.QThread.msleep(300)
 
 class AboutForm(QtWidgets.QDialog, Ui_AboutForm):
+    ''' Oкно o программe
+
+.. figure:: ./png/about_window.png
+    :scale: 70 %
+    :align: center
+    '''
     def __init__(self, *args, obj=None, **kwargs):
         super(AboutForm, self).__init__(*args, **kwargs)
         self.setupUi(self)
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
+    ''' Основное окно программы
+
+.. figure:: ./png/main_window.png
+    :scale: 70 %
+    :align: center
+    '''
+
     _num = 100
 
     def __init__(self, *args, obj=None, **kwargs):

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Serial Port Reader by Pavel Golovkin, aka pgg (14.04.2021).
+# Serial Port Reader with matplotlib interface by Pavel Golovkin, aka pgg (14.04.2021).
 # Feel free to use. No warranty
 # Version 1.0.3
 '''
@@ -29,6 +29,10 @@ from abc import ABCMeta, abstractmethod
 from datetime import datetime
 
 class FixedSerial( serial.Serial ):
+    """
+    Proposals to improve Windows 10 open exception #362
+    https://github.com/pyserial/pyserial/issues/362
+    """
     def _reconfigure_port( self, *args, **kwargs ):
         try:
             super()._reconfigure_port( *args, **kwargs )
