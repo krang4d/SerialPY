@@ -18,7 +18,11 @@ from datetime import datetime
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 import pyqtgraph
 import serial
+
+import signal
 import serial.tools.list_ports
+
+signal.signal(signal.SIGINT, signal.SIG_DFL)
 
 class Ui_AboutForm(object):
     def setupUi(self, AboutForm):
@@ -295,7 +299,7 @@ class UDevice(QtCore.QThread):
             if data == b'':
                 line = ['timeout']
                 print(line)
-            else: line = [ float(x) for x in data.decode('utf-8')[:-2].split(';') ]
+            else: line = list(data) # [ float(x) for x in data.decode('utf-8')[:-2].split(';') ]
         except Exception as e:
             print(e)
             UDevice._dev = None
