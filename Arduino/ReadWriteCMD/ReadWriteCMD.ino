@@ -17,25 +17,31 @@ void setup() {
   Serial.begin(9600);
 }
 
+void serial_flush_buffer()
+{
+  while (Serial.read() >= 0)
+   ; // do nothing
+}
+
 byte buffer[8];
-byte cmd[] = {0x10, 0x03, 0x00, 0x01, 0x00, 0x01,0xD6, 0x8B};
-byte cmd_1[] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06,0x07, 0x08};
-byte cmd_t[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00,0x00, 0x01};
-byte cmd_f[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00,0x00, 0x00};
+byte cmd[]   = {0x10, 0x03, 0x00, 0x01, 0x00, 0x01, 0xD6, 0x8B};
+byte cmd_1[] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08};
+byte cmd_t[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01};
+byte cmd_f[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+
+void serialEvent(){
+  Serial.readBytes(buffer, 8);
+  serial_flush_buffer();
+  Serial.write(buffer, 8);
+}
 
 // the loop routine runs over and over again forever:
 void loop() {
-  // read the input on analog pin 0:
-  int sensorValue = analogRead(A0);
-  // Convert the analog reading (which goes from 0 - 1023) to a voltage (0 - 5V):
-  float voltage = sensorValue * (5.0 / 1023.0);
-  String out = String(voltage) + ";" + String(voltage + 1) + ";" + String(voltage + 2);
-  // print out the value you read:
-  //  Serial.println(out);
-  Serial.readBytes(buffer, 8);
-  if(memcmp (buffer, cmd_1, 8)==0)
-  {
-    Serial.write(cmd_t, sizeof(cmd_t));
-  } else Serial.write(cmd_f, sizeof(cmd_f));
-  delay(500);
+  
+//  if(memcmp (buffer, cmd_1, 8)==0)
+//  {
+//    cmd_t[7] += 1; 
+//    Serial.write(cmd_t, sizeof(cmd_t));
+//  } else Serial.write(cmd_f, sizeof(cmd_f));
+  delay(50);
 }
