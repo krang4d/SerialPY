@@ -9,8 +9,7 @@ import serial
 import serial.tools.list_ports as prtlst
 # import serial.tools.list_ports
 import libscrc
-
-from PyQt5 import QtWidgets, QtCore, uic
+from PyQt5 import QtWidgets, QtGui, QtCore, uic
 
 import signal
 signal.signal(signal.SIGINT, signal.SIG_DFL)
@@ -23,6 +22,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self, *args, obj=None, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
         self.setupUi(self)
+        self.textEdit.setWordWrapMode(QtGui.QTextOption.NoWrap)
+
 
     def set_devs(self, devs):
         self.portCBox.clear()
@@ -31,14 +32,17 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def get_bytes(self):
         cmd = self.cmdLineEdit.text()
-        bl = bytes.fromhex(cmd)
-        # self.statusbar.showMessage(str(_add_CRC16(bl)))
-        print('get_bytes:', bl)
+        try:
+            bl = bytes.fromhex(cmd)
+            print('get_bytes:', bl)
+        except Exception as e:
+            self.statusbar.showMessage(str(e), 3000)
         return bl
 
     def show_res(self, data : bytes):
+        now = datetime.now() # current date and time
         self.statusbar.showMessage(str(data), 1000)
-        self.textEdit.insertPlainText(str(data)+'\n');
+        self.textEdit.insertPlainText(str(data)+" "+now.strftime("%H:%M:%S %f")+'\n');
         sb = self.textEdit.verticalScrollBar();
         sb.setValue(sb.maximum());
         print('show_res: ', data)
@@ -69,9 +73,6 @@ class UDevice(QtWidgets.QWidget):
 
     def __init__(self):
         super().__init__()
-        self.timer=QtCore.QTimer()
-        self.timer.timeout.connect( lambda: print("time") )
-        self.timer.start(1000)
 
     def __del__(self):
         self.close()
@@ -129,7 +130,6 @@ def _add_CRC16(data: bytes):
     return bytes(l)
 
 def _test_send():
-    device = UDevice()
     devl = UDevice.get_devs()
     device.open(devl[0], 9600, 3)
 
@@ -158,25 +158,29 @@ def _test_send():
     # print('sum: ', b2)
 
 def _test_window():
-    window = MainWindow()
-    device = UDevice()
+
+    timer.timeout.connect( lambda: {
+        device.writebincode(window.get_bytes()),
+        window.show_res(device.readbincode())
+        } )
 
     window.openButton.clicked.connect( lambda : {
+        window.statusbar.showMessage("Open("+window.portCBox.currentText()+")", 1000),
         device.open(window.portCBox.currentText(), int(window.speedCBox.currentText()), 0.1)
         })
 
     window.closeButton.clicked.connect( lambda :{
+        window.statusbar.showMessage("Close()"),
         device.close()
         })
 
     window.refButton.clicked.connect( lambda : {
+        window.statusbar.showMessage("Refresh()"),
         window.set_devs(UDevice.get_devs())
         })
 
     window.sendButton.clicked.connect( lambda : {
-        device.writebincode(window.get_bytes()),
-        time.sleep(0.1),
-        window.show_res(device.readbincode())
+        send_com(window, device, timer)
         })
 
     window.readButton.clicked.connect( lambda : {
@@ -185,8 +189,21 @@ def _test_window():
 
     window.show()
 
+
+def send_com(window, device, timer):
+    if window.cmdChBox.isChecked() == True:
+        print("iterval: ", window.cmdSBox.value())
+        timer.start(window.cmdSBox.value())
+    else:
+        timer.stop()
+        device.writebincode(window.get_bytes())
+        window.show_res(device.readbincode())
+
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
+    window = MainWindow()
+    device = UDevice()
+    timer=QtCore.QTimer()
     # _test_send()
     _test_window()
     sys.exit(app.exec_())
