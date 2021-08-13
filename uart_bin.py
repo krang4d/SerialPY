@@ -39,6 +39,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.statusbar.showMessage(str(e), 3000)
         return bl
 
+    def get_ph(self):
+        cmd = self.photoLineEdit_2.text()
+        try:
+            bl = bytes.fromhex(cmd)
+            print('get_ph:', bl)
+        except Exception as e:
+            self.statusbar.showMessage(str(e), 3000)
+        return bl
+
     def show_res(self, data : bytes):
         now = datetime.now() # current date and time
         self.statusbar.showMessage(str(data), 1000)
@@ -46,6 +55,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         sb = self.textEdit.verticalScrollBar();
         sb.setValue(sb.maximum());
         print('show_res: ', data)
+
+    def show_ph(self, data : bytes):
+        self.photoLineEdit_1.setText(str(int.from_bytes(data[2:4], byteorder='little', signed=False)))
+
 
 class FixedSerial( serial.Serial ):
     '''To fix bug on Windows system'''
@@ -159,10 +172,15 @@ def _test_send():
 
 def _test_window():
 
-    timer.timeout.connect( lambda: {
+    timer1.timeout.connect( lambda: {
         device.writebincode(window.get_bytes()),
         window.show_res(device.readbincode())
-        } )
+        })
+
+    timer2.timeout.connect( lambda: {
+        device.writebincode(window.get_ph()),
+        window.show_ph(device.readbincode())
+    })
 
     window.openButton.clicked.connect( lambda : {
         window.statusbar.showMessage("Open("+window.portCBox.currentText()+")", 1000),
@@ -180,17 +198,25 @@ def _test_window():
         })
 
     window.sendButton.clicked.connect( lambda : {
-        send_com(window, device, timer)
+        _com(window, device, timer1)
         })
 
     window.readButton.clicked.connect( lambda : {
         window.show_res(device.readbincode())
         })
 
+    window.photoButton_1.clicked.connect( lambda : {
+        timer2.start(100)
+        })
+
+    window.photoButton_2.clicked.connect( lambda : {
+        timer2.stop()
+        })
+
     window.show()
 
 
-def send_com(window, device, timer):
+def _com(window, device, timer):
     if window.cmdChBox.isChecked() == True:
         print("iterval: ", window.cmdSBox.value())
         timer.start(window.cmdSBox.value())
@@ -199,11 +225,18 @@ def send_com(window, device, timer):
         device.writebincode(window.get_bytes())
         window.show_res(device.readbincode())
 
+def _photo(window, device, timer):
+    timer2.timeout.connect( lambda: {
+        device.writebincode(window.get_ph()),
+        window.show_ph(device.readbincode())
+    })
+
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     window = MainWindow()
     device = UDevice()
-    timer=QtCore.QTimer()
+    timer1=QtCore.QTimer()
+    timer2=QtCore.QTimer()
     # _test_send()
     _test_window()
     sys.exit(app.exec_())
