@@ -278,10 +278,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def show_taxo(self, data : bytes):
         t = int.from_bytes(data[3:7], byteorder='little', signed=False)
         msg1 = str(t)
-        msg0 = str(60000000/t)
         print("show_ph():", msg1, data[3:7].hex())
         self.taxoLineEdit_1.setText(msg1)
-        self.taxoLineEdit_0.setText(msg0)
+        if (t == 0):
+            self.taxoLineEdit_0.setText("-")
+        else: 
+            msg0 = "%.3f" % (60000000/t)
+            self.taxoLineEdit_0.setText(msg0)
 
 class FixedSerial( serial.Serial ):
     '''To fix bug on Windows system'''
