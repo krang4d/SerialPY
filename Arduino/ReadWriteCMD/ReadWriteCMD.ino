@@ -23,7 +23,7 @@ void serial_flush_buffer()
    ; // do nothing
 }
 
-byte buffer[8];
+byte buffer[9];
 byte cmd[]   = {0x10, 0x03, 0x00, 0x01, 0x00, 0x01, 0xD6, 0x8B};
 byte cmd_1[] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08};
 byte cmd_t[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01};
@@ -32,7 +32,7 @@ byte cmd_f[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 void serialEvent(){
   Serial.readBytes(buffer, 8);
   serial_flush_buffer();
-  Serial.write(buffer, 8);
+  Serial.write(buffer, 9);
 }
 
 // the loop routine runs over and over again forever:
@@ -43,5 +43,5 @@ void loop() {
 //    cmd_t[7] += 1; 
 //    Serial.write(cmd_t, sizeof(cmd_t));
 //  } else Serial.write(cmd_f, sizeof(cmd_f));
-  delay(50);
+//  delay(1);
 }

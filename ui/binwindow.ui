@@ -6,24 +6,24 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1125</width>
-    <height>891</height>
+    <width>796</width>
+    <height>975</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Физприбор 3.3.12а</string>
+   <string>Физприбор 3.4.12а</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout_3">
+   <layout class="QVBoxLayout" name="verticalLayout_5">
     <item>
-     <layout class="QGridLayout" name="gridLayout_0">
-      <item row="4" column="0">
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="5" column="0">
        <spacer name="verticalSpacer">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
         </property>
         <property name="sizeType">
-         <enum>QSizePolicy::Preferred</enum>
+         <enum>QSizePolicy::Minimum</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
@@ -33,7 +33,113 @@
         </property>
        </spacer>
       </item>
-      <item row="0" column="1" rowspan="5">
+      <item row="3" column="0">
+       <widget class="QGroupBox" name="groupBox_2">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="title">
+         <string>Опрос тахометра</string>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_4">
+         <item>
+          <widget class="QLabel" name="label_1">
+           <property name="text">
+            <string>Скорость вращения:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <item>
+            <widget class="QLineEdit" name="taxoLineEdit_0">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="taxoLineEdit_1">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>Команда:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="taxoLineEdit_2">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>100300010001</string>
+           </property>
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>Параметры калибровки:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <item>
+            <widget class="QLineEdit" name="taxoLineEdit_3">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="taxoLineEdit_4">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="0" column="1" rowspan="6">
        <widget class="QGroupBox" name="responseGBox">
         <property name="sizePolicy">
          <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
@@ -58,53 +164,71 @@
            </property>
           </widget>
          </item>
-         <item>
-          <widget class="QPushButton" name="cleanButton">
-           <property name="text">
-            <string>Очистить</string>
-           </property>
-          </widget>
-         </item>
         </layout>
        </widget>
       </item>
       <item row="2" column="0">
        <widget class="QGroupBox" name="groupBox">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="title">
          <string>Опрос фотоприёмника</string>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_2">
          <item>
-          <widget class="QLineEdit" name="photoLineEdit_1">
+          <layout class="QHBoxLayout" name="horizontalLayout_5">
+           <item>
+            <widget class="QLineEdit" name="photoLineEdit_0">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="photoLineEdit_1">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="QLabel" name="label">
            <property name="text">
-            <string/>
-           </property>
-           <property name="readOnly">
-            <bool>true</bool>
+            <string>Команда:</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QLineEdit" name="photoLineEdit_2">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="text">
             <string>200300010001</string>
            </property>
            <property name="readOnly">
             <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="photoButton_1">
-           <property name="text">
-            <string>Старт</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="photoButton_2">
-           <property name="text">
-            <string>Стоп</string>
            </property>
           </widget>
          </item>
@@ -114,30 +238,32 @@
       <item row="1" column="0">
        <widget class="QGroupBox" name="requestGBox">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
         <property name="title">
-         <string>Команда:</string>
+         <string>Отправка команда</string>
         </property>
         <layout class="QGridLayout" name="gridLayout_2">
-         <item row="2" column="1" colspan="2">
-          <widget class="QPushButton" name="sendButton">
-           <property name="text">
-            <string>Отправить</string>
+         <item row="1" column="1" colspan="2">
+          <widget class="QLineEdit" name="cmdLineEdit">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="inputMethodHints">
+            <set>Qt::ImhDigitsOnly</set>
+           </property>
+           <property name="maxLength">
+            <number>12</number>
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
-          <widget class="QCheckBox" name="cmdChBox">
-           <property name="text">
-            <string>Через интервал (мс)</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="2">
+         <item row="2" column="2">
           <widget class="QSpinBox" name="cmdSBox">
            <property name="enabled">
             <bool>false</bool>
@@ -160,19 +286,30 @@
           </widget>
          </item>
          <item row="3" column="1" colspan="2">
+          <widget class="QPushButton" name="sendButton">
+           <property name="text">
+            <string>Отправить</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QCheckBox" name="cmdChBox">
+           <property name="text">
+            <string>Через интервал (мс)</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="1" colspan="2">
           <widget class="QPushButton" name="readButton">
            <property name="text">
             <string>Принять</string>
            </property>
           </widget>
          </item>
-         <item row="0" column="1" colspan="2">
-          <widget class="QLineEdit" name="cmdLineEdit">
-           <property name="inputMethodHints">
-            <set>Qt::ImhDigitsOnly</set>
-           </property>
-           <property name="maxLength">
-            <number>12</number>
+         <item row="0" column="1">
+          <widget class="QLabel" name="label_4">
+           <property name="text">
+            <string>Команда:</string>
            </property>
           </widget>
          </item>
@@ -191,160 +328,140 @@
          </sizepolicy>
         </property>
         <property name="title">
-         <string>Настройка COM порта:</string>
+         <string>Настройка соединения</string>
         </property>
-        <layout class="QGridLayout" name="gridLayout_3">
-         <item row="1" column="0">
-          <layout class="QGridLayout" name="gridLayout_1">
-           <item row="2" column="0">
-            <widget class="QComboBox" name="portCBox">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>140</width>
-               <height>0</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-           <item row="5" column="0">
-            <widget class="QPushButton" name="refButton">
-             <property name="text">
-              <string>Обновить</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0">
-            <widget class="QLabel" name="speedLabel">
-             <property name="text">
-              <string>Скорость:</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-             </property>
-             <property name="margin">
-              <number>1</number>
-             </property>
-             <property name="buddy">
-              <cstring>speedCBox</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="6" column="0">
-            <widget class="QPushButton" name="openButton">
-             <property name="text">
-              <string>Открыть</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="portLabel">
-             <property name="text">
-              <string>Номер:</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-             </property>
-             <property name="margin">
-              <number>1</number>
-             </property>
-             <property name="buddy">
-              <cstring>portCBox</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="0">
-            <widget class="QComboBox" name="speedCBox">
-             <item>
-              <property name="text">
-               <string>9600</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>19200</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>38400</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>57600</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>115200</string>
-              </property>
-             </item>
-            </widget>
-           </item>
-           <item row="7" column="0">
-            <widget class="QPushButton" name="closeButton">
-             <property name="text">
-              <string>Закрыть</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item row="3" column="0">
-       <widget class="QGroupBox" name="groupBox_2">
-        <property name="title">
-         <string>Опрос тахометра</string>
-        </property>
-        <layout class="QVBoxLayout" name="verticalLayout_4">
+        <layout class="QVBoxLayout" name="verticalLayout_3">
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayout">
-           <item>
-            <widget class="QLineEdit" name="taxoLineEdit_0"/>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="taxoLineEdit_1">
-             <property name="text">
-              <string/>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="taxoLineEdit_2">
+          <widget class="QLabel" name="portLabel">
            <property name="text">
-            <string>100300010001</string>
+            <string>Номер порта:</string>
            </property>
-           <property name="readOnly">
-            <bool>true</bool>
+           <property name="alignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           </property>
+           <property name="margin">
+            <number>1</number>
+           </property>
+           <property name="buddy">
+            <cstring>portCBox</cstring>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="taxoButton_1">
-           <property name="text">
-            <string>Старт</string>
+          <widget class="QComboBox" name="portCBox">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>140</width>
+             <height>0</height>
+            </size>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="taxoButton_2">
+          <widget class="QLabel" name="speedLabel">
            <property name="text">
-            <string>Стоп</string>
+            <string>Скорость соединения:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           </property>
+           <property name="margin">
+            <number>1</number>
+           </property>
+           <property name="buddy">
+            <cstring>speedCBox</cstring>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="speedCBox">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <item>
+            <property name="text">
+             <string>9600</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>19200</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>38400</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>57600</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>115200</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="refButton">
+           <property name="text">
+            <string>Обновить</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="openButton">
+           <property name="text">
+            <string>Открыть</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="closeButton">
+           <property name="text">
+            <string>Закрыть</string>
            </property>
           </widget>
          </item>
         </layout>
        </widget>
+      </item>
+      <item row="4" column="0">
+       <layout class="QVBoxLayout" name="verticalLayout_6">
+        <item>
+         <widget class="QPushButton" name="photoButton_1">
+          <property name="text">
+           <string>Старт</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="photoButton_2">
+          <property name="text">
+           <string>Стоп</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="cleanButton">
+          <property name="text">
+           <string>Очистить</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
     </item>
@@ -355,7 +472,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1125</width>
+     <width>796</width>
      <height>22</height>
     </rect>
    </property>
