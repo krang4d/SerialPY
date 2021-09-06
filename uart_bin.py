@@ -19,8 +19,72 @@ import pyqtgraph as pg
 import signal
 signal.signal(signal.SIGINT, signal.SIG_DFL)
 import time
+import json
 
 # from ui.binwindow import Ui_MainWindow
+
+class BigIntSpinbox(QtGui.QAbstractSpinBox):
+
+    def __init__(self, parent=None):
+        super(BigIntSpinbox, self).__init__(parent)
+
+        self._singleStep = 1
+        self._minimum = 0 #-18446744073709551616
+        self._maximum = 4294967295 #18446744073709551615
+
+        self.lineEdit = QtGui.QLineEdit(self)
+
+        rx = QtCore.QRegExp("[0-9]\\d{1,9}")
+        validator = QtGui.QRegExpValidator(rx, self)
+
+        self.lineEdit.setValidator(validator)
+        self.setLineEdit(self.lineEdit)
+
+    def value(self):
+        try:
+            return int(self.lineEdit.text())
+        except:
+            raise
+            return 0
+
+    def setValue(self, value):
+        if self._valueInRange(value):
+            self.lineEdit.setText(str(value))
+
+    def stepBy(self, steps):
+        self.setValue(self.value() + steps*self.singleStep())
+
+    def stepEnabled(self):
+        return self.StepUpEnabled | self.StepDownEnabled
+
+    def setSingleStep(self, singleStep):
+        assert isinstance(singleStep, int)
+        # don't use negative values
+        self._singleStep = abs(singleStep)
+
+    def singleStep(self):
+        return self._singleStep
+
+    def minimum(self):
+        return self._minimum
+
+    def setMinimum(self, minimum):
+        assert isinstance(minimum, int) or isinstance(minimum, long)
+        self._minimum = minimum
+
+    def maximum(self):
+        return self._maximum
+
+    def setMaximum(self, maximum):
+        assert isinstance(maximum, int) or isinstance(maximum, long)
+        self._maximum = maximum
+
+    def _valueInRange(self, value):
+        if value >= self.minimum() and value <= self.maximum():
+            return True
+        else:
+            return False
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -121,22 +185,20 @@ class Ui_MainWindow(object):
         self.label_calibr = QtWidgets.QLabel(self.groupBox)
         self.label_calibr.setObjectName("label_calibr")
         self.formLayout.setWidget(0, QtWidgets.QFormLayout.SpanningRole, self.label_calibr)
-        self.spinBox_N1 = QtWidgets.QSpinBox(self.groupBox)
-        self.spinBox_N1.setMaximum(999999999)
+        self.spinBox_N1 = BigIntSpinbox(self.groupBox)
+        # self.spinBox_N1.setMaximum(999999999)
         self.spinBox_N1.setObjectName("spinBox_N1")
         self.formLayout.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.spinBox_N1)
-        self.spinBox_N2 = QtWidgets.QSpinBox(self.groupBox)
-        self.spinBox_N2.setMaximum(999999999)
+        self.spinBox_N2 = BigIntSpinbox(self.groupBox)
+        # self.spinBox_N2.setMaximum(999999999)
         self.spinBox_N2.setObjectName("spinBox_N2")
         self.formLayout.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.spinBox_N2)
-        self.spinBox_T1 = QtWidgets.QSpinBox(self.groupBox)
-        self.spinBox_T1.setMinimum(-999999999)
-        self.spinBox_T1.setMaximum(999999999)
+        self.spinBox_T1 = BigIntSpinbox(self.groupBox)
+        # self.spinBox_T1.setMaximum(999999999)
         self.spinBox_T1.setObjectName("spinBox_T1")
         self.formLayout.setWidget(3, QtWidgets.QFormLayout.FieldRole, self.spinBox_T1)
-        self.spinBox_T2 = QtWidgets.QSpinBox(self.groupBox)
-        self.spinBox_T2.setMinimum(-999999999)
-        self.spinBox_T2.setMaximum(999999999)
+        self.spinBox_T2 = BigIntSpinbox(self.groupBox)
+        # self.spinBox_T2.setMaximum(999999999)
         self.spinBox_T2.setObjectName("spinBox_T2")
         self.formLayout.setWidget(4, QtWidgets.QFormLayout.FieldRole, self.spinBox_T2)
         self.verticalLayout_2.addLayout(self.formLayout)
@@ -311,7 +373,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Физприбор 3.6.15а"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Физприбор 3.6.16а"))
         self.groupBox_Graphs.setTitle(_translate("MainWindow", "Графики"))
         self.responseGBox.setTitle(_translate("MainWindow", "Ответ:"))
         self.groupBox.setTitle(_translate("MainWindow", "Опрос фотоприёмника"))
@@ -349,6 +411,66 @@ class Ui_MainWindow(object):
         self.readButton.setText(_translate("MainWindow", "Принять"))
         self.label_4.setText(_translate("MainWindow", "Команда:"))
 
+class Inits:
+    def __init__(self):
+        self._settings_box = {
+            "calibration" : {
+                "N1": 0,
+                "N2": 1,
+                "T1": 0,
+                "T2": 0
+            }
+        }
+        if os.path.isfile("settings.json"):
+            with open("settings.json", "r") as read_file:
+                data = json.load(read_file)
+            self.calibration = data.get("calibration")
+        else:
+            with open("settings.json", "w") as write_file:
+                json.dump(self._settings_box, write_file)
+            self.calibration = self._settings_box['calibration']
+
+    def __del__(self):
+        print('save_settings')
+        self._settings_box['calibration'] = self.calibration
+        with open("settings.json", "w") as write_file:
+            json.dump(self._settings_box, write_file)
+
+
+    def print_debug(self):
+        print(self.calibration)
+        self._settings_box['calibration'] = self.calibration
+        if self.calibration is self._settings_box.get("calibration"):
+            print("is equal")
+        else:
+            print(id(self.calibration), self.calibration)
+            print(id(self._settings_box.get("calibration")), self._settings_box.get("calibration"))
+
+    def get_N1(self):
+        return self.calibration.get('N1', 0)
+
+    def set_N1(self, value):
+        self.calibration['N1'] = value
+
+    def get_N2(self):
+        return self.calibration.get('N2', 1)
+
+    def set_N2(self, value):
+        self.calibration['N2'] = value
+
+    def get_T1(self):
+        return self.calibration.get('T1', 0)
+
+    def set_T1(self, value):
+        self.calibration['T1'] = value
+
+    def get_T2(self):
+        return self.calibration.get('T2', 0)
+
+    def set_T2(self, value):
+        self.calibration['T2'] = value
+
+
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     ''' Основное окно программы    '''
     _num = 100
@@ -357,7 +479,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         super(MainWindow, self).__init__(*args, **kwargs)
         self.setupUi(self)
         self.textEdit.setWordWrapMode(QtGui.QTextOption.NoWrap)
-        self.cleanButton.clicked.connect( lambda : { self.textEdit.clear() })
+        self.cleanButton.clicked.connect( lambda : { self.clean() })
 
         self._index1 = iter(NumbersIterator())
         self._index2 = iter(NumbersIterator())
@@ -410,6 +532,20 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         # pen = pg.mkPen(color=(196, 160, 0), width=2, style=QtCore.Qt.SolidLine)
         # self._line3 = self.graphWidget2.plot(self._x3, self._y3, name='ADC', symbolBrush=(196, 160, 0), symbolSize=6, pen=pen)
 
+        self.init = Inits()
+        self.init.print_debug()
+        self.spinBox_N1.setValue(self.init.get_N1())
+        self.spinBox_N2.setValue(self.init.get_N2())
+        self.spinBox_T1.setValue(self.init.get_T1())
+        self.spinBox_T2.setValue(self.init.get_T2())
+
+    def closeEvent(self, event):
+        self.init.set_N1(self.spinBox_N1.value())
+        self.init.set_N2(self.spinBox_N2.value())
+        self.init.set_T1(self.spinBox_T1.value())
+        self.init.set_T2(self.spinBox_T2.value())
+        del self.init
+        # event.accept()
 
     def set_devs(self, devs):
         self.portCBox.clear()
@@ -512,6 +648,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.taxoLineEdit_0.setText(msg0)
             self._update_taxo(y)
 
+    def clean(self):
+        self.textEdit.clear()
+        self._x1.clear()
+        self._x2.clear()
+        self._y1.clear()
+        self._y2.clear()
+        self._index1.reset()
+        self._index2.reset()
+        self._line1.setData(self._x1, self._y1)
+        self._line2.setData(self._x2, self._y2)
 
 class FixedSerial( serial.Serial ):
     '''To fix bug on Windows system'''
@@ -719,6 +865,8 @@ def _taxo(window, device, timer):
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     window = MainWindow()
+    print(sys.getsizeof(2 ** 63))
+    print(type(2 ** 63))
     device = UDevice()
     timer1 = QtCore.QTimer()
     timer2 = QtCore.QTimer()
