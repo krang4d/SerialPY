@@ -111,12 +111,12 @@ class Ui_MainWindow(object):
         self.label_calibr = QtWidgets.QLabel(self.groupBox)
         self.label_calibr.setObjectName("label_calibr")
         self.formLayout.setWidget(0, QtWidgets.QFormLayout.SpanningRole, self.label_calibr)
-        self.spinBox_N1 = QtWidgets.QSpinBox(self.groupBox)
-        self.spinBox_N1.setMaximum(999999999)
+        self.spinBox_N1 = BigIntSpinbox(self.groupBox)
+        # self.spinBox_N1.setMaximum(999999999)
         self.spinBox_N1.setObjectName("spinBox_N1")
         self.formLayout.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.spinBox_N1)
-        self.spinBox_N2 = QtWidgets.QSpinBox(self.groupBox)
-        self.spinBox_N2.setMaximum(999999999)
+        self.spinBox_N2 = BigIntSpinbox(self.groupBox)
+        # self.spinBox_N2.setMaximum(999999999)
         self.spinBox_N2.setObjectName("spinBox_N2")
         self.formLayout.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.spinBox_N2)
         self.spinBox_T1 = QtWidgets.QSpinBox(self.groupBox)
@@ -301,7 +301,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Физприбор 3.6.16а"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Физприбор 3.6.17а"))
         self.groupBox_Graphs.setTitle(_translate("MainWindow", "Графики"))
         self.responseGBox.setTitle(_translate("MainWindow", "Ответ:"))
         self.groupBox.setTitle(_translate("MainWindow", "Опрос фотоприёмника"))

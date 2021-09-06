@@ -23,68 +23,6 @@ import json
 
 # from ui.binwindow import Ui_MainWindow
 
-class BigIntSpinbox(QtGui.QAbstractSpinBox):
-
-    def __init__(self, parent=None):
-        super(BigIntSpinbox, self).__init__(parent)
-
-        self._singleStep = 1
-        self._minimum = 0 #-18446744073709551616
-        self._maximum = 4294967295 #18446744073709551615
-
-        self.lineEdit = QtGui.QLineEdit(self)
-
-        rx = QtCore.QRegExp("[0-9]\\d{1,9}")
-        validator = QtGui.QRegExpValidator(rx, self)
-
-        self.lineEdit.setValidator(validator)
-        self.setLineEdit(self.lineEdit)
-
-    def value(self):
-        try:
-            return int(self.lineEdit.text())
-        except:
-            raise
-            return 0
-
-    def setValue(self, value):
-        if self._valueInRange(value):
-            self.lineEdit.setText(str(value))
-
-    def stepBy(self, steps):
-        self.setValue(self.value() + steps*self.singleStep())
-
-    def stepEnabled(self):
-        return self.StepUpEnabled | self.StepDownEnabled
-
-    def setSingleStep(self, singleStep):
-        assert isinstance(singleStep, int)
-        # don't use negative values
-        self._singleStep = abs(singleStep)
-
-    def singleStep(self):
-        return self._singleStep
-
-    def minimum(self):
-        return self._minimum
-
-    def setMinimum(self, minimum):
-        assert isinstance(minimum, int) or isinstance(minimum, long)
-        self._minimum = minimum
-
-    def maximum(self):
-        return self._maximum
-
-    def setMaximum(self, maximum):
-        assert isinstance(maximum, int) or isinstance(maximum, long)
-        self._maximum = maximum
-
-    def _valueInRange(self, value):
-        if value >= self.minimum() and value <= self.maximum():
-            return True
-        else:
-            return False
-
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -193,12 +131,14 @@ class Ui_MainWindow(object):
         # self.spinBox_N2.setMaximum(999999999)
         self.spinBox_N2.setObjectName("spinBox_N2")
         self.formLayout.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.spinBox_N2)
-        self.spinBox_T1 = BigIntSpinbox(self.groupBox)
-        # self.spinBox_T1.setMaximum(999999999)
+        self.spinBox_T1 = QtWidgets.QSpinBox(self.groupBox)
+        self.spinBox_T1.setMinimum(-999999999)
+        self.spinBox_T1.setMaximum(999999999)
         self.spinBox_T1.setObjectName("spinBox_T1")
         self.formLayout.setWidget(3, QtWidgets.QFormLayout.FieldRole, self.spinBox_T1)
-        self.spinBox_T2 = BigIntSpinbox(self.groupBox)
-        # self.spinBox_T2.setMaximum(999999999)
+        self.spinBox_T2 = QtWidgets.QSpinBox(self.groupBox)
+        self.spinBox_T2.setMinimum(-999999999)
+        self.spinBox_T2.setMaximum(999999999)
         self.spinBox_T2.setObjectName("spinBox_T2")
         self.formLayout.setWidget(4, QtWidgets.QFormLayout.FieldRole, self.spinBox_T2)
         self.verticalLayout_2.addLayout(self.formLayout)
@@ -373,7 +313,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Физприбор 3.6.16а"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Физприбор 3.6.17а"))
         self.groupBox_Graphs.setTitle(_translate("MainWindow", "Графики"))
         self.responseGBox.setTitle(_translate("MainWindow", "Ответ:"))
         self.groupBox.setTitle(_translate("MainWindow", "Опрос фотоприёмника"))
@@ -410,6 +350,68 @@ class Ui_MainWindow(object):
         self.cmdChBox.setText(_translate("MainWindow", "Через интервал (мс)"))
         self.readButton.setText(_translate("MainWindow", "Принять"))
         self.label_4.setText(_translate("MainWindow", "Команда:"))
+
+class BigIntSpinbox(QtGui.QAbstractSpinBox):
+
+    def __init__(self, parent=None):
+        super(BigIntSpinbox, self).__init__(parent)
+
+        self._singleStep = 1
+        self._minimum = 0 #-18446744073709551616
+        self._maximum = 4294967295 #18446744073709551615
+
+        self.lineEdit = QtGui.QLineEdit(self)
+
+        rx = QtCore.QRegExp("[0-9]\\d{1,9}")
+        validator = QtGui.QRegExpValidator(rx, self)
+
+        self.lineEdit.setValidator(validator)
+        self.setLineEdit(self.lineEdit)
+
+    def value(self):
+        try:
+            return int(self.lineEdit.text())
+        except:
+            raise
+            return 0
+
+    def setValue(self, value):
+        if self._valueInRange(value):
+            self.lineEdit.setText(str(value))
+
+    def stepBy(self, steps):
+        self.setValue(self.value() + steps*self.singleStep())
+
+    def stepEnabled(self):
+        return self.StepUpEnabled | self.StepDownEnabled
+
+    def setSingleStep(self, singleStep):
+        assert isinstance(singleStep, int)
+        # don't use negative values
+        self._singleStep = abs(singleStep)
+
+    def singleStep(self):
+        return self._singleStep
+
+    def minimum(self):
+        return self._minimum
+
+    def setMinimum(self, minimum):
+        assert isinstance(minimum, int) or isinstance(minimum, long)
+        self._minimum = minimum
+
+    def maximum(self):
+        return self._maximum
+
+    def setMaximum(self, maximum):
+        assert isinstance(maximum, int) or isinstance(maximum, long)
+        self._maximum = maximum
+
+    def _valueInRange(self, value):
+        if value >= self.minimum() and value <= self.maximum():
+            return True
+        else:
+            return False
 
 class Inits:
     def __init__(self):
@@ -478,6 +480,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self, *args, obj=None, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
         self.setupUi(self)
+
         self.textEdit.setWordWrapMode(QtGui.QTextOption.NoWrap)
         self.cleanButton.clicked.connect( lambda : { self.clean() })
 
