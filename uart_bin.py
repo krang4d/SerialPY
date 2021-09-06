@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # Serial Port Reader by Pavel Golovkin, aka pgg.
 # Feel free to use. No warranty
-# Version 3.6.14a
+# Version 3.6.15a
 
 import sys  # We need sys so that we can pass argv to QApplication
 import os
@@ -311,7 +311,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Физприбор 3.6.14а"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Физприбор 3.6.15а"))
         self.groupBox_Graphs.setTitle(_translate("MainWindow", "Графики"))
         self.responseGBox.setTitle(_translate("MainWindow", "Ответ:"))
         self.groupBox.setTitle(_translate("MainWindow", "Опрос фотоприёмника"))
@@ -361,15 +361,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self._index1 = iter(NumbersIterator())
         self._index2 = iter(NumbersIterator())
-        self._index3 = iter(NumbersIterator())
+        # self._index3 = iter(NumbersIterator())
 
 
         self._y1 = list()
         self._y2 = list()
-        self._y3 = list()
+        # self._y3 = list()
         self._x1  = list()
         self._x2  = list()
-        self._x3  = list()
+        # self._x3  = list()
 
         self.graphWidget1 = pg.PlotWidget()
         self.graphWidget2 = pg.PlotWidget()
@@ -379,7 +379,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         styles = {'color':'b', 'font-size':'14px'}
         self.graphWidget1.setLabel('left', 'RPM', **styles)
-        self.graphWidget2.setLabel('left', 'ADC, T (C)', **styles)
+        self.graphWidget2.setLabel('left', 'T (°C)', **styles)
 
         # Create a QHBoxLayout instance
         graphsLayout = QtWidgets.QVBoxLayout()
@@ -406,9 +406,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         pen = pg.mkPen(color=(0, 180, 0), width=2, style=QtCore.Qt.SolidLine)
         self._line1 = self.graphWidget1.plot(self._x1, self._y1, name='RPM', symbolBrush=(0, 180, 0), symbolSize=6, pen=pen)
         pen = pg.mkPen(color='b', width=2, style=QtCore.Qt.SolidLine)
-        self._line2 = self.graphWidget2.plot(self._x2, self._y2, name='T(C)/16', symbolBrush='b', symbolSize=6, pen=pen)
-        pen = pg.mkPen(color=(196, 160, 0), width=2, style=QtCore.Qt.SolidLine)
-        self._line3 = self.graphWidget2.plot(self._x3, self._y3, name='ADC', symbolBrush=(196, 160, 0), symbolSize=6, pen=pen)
+        self._line2 = self.graphWidget2.plot(self._x2, self._y2, name='T(°C)', symbolBrush='b', symbolSize=6, pen=pen)
+        # pen = pg.mkPen(color=(196, 160, 0), width=2, style=QtCore.Qt.SolidLine)
+        # self._line3 = self.graphWidget2.plot(self._x3, self._y3, name='ADC', symbolBrush=(196, 160, 0), symbolSize=6, pen=pen)
 
 
     def set_devs(self, devs):
@@ -419,34 +419,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     @staticmethod
     def set_num(i: int):
         MainWindow._num = i
-
-    def update_plot_data(self, data=None):
-        if data is None:
-            self._line1.setData(self._x, self._y1)  # Update the data.
-            self._line2.setData(self._x, self._y2)  # Update the data.
-            self._line3.setData(self._x, self._y3)  # Update the data.
-        elif data[0] == 'timeout':
-            self.statusbar.showMessage('timeout')
-        elif data[0] == 'error':
-            self.statusbar.showMessage('error: '+ data[1])
-        else:
-            self.statusbar.showMessage('data: '+str(data))
-            if len(self._x) >= self._num:
-                cut = len(self._x) - self._num + 1
-                self._x = self._x[cut:]       # Remove the first
-                self._y1 = self._y1[cut:]     # Remove the first
-                self._y2 = self._y2[cut:]     # Remove the first
-                self._y3 = self._y3[cut:]     # Remove the first
-
-            data[2] = data[2]/16
-            self._x.append(next(self._index)) #self._x[-1] + 1)   # Add a new value 1 higher than the last.
-            self._y1.append( data[0])   # Add a new value.
-            self._y2.append( data[1])   # Add a new value.
-            self._y3.append( data[2])   # Add a new value.
-
-            self._line1.setData(self._x, self._y1)  # Update the data.
-            self._line2.setData(self._x, self._y2)  # Update the data.
-            self._line3.setData(self._x, self._y3)  # Update the data.
 
     def get_bytes(self):
         cmd = self.cmdLineEdit.text()
@@ -483,7 +455,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         sb.setValue(sb.maximum())
         print('show_res: ', data.hex())
 
+    def _update_ph(self, data):
+        '''Функция добавления новой точки на график фотоприемника'''
+        if len(self._x2) >= self._num:
+            cut = len(self._x2) - self._num + 1
+            self._x2 = self._x2[cut:]     # Remove the first
+            self._y2 = self._y2[cut:]     # Remove the first
+
+        self._x2.append(next(self._index2)) #self._x[-1] + 1)   # Add a new value 1 higher than the last.
+        self._y2.append(data) # Add a new value.
+        self._line2.setData(self._x2, self._y2)  # Update the data.
+
     def show_ph(self, data : bytes):
+        """Функция обновления всех значейний фотоприемника"""
         N = int.from_bytes(data[3:7], byteorder='little', signed=False)
         str_code = str(N)
         print("show_ph():", str_code, data[3:7].hex())
@@ -496,17 +480,26 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         try: 
             T = (N-N1)*(T2-T1)/(N2-N1)+T1
             self.photoLineEdit_0.setText( str(T) )
-
-            self._x2.append(next(self._index2)) #self._x[-1] + 1)   # Add a new value 1 higher than the last.
-            self._y2.append(T)   # Add a new value.
-            self._line2.setData(self._x2, self._y2)  # Update the data.
+            self._update_ph(T)
         except ZeroDivisionError:
             self.photoLineEdit_0.setText( "-" )
             self.statusbar.showMessage("ZeroDivisionError", 3000)
 
         # self.textEdit.insertPlainText(str(data)+" "+now.strftime("%H:%M:%S %f")+'\n');
 
+    def _update_taxo(self, data):
+        """Функция добавления новой точки на график скрости тахометра"""
+        if len(self._x1) >= self._num:
+            cut = len(self._x1) - self._num + 1
+            self._x1 = self._x1[cut:]     # Remove the first
+            self._y1 = self._y1[cut:]     # Remove the first
+
+        self._x1.append(next(self._index1)) #self._x[-1] + 1)   # Add a new value 1 higher than the last.
+        self._y1.append(data) # Add a new value.
+        self._line1.setData(self._x1, self._y1)  # Update the data.
+
     def show_taxo(self, data : bytes):
+        """Функция обновления всех значейний тахометра"""
         t = int.from_bytes(data[3:7], byteorder='little', signed=False)
         msg1 = str(t)
         print("show_ph():", msg1, data[3:7].hex())
@@ -517,10 +510,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             y = 60000000/t
             msg0 = "%.3f" % (60000000/t)
             self.taxoLineEdit_0.setText(msg0)
-
-            self._x1.append(next(self._index1)) #self._x[-1] + 1)   # Add a new value 1 higher than the last.
-            self._y1.append(y)   # Add a new value.
-            self._line1.setData(self._x1, self._y1)  # Update the data.
+            self._update_taxo(y)
 
 
 class FixedSerial( serial.Serial ):
