@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # Serial Port Reader by Pavel Golovkin, aka pgg.
 # Feel free to use. No warranty
-# Version 3.6.15a
+# Version 3.6.17a
 
 import sys  # We need sys so that we can pass argv to QApplication
 import os
