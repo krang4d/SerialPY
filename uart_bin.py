@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # Serial Port Reader by Pavel Golovkin, aka pgg.
 # Feel free to use. No warranty
-# Version 3.6.17a
+# Version 3.6.18a
 
 import sys  # We need sys so that we can pass argv to QApplication
 import os
@@ -313,7 +313,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Физприбор 3.6.17а"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Физприбор 3.6.18а"))
         self.groupBox_Graphs.setTitle(_translate("MainWindow", "Графики"))
         self.responseGBox.setTitle(_translate("MainWindow", "Ответ:"))
         self.groupBox.setTitle(_translate("MainWindow", "Опрос фотоприёмника"))
@@ -351,7 +351,7 @@ class Ui_MainWindow(object):
         self.readButton.setText(_translate("MainWindow", "Принять"))
         self.label_4.setText(_translate("MainWindow", "Команда:"))
 
-class BigIntSpinbox(QtGui.QAbstractSpinBox):
+class BigIntSpinbox(QtWidgets.QAbstractSpinBox):
 
     def __init__(self, parent=None):
         super(BigIntSpinbox, self).__init__(parent)
@@ -360,7 +360,7 @@ class BigIntSpinbox(QtGui.QAbstractSpinBox):
         self._minimum = 0 #-18446744073709551616
         self._maximum = 4294967295 #18446744073709551615
 
-        self.lineEdit = QtGui.QLineEdit(self)
+        self.lineEdit = QtWidgets.QLineEdit(self)
 
         rx = QtCore.QRegExp("[0-9]\\d{1,9}")
         validator = QtGui.QRegExpValidator(rx, self)
