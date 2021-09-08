@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # Serial Port Reader by Pavel Golovkin, aka pgg.
 # Feel free to use. No warranty
-# Version 3.6.18a
+# Version 3.6.19a
 
 import sys  # We need sys so that we can pass argv to QApplication
 import os
@@ -313,7 +313,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Физприбор 3.6.18а"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Физприбор 3.6.19а"))
         self.groupBox_Graphs.setTitle(_translate("MainWindow", "Графики"))
         self.responseGBox.setTitle(_translate("MainWindow", "Ответ:"))
         self.groupBox.setTitle(_translate("MainWindow", "Опрос фотоприёмника"))
@@ -618,7 +618,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         T2 = self.spinBox_T2.value()
         try: 
             T = (N-N1)*(T2-T1)/(N2-N1)+T1
-            self.photoLineEdit_0.setText( str(T) )
+            self.photoLineEdit_0.setText( "%.1f" % (T) )
             self._update_ph(T)
         except ZeroDivisionError:
             self.photoLineEdit_0.setText( "-" )
@@ -647,7 +647,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.taxoLineEdit_0.setText("-")
         else:
             y = 60000000/t
-            msg0 = "%.3f" % (60000000/t)
+            msg0 = "%.1f" % (60000000/t)
             self.taxoLineEdit_0.setText(msg0)
             self._update_taxo(y)
 
