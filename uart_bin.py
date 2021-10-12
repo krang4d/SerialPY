@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # Serial Port Reader by Pavel Golovkin, aka pgg.
 # Feel free to use. No warranty
-# Version 3.6.22a
+# Version 3.6.23a
 
 import sys  # We need sys so that we can pass argv to QApplication
 import os
@@ -313,7 +313,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Физприбор 3.6.22а"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Физприбор 3.6.23а"))
         self.groupBox_Graphs.setTitle(_translate("MainWindow", "Графики"))
         self.responseGBox.setTitle(_translate("MainWindow", "Ответ:"))
         self.groupBox.setTitle(_translate("MainWindow", "Опрос фотоприёмника"))
@@ -488,6 +488,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self._index2 = iter(NumbersIterator())
         # self._index3 = iter(NumbersIterator())
 
+        self.flag_update_ph = True
+        self.flag_update_taxo = True
 
         self._y1 = list()
         self._y2 = list()
@@ -604,8 +606,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self._x2.append(next(self._index2)) #self._x[-1] + 1)   # Add a new value 1 higher than the last.
         self._y2.append(data) # Add a new value.
         self._line2.setData(self._x2, self._y2)  # Update the data.
-        avg = sum(self._y2) / len(self._y2)
-        self.graphWidget2.setRange(yRange=[avg+0.25, avg-0.25])
+
+        axY = self.graphWidget2.getAxis('left')
+
+        if data > axY.range[1] or data < axY.range[0] or self.flag_update_ph:
+            avg = sum(self._y2) / len(self._y2)
+            self.graphWidget2.setRange(yRange=[avg+0.25, avg-0.25])
+            self.flag_update_ph = False;
 
     def show_ph(self, data : bytes):
         """Функция обновления всех значейний фотоприемника"""
@@ -639,9 +646,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self._y1.append(data) # Add a new value.
         self._line1.setData(self._x1, self._y1)  # Update the data.
 
-        avg = sum(self._y1) / len(self._y1)
-        limit = 0.005 * avg / 2
-        self.graphWidget1.setRange(yRange=[ avg+limit, avg-limit])
+        axY = self.graphWidget1.getAxis('left')
+        # print("axis bottom", axX.range, "axis left", axY.range[0], axY.range[1])
+        if data > axY.range[1] or data < axY.range[0] or self.flag_update_taxo:
+            avg = sum(self._y1) / len(self._y1)
+            limit = 0.05 * avg / 2
+            self.graphWidget1.setRange(yRange=[ avg+limit, avg-limit])
+            self.flag_update_taxo = False
 
     def show_taxo(self, data : bytes):
         """Функция обновления всех значейний тахометра"""
