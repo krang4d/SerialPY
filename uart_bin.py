@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # Serial Port Reader by Pavel Golovkin, aka pgg.
 # Feel free to use. No warranty
-# Version 3.6.20a
+# Version 3.6.21a
 
 import sys  # We need sys so that we can pass argv to QApplication
 import os
@@ -313,7 +313,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Физприбор 3.6.20а"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Физприбор 3.6.21а"))
         self.groupBox_Graphs.setTitle(_translate("MainWindow", "Графики"))
         self.responseGBox.setTitle(_translate("MainWindow", "Ответ:"))
         self.groupBox.setTitle(_translate("MainWindow", "Опрос фотоприёмника"))
@@ -604,10 +604,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self._x2.append(next(self._index2)) #self._x[-1] + 1)   # Add a new value 1 higher than the last.
         self._y2.append(data) # Add a new value.
         self._line2.setData(self._x2, self._y2)  # Update the data.
-
-        avg = sum(self._y2) / len(self._y2)
-        limit = 0.005 * avg / 2
-        self.graphWidget2.setRange(yRange=[ avg+limit, avg-limit])
+        self.graphWidget2.setRange(yRange=[0, 0.5])
 
     def show_ph(self, data : bytes):
         """Функция обновления всех значейний фотоприемника"""
@@ -640,7 +637,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self._x1.append(next(self._index1)) #self._x[-1] + 1)   # Add a new value 1 higher than the last.
         self._y1.append(data) # Add a new value.
         self._line1.setData(self._x1, self._y1)  # Update the data.
-        self.graphWidget1.setRange(yRange=[0, 0.5])
+
+        avg = sum(self._y1) / len(self._y1)
+        limit = 0.005 * avg / 2
+        self.graphWidget1.setRange(yRange=[ avg+limit, avg-limit])
 
     def show_taxo(self, data : bytes):
         """Функция обновления всех значейний тахометра"""
