@@ -605,6 +605,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self._y2.append(data) # Add a new value.
         self._line2.setData(self._x2, self._y2)  # Update the data.
 
+        avg = sum(self._y2) / len(self._y2)
+        limit = 0.005 * avg / 2
+        self.graphWidget2.setRange(yRange=[ avg+limit, avg-limit])
+
     def show_ph(self, data : bytes):
         """Функция обновления всех значейний фотоприемника"""
         N = int.from_bytes(data[3:7], byteorder='little', signed=False)
@@ -636,6 +640,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self._x1.append(next(self._index1)) #self._x[-1] + 1)   # Add a new value 1 higher than the last.
         self._y1.append(data) # Add a new value.
         self._line1.setData(self._x1, self._y1)  # Update the data.
+        self.graphWidget1.setRange(yRange=[0, 0.5])
 
     def show_taxo(self, data : bytes):
         """Функция обновления всех значейний тахометра"""
