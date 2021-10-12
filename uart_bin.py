@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # Serial Port Reader by Pavel Golovkin, aka pgg.
 # Feel free to use. No warranty
-# Version 3.6.19a
+# Version 3.6.20a
 
 import sys  # We need sys so that we can pass argv to QApplication
 import os
@@ -313,7 +313,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Физприбор 3.6.19а"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Физприбор 3.6.20а"))
         self.groupBox_Graphs.setTitle(_translate("MainWindow", "Графики"))
         self.responseGBox.setTitle(_translate("MainWindow", "Ответ:"))
         self.groupBox.setTitle(_translate("MainWindow", "Опрос фотоприёмника"))
