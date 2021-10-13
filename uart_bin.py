@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # Serial Port Reader by Pavel Golovkin, aka pgg.
 # Feel free to use. No warranty
-# Version 3.6.24a
+# Version 3.6.25a
 
 import sys  # We need sys so that we can pass argv to QApplication
 import os
@@ -313,7 +313,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Физприбор 3.6.24а"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Физприбор 3.6.25а"))
         self.groupBox_Graphs.setTitle(_translate("MainWindow", "Графики"))
         self.responseGBox.setTitle(_translate("MainWindow", "Ответ:"))
         self.groupBox.setTitle(_translate("MainWindow", "Опрос фотоприёмника"))
@@ -610,8 +610,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         axY = self.graphWidget2.getAxis('left')
 
         if data > axY.range[1] or data < axY.range[0] or self.flag_update_ph:
-            avg = sum(self._y2) / len(self._y2)
-            self.graphWidget2.setRange(yRange=[avg+0.25, avg-0.25])
+            # avg = sum(self._y2) / len(self._y2)
+            ymin = min(self._y2)
+            ymax = max(self._y2)
+            self.graphWidget2.setRange(yRange=[ymax+0.25, ymin-0.25])
             self.flag_update_ph = False;
 
     def show_ph(self, data : bytes):
@@ -650,8 +652,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         # print("axis bottom", axX.range, "axis left", axY.range[0], axY.range[1])
         if data > axY.range[1] or data < axY.range[0] or self.flag_update_taxo:
             avg = sum(self._y1) / len(self._y1)
-            limit = 0.05 * avg / 2
-            self.graphWidget1.setRange(yRange=[ avg+limit, avg-limit])
+            ymin = min(self._y1)
+            ymax = max(self._y1)
+            limit = 0.005 * avg
+            self.graphWidget1.setRange(yRange=[ ymax+limit, ymin-limit])
             self.flag_update_taxo = False
 
     def show_taxo(self, data : bytes):
