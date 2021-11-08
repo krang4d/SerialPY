@@ -780,8 +780,8 @@ class UDevice(QtWidgets.QWidget):
         return devices
 
     # @_FileLogger
-    def readbincode(self):
-        r = UDevice._port.read(9)
+    def readbincode(self, len=9):
+        r = UDevice._port.read(len)
         # print("readbincode() ", r.hex())
         return r
 

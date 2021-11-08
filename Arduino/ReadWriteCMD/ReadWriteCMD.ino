@@ -23,21 +23,54 @@ void serial_flush_buffer()
    ; // do nothing
 }
 
+bool is_equal(byte cmd[], int len)
+{
+  //ffffffffffff019400
+  byte tmp[]   = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x01, 0x94, 0x00};
+  for(int i=0; i<len; i++)
+  {
+    if(cmd[i] !=  tmp[i])
+      return false;
+  }
+  return true;
+}
+
+byte data[1024];
+void prepe()
+{
+  byte b = 0;
+  for(int i=0; i<1024; i++)
+  {
+    data[i] = b;
+    b++;
+  }
+}
+
 byte buffer[9];
-byte cmd[]   = {0x10, 0x03, 0x00, 0x01, 0x00, 0x01, 0xD6, 0x8B};
+byte cmd_0[]   = {0x10, 0x03, 0x00, 0x01, 0x00, 0x01, 0xD6, 0x8B};
 byte cmd_1[] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08};
-byte cmd_t[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01};
-byte cmd_f[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+byte cmd_t[] = {0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01};
+byte cmd_f[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
 void serialEvent(){
   Serial.readBytes(buffer, 8);
   serial_flush_buffer();
-  Serial.write(buffer, 9);
+  if(is_equal(buffer, 8)) {
+    Serial.write(data, 1024);
+  }
+  else 
+    Serial.write(buffer, 9);
 }
 
+bool alreadyRun = false;
 // the loop routine runs over and over again forever:
 void loop() {
-  
+  if(alreadyRun == false)
+  {
+    prepe();
+    alreadyRun = true;
+  }
+    
 //  if(memcmp (buffer, cmd_1, 8)==0)
 //  {
 //    cmd_t[7] += 1; 
