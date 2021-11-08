@@ -472,6 +472,10 @@ class Inits:
     def set_T2(self, value):
         self.calibration['T2'] = value
 
+class EmittingStream(QtCore.QObject):
+    textWritten = QtCore.pyqtSignal(str)
+    def write(self, text):
+        self.textWritten.emit(str(text))
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     ''' Основное окно программы    '''
@@ -480,6 +484,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self, *args, obj=None, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
         self.setupUi(self)
+
+        # Install the custom output stream
+        sys.stdout = EmittingStream(textWritten=self.normalOutputWritten)
 
         self.textEdit.setWordWrapMode(QtGui.QTextOption.NoWrap)
         self.cleanButton.clicked.connect( lambda : { self.clean() })
@@ -538,12 +545,25 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         # self._line3 = self.graphWidget2.plot(self._x3, self._y3, name='ADC', symbolBrush=(196, 160, 0), symbolSize=6, pen=pen)
 
         self.init = Inits()
-        self.init.print_debug()
+        # self.init.print_debug()
         self.spinBox_N1.setValue(self.init.get_N1())
         self.spinBox_N2.setValue(self.init.get_N2())
         self.spinBox_T1.setValue(self.init.get_T1())
         self.spinBox_T2.setValue(self.init.get_T2())
 
+    def __del__(self):
+        # Restore sys.stdout
+        sys.stdout = sys.__stdout__
+
+    def normalOutputWritten(self, text):
+        """Append text to the QTextEdit."""
+        # Maybe QTextEdit.append() works as well, but this is how I do it:
+        cursor = self.textEdit.textCursor()
+        cursor.movePosition(QtGui.QTextCursor.End)
+        cursor.insertText(text)
+        self.textEdit.setTextCursor(cursor)
+        self.textEdit.ensureCursorVisible()
+    
     def closeEvent(self, event):
         self.init.set_N1(self.spinBox_N1.value())
         self.init.set_N2(self.spinBox_N2.value())
@@ -565,7 +585,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         cmd = self.cmdLineEdit.text()
         try:
             bl = bytes.fromhex(cmd)
-            print('get_bytes:', bl.hex())
+            print('get_bytes():', bl.hex())
         except Exception as e:
             self.statusbar.showMessage(str(e), 3000)
         return bl
@@ -574,7 +594,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         cmd = self.photoLineEdit_2.text()
         try:
             bl = bytes.fromhex(cmd)
-            print('get_ph:', bl)
+            # print('get_ph():', bl)
         except Exception as e:
             self.statusbar.showMessage(str(e), 3000)
         return bl
@@ -583,7 +603,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         cmd = self.taxoLineEdit_2.text()
         try:
             bl = bytes.fromhex(cmd)
-            print('get_ph:', bl)
+            # print('get_taxo():', bl)
         except Exception as e:
             self.statusbar.showMessage(str(e), 3000)
         return bl
@@ -594,7 +614,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.textEdit.insertPlainText(data.hex() +" "+now.strftime("%H:%M:%S %f")+'\n')
         sb = self.textEdit.verticalScrollBar()
         sb.setValue(sb.maximum())
-        print('show_res: ', data.hex())
+        print('show_res(): ', data.hex())
 
     def _update_ph(self, data):
         '''Функция добавления новой точки на график фотоприемника'''
@@ -620,7 +640,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         """Функция обновления всех значейний фотоприемника"""
         N = int.from_bytes(data[3:7], byteorder='little', signed=False)
         str_code = str(N)
-        print("show_ph():", str_code, data[3:7].hex())
+        # print("show_ph():", str_code, data[3:7].hex())
         self.photoLineEdit_1.setText(str_code)
 
         N1 = self.spinBox_N1.value()
@@ -662,7 +682,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         """Функция обновления всех значейний тахометра"""
         t = int.from_bytes(data[3:7], byteorder='little', signed=False)
         msg1 = str(t)
-        print("show_ph():", msg1, data[3:7].hex())
+        # print("show_taxo():", msg1, data[3:7].hex())
         self.taxoLineEdit_1.setText(msg1)
         if (t == 0):
             self.taxoLineEdit_0.setText("-")
@@ -762,7 +782,7 @@ class UDevice(QtWidgets.QWidget):
     # @_FileLogger
     def readbincode(self):
         r = UDevice._port.read(9)
-        print("readbincode() ", r.hex())
+        # print("readbincode() ", r.hex())
         return r
 
     def writebincode(self, data : bytes):
@@ -773,7 +793,7 @@ class UDevice(QtWidgets.QWidget):
 def _add_CRC16(data: bytes):
     crc16 = libscrc.modbus(data)
     b78 = crc16.to_bytes(2, byteorder='little')
-    print("b78: ", b78.hex(), "crc16: ", crc16)
+    # print("_add_CRC16(): b78: ", b78.hex(), "crc16: ", crc16)
     l = list(data)
     l.append(int(b78[0]))
     l.append(int(b78[1]))
@@ -808,6 +828,9 @@ def _test_send():
     # print('sum: ', b2)
 
 def _setup_window():
+
+    timer1 = QtCore.QTimer()
+    timer2 = QtCore.QTimer()
 
     timer1.timeout.connect( lambda: {
         device.writebincode(window.get_bytes()),
@@ -889,11 +912,10 @@ def _taxo(window, device, timer):
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     window = MainWindow()
-    print(sys.getsizeof(2 ** 63))
-    print(type(2 ** 63))
+    # print(sys.getsizeof(2 ** 63))
+    # print(type(2 ** 63))
     device = UDevice()
-    timer1 = QtCore.QTimer()
-    timer2 = QtCore.QTimer()
+
     # timer3=QtCore.QTimer()
     # _test_send()
     _setup_window()
