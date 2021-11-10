@@ -26,143 +26,50 @@ import json
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1125, 1059)
+        MainWindow.resize(1352, 1125)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
         self.gridLayout.setObjectName("gridLayout")
-        self.groupBox_Graphs = QtWidgets.QGroupBox(self.centralwidget)
-        self.groupBox_Graphs.setObjectName("groupBox_Graphs")
-        self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.groupBox_Graphs)
-        self.verticalLayout_5.setObjectName("verticalLayout_5")
-        self.widget = QtWidgets.QWidget(self.groupBox_Graphs)
-        self.widget.setObjectName("widget")
-        self.verticalLayout_5.addWidget(self.widget)
-        self.gridLayout.addWidget(self.groupBox_Graphs, 0, 1, 3, 1)
-        self.responseGBox = QtWidgets.QGroupBox(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.MinimumExpanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.responseGBox.sizePolicy().hasHeightForWidth())
-        self.responseGBox.setSizePolicy(sizePolicy)
-        self.responseGBox.setObjectName("responseGBox")
-        self.verticalLayout = QtWidgets.QVBoxLayout(self.responseGBox)
-        self.verticalLayout.setObjectName("verticalLayout")
-        self.textEdit = QtWidgets.QTextEdit(self.responseGBox)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.MinimumExpanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.textEdit.sizePolicy().hasHeightForWidth())
-        self.textEdit.setSizePolicy(sizePolicy)
-        self.textEdit.setReadOnly(True)
-        self.textEdit.setObjectName("textEdit")
-        self.verticalLayout.addWidget(self.textEdit)
-        self.gridLayout.addWidget(self.responseGBox, 3, 1, 3, 1)
-        self.groupBox = QtWidgets.QGroupBox(self.centralwidget)
+        self.groupBox_data_vibro = QtWidgets.QGroupBox(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.groupBox.sizePolicy().hasHeightForWidth())
-        self.groupBox.setSizePolicy(sizePolicy)
-        self.groupBox.setObjectName("groupBox")
-        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.groupBox)
-        self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.formLayout_2 = QtWidgets.QFormLayout()
-        self.formLayout_2.setObjectName("formLayout_2")
-        self.photoLineEdit_0 = QtWidgets.QLineEdit(self.groupBox)
+        sizePolicy.setHeightForWidth(self.groupBox_data_vibro.sizePolicy().hasHeightForWidth())
+        self.groupBox_data_vibro.setSizePolicy(sizePolicy)
+        self.groupBox_data_vibro.setObjectName("groupBox_data_vibro")
+        self.gridLayout_2 = QtWidgets.QGridLayout(self.groupBox_data_vibro)
+        self.gridLayout_2.setObjectName("gridLayout_2")
+        self.NVButton = QtWidgets.QPushButton(self.groupBox_data_vibro)
+        self.NVButton.setObjectName("NVButton")
+        self.gridLayout_2.addWidget(self.NVButton, 2, 1, 1, 2)
+        self.label_NV = QtWidgets.QLabel(self.groupBox_data_vibro)
+        self.label_NV.setObjectName("label_NV")
+        self.gridLayout_2.addWidget(self.label_NV, 0, 1, 1, 1)
+        self.spinBox_NV = QtWidgets.QSpinBox(self.groupBox_data_vibro)
+        self.spinBox_NV.setObjectName("spinBox_NV")
+        self.gridLayout_2.addWidget(self.spinBox_NV, 0, 2, 1, 1)
+        self.gridLayout.addWidget(self.groupBox_data_vibro, 2, 0, 1, 1)
+        self.groupBox_taxo = QtWidgets.QGroupBox(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.photoLineEdit_0.sizePolicy().hasHeightForWidth())
-        self.photoLineEdit_0.setSizePolicy(sizePolicy)
-        self.photoLineEdit_0.setObjectName("photoLineEdit_0")
-        self.formLayout_2.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.photoLineEdit_0)
-        self.photoLineEdit_1 = QtWidgets.QLineEdit(self.groupBox)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.photoLineEdit_1.sizePolicy().hasHeightForWidth())
-        self.photoLineEdit_1.setSizePolicy(sizePolicy)
-        self.photoLineEdit_1.setText("")
-        self.photoLineEdit_1.setReadOnly(True)
-        self.photoLineEdit_1.setObjectName("photoLineEdit_1")
-        self.formLayout_2.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.photoLineEdit_1)
-        self.label_temp = QtWidgets.QLabel(self.groupBox)
-        self.label_temp.setObjectName("label_temp")
-        self.formLayout_2.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.label_temp)
-        self.label = QtWidgets.QLabel(self.groupBox)
-        self.label.setObjectName("label")
-        self.formLayout_2.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.label)
-        self.verticalLayout_2.addLayout(self.formLayout_2)
-        self.label_cmd = QtWidgets.QLabel(self.groupBox)
-        self.label_cmd.setObjectName("label_cmd")
-        self.verticalLayout_2.addWidget(self.label_cmd)
-        self.photoLineEdit_2 = QtWidgets.QLineEdit(self.groupBox)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.photoLineEdit_2.sizePolicy().hasHeightForWidth())
-        self.photoLineEdit_2.setSizePolicy(sizePolicy)
-        self.photoLineEdit_2.setReadOnly(True)
-        self.photoLineEdit_2.setObjectName("photoLineEdit_2")
-        self.verticalLayout_2.addWidget(self.photoLineEdit_2)
-        self.formLayout = QtWidgets.QFormLayout()
-        self.formLayout.setObjectName("formLayout")
-        self.label_N2 = QtWidgets.QLabel(self.groupBox)
-        self.label_N2.setObjectName("label_N2")
-        self.formLayout.setWidget(2, QtWidgets.QFormLayout.LabelRole, self.label_N2)
-        self.label_T1 = QtWidgets.QLabel(self.groupBox)
-        self.label_T1.setObjectName("label_T1")
-        self.formLayout.setWidget(3, QtWidgets.QFormLayout.LabelRole, self.label_T1)
-        self.label_T2 = QtWidgets.QLabel(self.groupBox)
-        self.label_T2.setObjectName("label_T2")
-        self.formLayout.setWidget(4, QtWidgets.QFormLayout.LabelRole, self.label_T2)
-        self.label_N1 = QtWidgets.QLabel(self.groupBox)
-        self.label_N1.setObjectName("label_N1")
-        self.formLayout.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.label_N1)
-        self.label_calibr = QtWidgets.QLabel(self.groupBox)
-        self.label_calibr.setObjectName("label_calibr")
-        self.formLayout.setWidget(0, QtWidgets.QFormLayout.SpanningRole, self.label_calibr)
-        self.spinBox_N1 = BigIntSpinbox(self.groupBox)
-        # self.spinBox_N1.setMaximum(999999999)
-        self.spinBox_N1.setObjectName("spinBox_N1")
-        self.formLayout.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.spinBox_N1)
-        self.spinBox_N2 = BigIntSpinbox(self.groupBox)
-        # self.spinBox_N2.setMaximum(999999999)
-        self.spinBox_N2.setObjectName("spinBox_N2")
-        self.formLayout.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.spinBox_N2)
-        self.spinBox_T1 = QtWidgets.QSpinBox(self.groupBox)
-        self.spinBox_T1.setMinimum(-999999999)
-        self.spinBox_T1.setMaximum(999999999)
-        self.spinBox_T1.setObjectName("spinBox_T1")
-        self.formLayout.setWidget(3, QtWidgets.QFormLayout.FieldRole, self.spinBox_T1)
-        self.spinBox_T2 = QtWidgets.QSpinBox(self.groupBox)
-        self.spinBox_T2.setMinimum(-999999999)
-        self.spinBox_T2.setMaximum(999999999)
-        self.spinBox_T2.setObjectName("spinBox_T2")
-        self.formLayout.setWidget(4, QtWidgets.QFormLayout.FieldRole, self.spinBox_T2)
-        self.verticalLayout_2.addLayout(self.formLayout)
-        self.gridLayout.addWidget(self.groupBox, 2, 0, 1, 1)
-        self.groupBox_2 = QtWidgets.QGroupBox(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.groupBox_2.sizePolicy().hasHeightForWidth())
-        self.groupBox_2.setSizePolicy(sizePolicy)
-        self.groupBox_2.setObjectName("groupBox_2")
-        self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.groupBox_2)
+        sizePolicy.setHeightForWidth(self.groupBox_taxo.sizePolicy().hasHeightForWidth())
+        self.groupBox_taxo.setSizePolicy(sizePolicy)
+        self.groupBox_taxo.setObjectName("groupBox_taxo")
+        self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.groupBox_taxo)
         self.verticalLayout_4.setObjectName("verticalLayout_4")
-        self.formLayout_3 = QtWidgets.QFormLayout()
-        self.formLayout_3.setObjectName("formLayout_3")
-        self.taxoLineEdit_0 = QtWidgets.QLineEdit(self.groupBox_2)
+        self.formLayout_taxo = QtWidgets.QFormLayout()
+        self.formLayout_taxo.setObjectName("formLayout_taxo")
+        self.taxoLineEdit_0 = QtWidgets.QLineEdit(self.groupBox_taxo)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.taxoLineEdit_0.sizePolicy().hasHeightForWidth())
         self.taxoLineEdit_0.setSizePolicy(sizePolicy)
         self.taxoLineEdit_0.setObjectName("taxoLineEdit_0")
-        self.formLayout_3.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.taxoLineEdit_0)
-        self.taxoLineEdit_1 = QtWidgets.QLineEdit(self.groupBox_2)
+        self.formLayout_taxo.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.taxoLineEdit_0)
+        self.taxoLineEdit_1 = QtWidgets.QLineEdit(self.groupBox_taxo)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -170,18 +77,18 @@ class Ui_MainWindow(object):
         self.taxoLineEdit_1.setSizePolicy(sizePolicy)
         self.taxoLineEdit_1.setText("")
         self.taxoLineEdit_1.setObjectName("taxoLineEdit_1")
-        self.formLayout_3.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.taxoLineEdit_1)
-        self.label_1 = QtWidgets.QLabel(self.groupBox_2)
+        self.formLayout_taxo.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.taxoLineEdit_1)
+        self.label_1 = QtWidgets.QLabel(self.groupBox_taxo)
         self.label_1.setObjectName("label_1")
-        self.formLayout_3.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.label_1)
-        self.label_2 = QtWidgets.QLabel(self.groupBox_2)
+        self.formLayout_taxo.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.label_1)
+        self.label_2 = QtWidgets.QLabel(self.groupBox_taxo)
         self.label_2.setObjectName("label_2")
-        self.formLayout_3.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.label_2)
-        self.verticalLayout_4.addLayout(self.formLayout_3)
-        self.label_3 = QtWidgets.QLabel(self.groupBox_2)
+        self.formLayout_taxo.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.label_2)
+        self.verticalLayout_4.addLayout(self.formLayout_taxo)
+        self.label_3 = QtWidgets.QLabel(self.groupBox_taxo)
         self.label_3.setObjectName("label_3")
         self.verticalLayout_4.addWidget(self.label_3)
-        self.taxoLineEdit_2 = QtWidgets.QLineEdit(self.groupBox_2)
+        self.taxoLineEdit_2 = QtWidgets.QLineEdit(self.groupBox_taxo)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -190,36 +97,34 @@ class Ui_MainWindow(object):
         self.taxoLineEdit_2.setReadOnly(True)
         self.taxoLineEdit_2.setObjectName("taxoLineEdit_2")
         self.verticalLayout_4.addWidget(self.taxoLineEdit_2)
-        self.gridLayout.addWidget(self.groupBox_2, 3, 0, 1, 1)
-        self.verticalLayout_6 = QtWidgets.QVBoxLayout()
-        self.verticalLayout_6.setObjectName("verticalLayout_6")
-        self.photoButton_1 = QtWidgets.QPushButton(self.centralwidget)
-        self.photoButton_1.setObjectName("photoButton_1")
-        self.verticalLayout_6.addWidget(self.photoButton_1)
-        self.photoButton_2 = QtWidgets.QPushButton(self.centralwidget)
-        self.photoButton_2.setObjectName("photoButton_2")
-        self.verticalLayout_6.addWidget(self.photoButton_2)
+        self.gridLayout.addWidget(self.groupBox_taxo, 5, 0, 1, 1)
+        self.verticalLayout_main_buttons = QtWidgets.QVBoxLayout()
+        self.verticalLayout_main_buttons.setObjectName("verticalLayout_main_buttons")
+        self.startButton = QtWidgets.QPushButton(self.centralwidget)
+        self.startButton.setObjectName("startButton")
+        self.verticalLayout_main_buttons.addWidget(self.startButton)
+        self.stopButton = QtWidgets.QPushButton(self.centralwidget)
+        self.stopButton.setObjectName("stopButton")
+        self.verticalLayout_main_buttons.addWidget(self.stopButton)
         self.cleanButton = QtWidgets.QPushButton(self.centralwidget)
         self.cleanButton.setObjectName("cleanButton")
-        self.verticalLayout_6.addWidget(self.cleanButton)
-        self.gridLayout.addLayout(self.verticalLayout_6, 4, 0, 1, 1)
-        spacerItem = QtWidgets.QSpacerItem(0, 0, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Ignored)
-        self.gridLayout.addItem(spacerItem, 5, 0, 1, 1)
-        self.settingsGBox = QtWidgets.QGroupBox(self.centralwidget)
-        self.settingsGBox.setEnabled(True)
+        self.verticalLayout_main_buttons.addWidget(self.cleanButton)
+        self.gridLayout.addLayout(self.verticalLayout_main_buttons, 6, 0, 1, 1)
+        self.groupBox_settings = QtWidgets.QGroupBox(self.centralwidget)
+        self.groupBox_settings.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.settingsGBox.sizePolicy().hasHeightForWidth())
-        self.settingsGBox.setSizePolicy(sizePolicy)
-        self.settingsGBox.setObjectName("settingsGBox")
-        self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.settingsGBox)
+        sizePolicy.setHeightForWidth(self.groupBox_settings.sizePolicy().hasHeightForWidth())
+        self.groupBox_settings.setSizePolicy(sizePolicy)
+        self.groupBox_settings.setObjectName("groupBox_settings")
+        self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.groupBox_settings)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
-        self.portLabel = QtWidgets.QLabel(self.settingsGBox)
+        self.portLabel = QtWidgets.QLabel(self.groupBox_settings)
         self.portLabel.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.portLabel.setObjectName("portLabel")
         self.verticalLayout_3.addWidget(self.portLabel)
-        self.portCBox = QtWidgets.QComboBox(self.settingsGBox)
+        self.portCBox = QtWidgets.QComboBox(self.groupBox_settings)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -228,11 +133,11 @@ class Ui_MainWindow(object):
         self.portCBox.setMinimumSize(QtCore.QSize(140, 0))
         self.portCBox.setObjectName("portCBox")
         self.verticalLayout_3.addWidget(self.portCBox)
-        self.speedLabel = QtWidgets.QLabel(self.settingsGBox)
+        self.speedLabel = QtWidgets.QLabel(self.groupBox_settings)
         self.speedLabel.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.speedLabel.setObjectName("speedLabel")
         self.verticalLayout_3.addWidget(self.speedLabel)
-        self.speedCBox = QtWidgets.QComboBox(self.settingsGBox)
+        self.speedCBox = QtWidgets.QComboBox(self.groupBox_settings)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -245,60 +150,160 @@ class Ui_MainWindow(object):
         self.speedCBox.addItem("")
         self.speedCBox.addItem("")
         self.verticalLayout_3.addWidget(self.speedCBox)
-        self.refButton = QtWidgets.QPushButton(self.settingsGBox)
+        self.refButton = QtWidgets.QPushButton(self.groupBox_settings)
         self.refButton.setObjectName("refButton")
         self.verticalLayout_3.addWidget(self.refButton)
-        self.openButton = QtWidgets.QPushButton(self.settingsGBox)
+        self.openButton = QtWidgets.QPushButton(self.groupBox_settings)
         self.openButton.setObjectName("openButton")
         self.verticalLayout_3.addWidget(self.openButton)
-        self.closeButton = QtWidgets.QPushButton(self.settingsGBox)
+        self.closeButton = QtWidgets.QPushButton(self.groupBox_settings)
         self.closeButton.setObjectName("closeButton")
         self.verticalLayout_3.addWidget(self.closeButton)
-        self.gridLayout.addWidget(self.settingsGBox, 0, 0, 1, 1)
-        self.requestGBox = QtWidgets.QGroupBox(self.centralwidget)
+        self.gridLayout.addWidget(self.groupBox_settings, 0, 0, 1, 1)
+        self.groupBox_messenger = QtWidgets.QGroupBox(self.centralwidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.MinimumExpanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.groupBox_messenger.sizePolicy().hasHeightForWidth())
+        self.groupBox_messenger.setSizePolicy(sizePolicy)
+        self.groupBox_messenger.setObjectName("groupBox_messenger")
+        self.verticalLayout = QtWidgets.QVBoxLayout(self.groupBox_messenger)
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.textEdit = QtWidgets.QTextEdit(self.groupBox_messenger)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.MinimumExpanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.textEdit.sizePolicy().hasHeightForWidth())
+        self.textEdit.setSizePolicy(sizePolicy)
+        self.textEdit.setReadOnly(True)
+        self.textEdit.setObjectName("textEdit")
+        self.verticalLayout.addWidget(self.textEdit)
+        self.gridLayout.addWidget(self.groupBox_messenger, 5, 1, 3, 1)
+        self.groupBox_graphs = QtWidgets.QGroupBox(self.centralwidget)
+        self.groupBox_graphs.setObjectName("groupBox_graphs")
+        self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.groupBox_graphs)
+        self.verticalLayout_5.setObjectName("verticalLayout_5")
+        self.widget = QtWidgets.QWidget(self.groupBox_graphs)
+        self.widget.setObjectName("widget")
+        self.verticalLayout_5.addWidget(self.widget)
+        self.gridLayout.addWidget(self.groupBox_graphs, 0, 1, 5, 1)
+        self.groupBox_freq_motor = QtWidgets.QGroupBox(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.requestGBox.sizePolicy().hasHeightForWidth())
-        self.requestGBox.setSizePolicy(sizePolicy)
-        self.requestGBox.setObjectName("requestGBox")
-        self.gridLayout_2 = QtWidgets.QGridLayout(self.requestGBox)
-        self.gridLayout_2.setObjectName("gridLayout_2")
-        self.cmdLineEdit = QtWidgets.QLineEdit(self.requestGBox)
+        sizePolicy.setHeightForWidth(self.groupBox_freq_motor.sizePolicy().hasHeightForWidth())
+        self.groupBox_freq_motor.setSizePolicy(sizePolicy)
+        self.groupBox_freq_motor.setObjectName("groupBox_freq_motor")
+        self.horizontalLayout = QtWidgets.QHBoxLayout(self.groupBox_freq_motor)
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.spinBox = QtWidgets.QSpinBox(self.groupBox_freq_motor)
+        self.spinBox.setObjectName("spinBox")
+        self.horizontalLayout.addWidget(self.spinBox)
+        self.pushButton = QtWidgets.QPushButton(self.groupBox_freq_motor)
+        self.pushButton.setObjectName("pushButton")
+        self.horizontalLayout.addWidget(self.pushButton)
+        self.gridLayout.addWidget(self.groupBox_freq_motor, 3, 0, 1, 1)
+        spacerItem = QtWidgets.QSpacerItem(0, 0, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Ignored)
+        self.gridLayout.addItem(spacerItem, 7, 0, 1, 1)
+        self.groupBox_photo = QtWidgets.QGroupBox(self.centralwidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.groupBox_photo.sizePolicy().hasHeightForWidth())
+        self.groupBox_photo.setSizePolicy(sizePolicy)
+        self.groupBox_photo.setObjectName("groupBox_photo")
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.groupBox_photo)
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.formLayout_photo_indicator = QtWidgets.QFormLayout()
+        self.formLayout_photo_indicator.setObjectName("formLayout_photo_indicator")
+        self.photoLineEdit_0 = QtWidgets.QLineEdit(self.groupBox_photo)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.cmdLineEdit.sizePolicy().hasHeightForWidth())
-        self.cmdLineEdit.setSizePolicy(sizePolicy)
-        self.cmdLineEdit.setInputMethodHints(QtCore.Qt.ImhDigitsOnly)
-        self.cmdLineEdit.setMaxLength(12)
-        self.cmdLineEdit.setObjectName("cmdLineEdit")
-        self.gridLayout_2.addWidget(self.cmdLineEdit, 1, 1, 1, 2)
-        self.cmdSBox = QtWidgets.QSpinBox(self.requestGBox)
-        self.cmdSBox.setEnabled(False)
-        self.cmdSBox.setMinimum(10)
-        self.cmdSBox.setMaximum(1000)
-        self.cmdSBox.setSingleStep(10)
-        self.cmdSBox.setProperty("value", 100)
-        self.cmdSBox.setDisplayIntegerBase(10)
-        self.cmdSBox.setObjectName("cmdSBox")
-        self.gridLayout_2.addWidget(self.cmdSBox, 2, 2, 1, 1)
-        self.sendButton = QtWidgets.QPushButton(self.requestGBox)
-        self.sendButton.setObjectName("sendButton")
-        self.gridLayout_2.addWidget(self.sendButton, 3, 1, 1, 2)
-        self.cmdChBox = QtWidgets.QCheckBox(self.requestGBox)
-        self.cmdChBox.setObjectName("cmdChBox")
-        self.gridLayout_2.addWidget(self.cmdChBox, 2, 1, 1, 1)
-        self.readButton = QtWidgets.QPushButton(self.requestGBox)
-        self.readButton.setObjectName("readButton")
-        self.gridLayout_2.addWidget(self.readButton, 4, 1, 1, 2)
-        self.label_4 = QtWidgets.QLabel(self.requestGBox)
-        self.label_4.setObjectName("label_4")
-        self.gridLayout_2.addWidget(self.label_4, 0, 1, 1, 1)
-        self.gridLayout.addWidget(self.requestGBox, 1, 0, 1, 1)
+        sizePolicy.setHeightForWidth(self.photoLineEdit_0.sizePolicy().hasHeightForWidth())
+        self.photoLineEdit_0.setSizePolicy(sizePolicy)
+        self.photoLineEdit_0.setObjectName("photoLineEdit_0")
+        self.formLayout_photo_indicator.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.photoLineEdit_0)
+        self.photoLineEdit_1 = QtWidgets.QLineEdit(self.groupBox_photo)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.photoLineEdit_1.sizePolicy().hasHeightForWidth())
+        self.photoLineEdit_1.setSizePolicy(sizePolicy)
+        self.photoLineEdit_1.setText("")
+        self.photoLineEdit_1.setReadOnly(True)
+        self.photoLineEdit_1.setObjectName("photoLineEdit_1")
+        self.formLayout_photo_indicator.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.photoLineEdit_1)
+        self.label_temp = QtWidgets.QLabel(self.groupBox_photo)
+        self.label_temp.setObjectName("label_temp")
+        self.formLayout_photo_indicator.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.label_temp)
+        self.label_ADC = QtWidgets.QLabel(self.groupBox_photo)
+        self.label_ADC.setObjectName("label_ADC")
+        self.formLayout_photo_indicator.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.label_ADC)
+        self.verticalLayout_2.addLayout(self.formLayout_photo_indicator)
+        self.label_cmd = QtWidgets.QLabel(self.groupBox_photo)
+        self.label_cmd.setObjectName("label_cmd")
+        self.verticalLayout_2.addWidget(self.label_cmd)
+        self.photoLineEdit_2 = QtWidgets.QLineEdit(self.groupBox_photo)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.photoLineEdit_2.sizePolicy().hasHeightForWidth())
+        self.photoLineEdit_2.setSizePolicy(sizePolicy)
+        self.photoLineEdit_2.setReadOnly(True)
+        self.photoLineEdit_2.setObjectName("photoLineEdit_2")
+        self.verticalLayout_2.addWidget(self.photoLineEdit_2)
+        self.formLayout_photo_calibr = QtWidgets.QFormLayout()
+        self.formLayout_photo_calibr.setObjectName("formLayout_photo_calibr")
+        self.label_N2 = QtWidgets.QLabel(self.groupBox_photo)
+        self.label_N2.setObjectName("label_N2")
+        self.formLayout_photo_calibr.setWidget(2, QtWidgets.QFormLayout.LabelRole, self.label_N2)
+        self.label_T1 = QtWidgets.QLabel(self.groupBox_photo)
+        self.label_T1.setObjectName("label_T1")
+        self.formLayout_photo_calibr.setWidget(3, QtWidgets.QFormLayout.LabelRole, self.label_T1)
+        self.label_T2 = QtWidgets.QLabel(self.groupBox_photo)
+        self.label_T2.setObjectName("label_T2")
+        self.formLayout_photo_calibr.setWidget(4, QtWidgets.QFormLayout.LabelRole, self.label_T2)
+        self.label_N1 = QtWidgets.QLabel(self.groupBox_photo)
+        self.label_N1.setObjectName("label_N1")
+        self.formLayout_photo_calibr.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.label_N1)
+        self.label_calibr = QtWidgets.QLabel(self.groupBox_photo)
+        self.label_calibr.setObjectName("label_calibr")
+        self.formLayout_photo_calibr.setWidget(0, QtWidgets.QFormLayout.SpanningRole, self.label_calibr)
+        self.spinBox_N1 = BigIntSpinbox(self.groupBox_photo)
+        # self.spinBox_N1.setMaximum(999999999)
+        self.spinBox_N1.setObjectName("spinBox_N1")
+        self.formLayout_photo_calibr.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.spinBox_N1)
+        self.spinBox_N2 = BigIntSpinbox(self.groupBox_photo)
+        # self.spinBox_N2.setMaximum(999999999)
+        self.spinBox_N2.setObjectName("spinBox_N2")
+        self.formLayout_photo_calibr.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.spinBox_N2)
+        self.spinBox_T1 = QtWidgets.QSpinBox(self.groupBox_photo)
+        self.spinBox_T1.setMinimum(-999999999)
+        self.spinBox_T1.setMaximum(999999999)
+        self.spinBox_T1.setObjectName("spinBox_T1")
+        self.formLayout_photo_calibr.setWidget(3, QtWidgets.QFormLayout.FieldRole, self.spinBox_T1)
+        self.spinBox_T2 = QtWidgets.QSpinBox(self.groupBox_photo)
+        self.spinBox_T2.setMinimum(-999999999)
+        self.spinBox_T2.setMaximum(999999999)
+        self.spinBox_T2.setObjectName("spinBox_T2")
+        self.formLayout_photo_calibr.setWidget(4, QtWidgets.QFormLayout.FieldRole, self.spinBox_T2)
+        self.verticalLayout_2.addLayout(self.formLayout_photo_calibr)
+        self.gridLayout.addWidget(self.groupBox_photo, 4, 0, 1, 1)
+        self.groupBox_vibro_status = QtWidgets.QGroupBox(self.centralwidget)
+        self.groupBox_vibro_status.setObjectName("groupBox_vibro_status")
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.groupBox_vibro_status)
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.label_vibro_status = QtWidgets.QLabel(self.groupBox_vibro_status)
+        self.label_vibro_status.setObjectName("label_vibro_status")
+        self.horizontalLayout_2.addWidget(self.label_vibro_status)
+        self.pushButton_vibro_status = QtWidgets.QPushButton(self.groupBox_vibro_status)
+        self.pushButton_vibro_status.setObjectName("pushButton_vibro_status")
+        self.horizontalLayout_2.addWidget(self.pushButton_vibro_status)
+        self.gridLayout.addWidget(self.groupBox_vibro_status, 1, 0, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1125, 22))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1352, 22))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -308,33 +313,23 @@ class Ui_MainWindow(object):
         self.speedLabel.setBuddy(self.speedCBox)
 
         self.retranslateUi(MainWindow)
-        self.cmdChBox.clicked['bool'].connect(self.cmdSBox.setEnabled)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Физприбор 3.6.25а"))
-        self.groupBox_Graphs.setTitle(_translate("MainWindow", "Графики"))
-        self.responseGBox.setTitle(_translate("MainWindow", "Ответ:"))
-        self.groupBox.setTitle(_translate("MainWindow", "Опрос фотоприёмника"))
-        self.label_temp.setText(_translate("MainWindow", "Температура °C:"))
-        self.label.setText(_translate("MainWindow", "ADC:"))
-        self.label_cmd.setText(_translate("MainWindow", "Команда:"))
-        self.photoLineEdit_2.setText(_translate("MainWindow", "200300010001"))
-        self.label_N2.setText(_translate("MainWindow", "N2"))
-        self.label_T1.setText(_translate("MainWindow", "T1"))
-        self.label_T2.setText(_translate("MainWindow", "T2"))
-        self.label_N1.setText(_translate("MainWindow", "N1"))
-        self.label_calibr.setText(_translate("MainWindow", "Параметры калибровки:"))
-        self.groupBox_2.setTitle(_translate("MainWindow", "Опрос тахометра"))
+        self.groupBox_data_vibro.setTitle(_translate("MainWindow", "Запрос данных с АЦП виброметра"))
+        self.NVButton.setText(_translate("MainWindow", "Запросить"))
+        self.label_NV.setText(_translate("MainWindow", "Номер фотоприёмника:"))
+        self.groupBox_taxo.setTitle(_translate("MainWindow", "Опрос тахометра"))
         self.label_1.setText(_translate("MainWindow", "Скорость  (oб/мин):"))
         self.label_2.setText(_translate("MainWindow", "ADC:"))
         self.label_3.setText(_translate("MainWindow", "Команда:"))
         self.taxoLineEdit_2.setText(_translate("MainWindow", "100300010001"))
-        self.photoButton_1.setText(_translate("MainWindow", "Старт"))
-        self.photoButton_2.setText(_translate("MainWindow", "Стоп"))
+        self.startButton.setText(_translate("MainWindow", "Старт"))
+        self.stopButton.setText(_translate("MainWindow", "Стоп"))
         self.cleanButton.setText(_translate("MainWindow", "Очистить"))
-        self.settingsGBox.setTitle(_translate("MainWindow", "Настройка соединения"))
+        self.groupBox_settings.setTitle(_translate("MainWindow", "Настройка соединения"))
         self.portLabel.setText(_translate("MainWindow", "Номер порта:"))
         self.speedLabel.setText(_translate("MainWindow", "Скорость соединения:"))
         self.speedCBox.setItemText(0, _translate("MainWindow", "9600"))
@@ -345,11 +340,29 @@ class Ui_MainWindow(object):
         self.refButton.setText(_translate("MainWindow", "Обновить"))
         self.openButton.setText(_translate("MainWindow", "Открыть"))
         self.closeButton.setText(_translate("MainWindow", "Закрыть"))
-        self.requestGBox.setTitle(_translate("MainWindow", "Отправка команд"))
-        self.sendButton.setText(_translate("MainWindow", "Отправить"))
-        self.cmdChBox.setText(_translate("MainWindow", "Через интервал (мс)"))
-        self.readButton.setText(_translate("MainWindow", "Принять"))
-        self.label_4.setText(_translate("MainWindow", "Команда:"))
+        self.groupBox_messenger.setTitle(_translate("MainWindow", "Ответ:"))
+        self.groupBox_graphs.setTitle(_translate("MainWindow", "Графики"))
+        self.groupBox_freq_motor.setTitle(_translate("MainWindow", "Задать частоту вращения вала двигателя"))
+        self.pushButton.setText(_translate("MainWindow", "Задать"))
+        self.groupBox_photo.setTitle(_translate("MainWindow", "Опрос фотоприёмника"))
+        self.label_temp.setText(_translate("MainWindow", "Температура °C:"))
+        self.label_ADC.setText(_translate("MainWindow", "ADC:"))
+        self.label_cmd.setText(_translate("MainWindow", "Команда:"))
+        self.photoLineEdit_2.setText(_translate("MainWindow", "200300010001"))
+        self.label_N2.setText(_translate("MainWindow", "N2"))
+        self.label_T1.setText(_translate("MainWindow", "T1"))
+        self.label_T2.setText(_translate("MainWindow", "T2"))
+        self.label_N1.setText(_translate("MainWindow", "N1"))
+        self.label_calibr.setText(_translate("MainWindow", "Параметры калибровки:"))
+        self.groupBox_vibro_status.setTitle(_translate("MainWindow", "Запрос состояния платы фотоприёмника виброметра"))
+        self.label_vibro_status.setText(_translate("MainWindow", "TextLabel"))
+        self.pushButton_vibro_status.setText(_translate("MainWindow", "Запросить"))
+
+
+def chunks(lst, n):
+    """Yield successive n-sized chunks from lst."""
+    for i in range(0, len(lst), n):
+        yield lst[i:i + n]
 
 class BigIntSpinbox(QtWidgets.QAbstractSpinBox):
 
@@ -488,6 +501,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         # Install the custom output stream
         sys.stdout = EmittingStream(textWritten=self.normalOutputWritten)
 
+        # self.timer1 = QtCore.QTimer()
+        self.plots_timer = QtCore.QTimer()
+
         self.textEdit.setWordWrapMode(QtGui.QTextOption.NoWrap)
         self.cleanButton.clicked.connect( lambda : { self.clean() })
 
@@ -551,9 +567,75 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.spinBox_T1.setValue(self.init.get_T1())
         self.spinBox_T2.setValue(self.init.get_T2())
 
+        self.start_flag = False
+
+    def setup_window(self, device):
+        # self.timer1.timeout.connect( lambda: {
+        #     device.writebincode(self.get_bytes()),
+        #     self.show_res(device.readbincode())
+        #     })
+        self.device = device
+        self.startButton.clicked.connect(self.start_slot)
+        self.stopButton.clicked.connect(self.stop_slot)
+
+        self.plots_timer.timeout.connect( lambda: {
+            device.writebincode(self.get_ph()),
+            self.show_ph(device.readbincode()),
+            time.sleep(0.02),
+            device.writebincode(self.get_taxo()),
+            self.show_taxo(device.readbincode())
+        })
+
+        self.openButton.clicked.connect( lambda : {
+            self.statusbar.showMessage("Open("+self.portCBox.currentText()+")", 1000),
+            device.open(self.portCBox.currentText(), int(self.speedCBox.currentText()), 0.1)
+            })
+
+        self.closeButton.clicked.connect( lambda :{
+            self.statusbar.showMessage("Close()"),
+            device.close()
+            })
+
+        self.refButton.clicked.connect( lambda : {
+            self.statusbar.showMessage("Refresh()"),
+            self.set_devs(UDevice.get_devs())
+            })
+
+        self.NVButton.clicked.connect(self.vibromotor_slot)
+
     def __del__(self):
         # Restore sys.stdout
         sys.stdout = sys.__stdout__
+
+    def start_slot(self):
+        self.plots_timer.start(100)
+        self.start_flag = True
+
+    def stop_slot(self):
+        self.plots_timer.stop()
+        self.device.flush()
+        self.start_flag = False
+
+    def vibromotor_slot(self):
+        """Slot for the vibromotor"""
+        self.statusbar.showMessage("Req_V()"),
+        self.plots_timer.stop(),
+        fname = QtWidgets.QFileDialog.getSaveFileName(self, 'Open file', '.',"Text files (*.txt)")
+        print(fname, os.path.isfile(fname[0]))
+        # TODO set true command
+        code = b'\xff\xff\xff\xff\xff\xff'
+        device.writebincode(code)
+        time.sleep(1)
+        if(self.start_flag):
+            self.stop_slot()
+            data = device.readbincode(1024).hex()
+            self.device.flush()
+            self.start_slot()
+        else:
+            data = device.readbincode(1024)
+
+        with open(fname[0], 'w') as f:
+            for b in chunks(data, 1): f.write(b.hex()+'\n')
 
     def normalOutputWritten(self, text):
         """Append text to the QTextEdit."""
@@ -563,7 +645,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         cursor.insertText(text)
         self.textEdit.setTextCursor(cursor)
         self.textEdit.ensureCursorVisible()
-    
+
     def closeEvent(self, event):
         self.init.set_N1(self.spinBox_N1.value())
         self.init.set_N2(self.spinBox_N2.value())
@@ -581,14 +663,22 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def set_num(i: int):
         MainWindow._num = i
 
-    def get_bytes(self):
-        cmd = self.cmdLineEdit.text()
-        try:
-            bl = bytes.fromhex(cmd)
-            print('get_bytes():', bl.hex())
-        except Exception as e:
-            self.statusbar.showMessage(str(e), 3000)
-        return bl
+    # def get_bytes(self):
+    #     cmd = self.cmdLineEdit.text()
+    #     try:
+    #         bl = bytes.fromhex(cmd)
+    #         print('get_bytes():', bl.hex())
+    #     except Exception as e:
+    #         self.statusbar.showMessage(str(e), 3000)
+    #     return bl
+
+    # def show_res(self, data : bytes):
+    #     now = datetime.now() # current date and time
+    #     self.statusbar.showMessage(data.hex(), 1000)
+    #     self.textEdit.insertPlainText("res:"+data.hex() +" "+now.strftime("%H:%M:%S %f")+'\n')
+    #     sb = self.textEdit.verticalScrollBar()
+    #     sb.setValue(sb.maximum())
+    #     # print('show_res(): ', data.hex())
 
     def get_ph(self):
         cmd = self.photoLineEdit_2.text()
@@ -607,14 +697,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         except Exception as e:
             self.statusbar.showMessage(str(e), 3000)
         return bl
-
-    def show_res(self, data : bytes):
-        now = datetime.now() # current date and time
-        self.statusbar.showMessage(data.hex(), 1000)
-        self.textEdit.insertPlainText(data.hex() +" "+now.strftime("%H:%M:%S %f")+'\n')
-        sb = self.textEdit.verticalScrollBar()
-        sb.setValue(sb.maximum())
-        print('show_res(): ', data.hex())
 
     def _update_ph(self, data):
         '''Функция добавления новой точки на график фотоприемника'''
@@ -704,7 +786,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self._line2.setData(self._x2, self._y2)
 
 class FixedSerial( serial.Serial ):
-    '''To fix bug on Windows system'''
+    """To fix bug on Windows 10 system
+        https://github.com/pyserial/pyserial/issues/258
+        https://github.com/pyserial/pyserial/issues/362
+    """
     def _reconfigure_port( self, *args, **kwargs ):
         try:
             super()._reconfigure_port( *args, **kwargs )
@@ -775,139 +860,33 @@ class UDevice(QtWidgets.QWidget):
 
         if len(devices)==0:
             #print('No USB device found.')
-            devices.append('no device')
+            devices.append('не найдено')
 
         return devices
 
     # @_FileLogger
     def readbincode(self, len=9):
         r = UDevice._port.read(len)
-        # print("readbincode() ", r.hex())
+        print("readbincode("+str(len)+"): ", r.hex())
         return r
 
-    def writebincode(self, data : bytes):
-        crc_data = _add_CRC16(data)
-        UDevice._port.write(crc_data)
+    def writebincode(self, data : bytes, len=8) -> bytes:
+        crc_data = self._add_CRC16(data)
+        print("writebincode("+str(len)+"): ", crc_data.hex())
+        UDevice._port.write(crc_data[:len])
         return crc_data
 
-def _add_CRC16(data: bytes):
-    crc16 = libscrc.modbus(data)
-    b78 = crc16.to_bytes(2, byteorder='little')
-    # print("_add_CRC16(): b78: ", b78.hex(), "crc16: ", crc16)
-    l = list(data)
-    l.append(int(b78[0]))
-    l.append(int(b78[1]))
-    return bytes(l)
+    def flush(self):
+        UDevice._port.flush()
 
-def _test_send():
-    devl = UDevice.get_devs()
-    device.open(devl[0], 9600, 3)
-
-    code = b'\x01\x02\x03\x04\x05\x01'
-    print('write: ', _add_CRC16(code))
-    device.writebincode(_add_CRC16(code))
-    print('read', device.readbincode())
-
-    code = b'\x01\x02\x03\x04\x05\x02'
-    print('write: ', _add_CRC16(code))
-    device.writebincode(_add_CRC16(code))
-    print('read', device.readbincode())
-
-    code = b'\x01\x02\x03\x04\x05\x03'
-    print('write: ', _add_CRC16(code))
-    device.writebincode(_add_CRC16(code))
-    print('read', device.readbincode())
-
-
-    code = b'\x01\x02\x03\x04\x05\x04'
-    print('write: ', _add_CRC16(code))
-    device.writebincode(_add_CRC16(code))
-    print('read', device.readbincode())
-    # b1 = b'\x20\x03\x00\x01\x00\x01'
-    # b2 = _add_CRC16(b1)
-    # print('sum: ', b2)
-
-def _setup_window():
-
-    timer1 = QtCore.QTimer()
-    timer2 = QtCore.QTimer()
-
-    timer1.timeout.connect( lambda: {
-        device.writebincode(window.get_bytes()),
-        window.show_res(device.readbincode())
-        })
-
-    timer2.timeout.connect( lambda: {
-        device.writebincode(window.get_ph()),
-        window.show_ph(device.readbincode()),
-        time.sleep(0.02),
-        device.writebincode(window.get_taxo()),
-        window.show_taxo(device.readbincode())
-    })
-
-    window.photoButton_1.clicked.connect( lambda : {
-        timer2.start(100)
-        })
-
-    window.photoButton_2.clicked.connect( lambda : {
-        timer2.stop()
-        })
-
-    # timer3.timeout.connect( lambda: {
-    #     device.writebincode(window.get_taxo()),
-    #     window.show_taxo(device.readbincode())
-    # })
-    # window.taxoButton_1.clicked.connect( lambda : {
-    #     timer3.start(100)
-    #     })
-
-    # window.taxoButton_2.clicked.connect( lambda : {
-    #     timer3.stop()
-    #     })
-
-    window.openButton.clicked.connect( lambda : {
-        window.statusbar.showMessage("Open("+window.portCBox.currentText()+")", 1000),
-        device.open(window.portCBox.currentText(), int(window.speedCBox.currentText()), 0.1)
-        })
-
-    window.closeButton.clicked.connect( lambda :{
-        window.statusbar.showMessage("Close()"),
-        device.close()
-        })
-
-    window.refButton.clicked.connect( lambda : {
-        window.statusbar.showMessage("Refresh()"),
-        window.set_devs(UDevice.get_devs())
-        })
-
-    window.sendButton.clicked.connect( lambda : {
-        _com(window, device, timer1)
-        })
-
-    window.readButton.clicked.connect( lambda : {
-        window.show_res(device.readbincode())
-        })
-
-def _com(window, device, timer):
-    if window.cmdChBox.isChecked() == True:
-        print("interval: ", window.cmdSBox.value())
-        timer.start(window.cmdSBox.value())
-    else:
-        timer.stop()
-        device.writebincode(window.get_bytes())
-        window.show_res(device.readbincode())
-
-def _photo(window, device, timer):
-    timer2.timeout.connect( lambda: {
-        device.writebincode(window.get_ph()),
-        window.show_ph(device.readbincode())
-    })
-
-def _taxo(window, device, timer):
-    timer3.timeout.connect( lambda: {
-        device.writebincode(window.get_taxo()),
-        window.show_taxo(device.readbincode())
-    })
+    def _add_CRC16(self, data: bytes) -> bytes:
+        crc16 = libscrc.modbus(data)
+        b78 = crc16.to_bytes(2, byteorder='little')
+        # print("_add_CRC16(): b78: ", b78.hex(), "crc16: ", crc16)
+        l = list(data)
+        l.append(int(b78[0]))
+        l.append(int(b78[1]))
+        return bytes(l)
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
@@ -916,8 +895,6 @@ if __name__ == '__main__':
     # print(type(2 ** 63))
     device = UDevice()
 
-    # timer3=QtCore.QTimer()
-    # _test_send()
-    _setup_window()
+    window.setup_window(device)
     window.show()
     sys.exit(app.exec_())

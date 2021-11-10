@@ -1,3 +1,6 @@
+#include "CRC16.h"
+#include "CRC.h"
+
 /*
   ReadAnalogVoltage
 
@@ -23,13 +26,11 @@ void serial_flush_buffer()
    ; // do nothing
 }
 
-bool is_equal(byte cmd[], int len)
+bool is_equal(byte cmd_1[], byte cmd_2[], int len)
 {
-  //ffffffffffff019400
-  byte tmp[]   = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x01, 0x94, 0x00};
   for(int i=0; i<len; i++)
   {
-    if(cmd[i] !=  tmp[i])
+    if(cmd_1[i] !=  cmd_2[i])
       return false;
   }
   return true;
@@ -52,10 +53,13 @@ byte cmd_1[] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08};
 byte cmd_t[] = {0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01};
 byte cmd_f[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
+//the vibromotor data request 
+byte vib_data[]   = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x01, 0x94};
+
 void serialEvent(){
   Serial.readBytes(buffer, 8);
   serial_flush_buffer();
-  if(is_equal(buffer, 8)) {
+  if(is_equal(buffer, vib_data, 8)) {
     Serial.write(data, 1024);
   }
   else 
