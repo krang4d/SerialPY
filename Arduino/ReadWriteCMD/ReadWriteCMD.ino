@@ -36,31 +36,40 @@ bool is_equal(byte cmd_1[], byte cmd_2[], int len)
   return true;
 }
 
-byte data[1024];
-void prepe()
+byte data[1029];
+void prepe(byte x)
 {
   byte b = 0;
-  for(int i=0; i<1024; i++)
+  data[0] = x;
+  data[1] = 0x03;
+  data[2] = 0x01;
+  for(int i=3; i<1027; i++)
   {
-    data[i] = b;
+    if(b%2 == 0)
+      data[i] = 0x00;
+    else data[i] = b;
     b++;
   }
+  // TODO add crc16
+  data[1027] = 0x00;
+  data[1028] = 0x00;
 }
 
 byte buffer[9];
-byte cmd_0[]   = {0x10, 0x03, 0x00, 0x01, 0x00, 0x01, 0xD6, 0x8B};
+byte cmd_0[] = {0x10, 0x03, 0x00, 0x01, 0x00, 0x01, 0xD6, 0x8B};
 byte cmd_1[] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08};
 byte cmd_t[] = {0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01};
 byte cmd_f[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
 //the vibromotor data request 
-byte vib_data[]   = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x01, 0x94};
+byte vib_data[]   = {0x30, 0x03, 0x00, 0x02, 0x00, 0x01, 0x21, 0xEB};
 
 void serialEvent(){
   Serial.readBytes(buffer, 8);
   serial_flush_buffer();
-  if(is_equal(buffer, vib_data, 8)) {
-    Serial.write(data, 1024);
+  if(is_equal(&buffer[3], &vib_data[3], 3)) {
+    prepe(buffer[0]);
+    Serial.write(data, 1029);
   }
   else 
     Serial.write(buffer, 9);
@@ -69,11 +78,11 @@ void serialEvent(){
 bool alreadyRun = false;
 // the loop routine runs over and over again forever:
 void loop() {
-  if(alreadyRun == false)
-  {
-    prepe();
-    alreadyRun = true;
-  }
+//  if(alreadyRun == false)
+//  {
+//    prepe();
+//    alreadyRun = true;
+//  }
     
 //  if(memcmp (buffer, cmd_1, 8)==0)
 //  {
