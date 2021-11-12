@@ -6,15 +6,176 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1336</width>
-    <height>1295</height>
+    <width>1196</width>
+    <height>1217</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Физприбор 3.7.26а</string>
+   <string>Физприбор 3.7.28а</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
+    <item row="4" column="0">
+     <widget class="QGroupBox" name="groupBox_motor_setFreq">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="title">
+       <string>Установка частоты вращения вала двигателя</string>
+      </property>
+      <layout class="QFormLayout" name="formLayout_2">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_motor_n">
+         <property name="text">
+          <string>Номер:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QSpinBox" name="spinBox_motor_n">
+         <property name="maximum">
+          <number>15</number>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_motor_freq">
+         <property name="text">
+          <string>Частота:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QSpinBox" name="spinBox_motor_freq">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximum">
+          <number>65535</number>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0" colspan="2">
+        <widget class="QPushButton" name="pushButton_motor_setFreq">
+         <property name="text">
+          <string>Задать</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="6" column="0">
+     <widget class="QGroupBox" name="groupBox_taxo">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="title">
+       <string>Опрос тахометра</string>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
+        <layout class="QGridLayout" name="_4">
+         <item row="1" column="0">
+          <widget class="QLineEdit" name="taxoLineEdit_0">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">background-color: rgb(238, 238, 236);
+color: rgb(78, 154, 6);</string>
+           </property>
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_1">
+           <property name="text">
+            <string>Скорость  (oб/мин):</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLineEdit" name="taxoLineEdit_1">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">background-color: rgb(238, 238, 236);
+color: rgb(78, 154, 6);</string>
+           </property>
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>ADC:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QLineEdit" name="taxoLineEdit_2">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">background-color: rgb(238, 238, 236)</string>
+           </property>
+           <property name="text">
+            <string>100300010001</string>
+           </property>
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>Команда:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </item>
     <item row="0" column="0">
      <widget class="QGroupBox" name="groupBox_settings">
       <property name="enabled">
@@ -211,172 +372,7 @@
       </layout>
      </widget>
     </item>
-    <item row="2" column="0">
-     <widget class="QGroupBox" name="groupBox_vibro_data">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="title">
-       <string>Запрос данных с АЦП виброметра</string>
-      </property>
-      <layout class="QGridLayout" name="gridLayout_2">
-       <item row="0" column="0">
-        <widget class="QLabel" name="label_vibro_n">
-         <property name="text">
-          <string>Номер фотоприёмника:</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QSpinBox" name="spinBox_vibro_n">
-         <property name="maximum">
-          <number>15</number>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0" colspan="2">
-        <widget class="QPushButton" name="pushButton_vobro_data">
-         <property name="text">
-          <string>Запросить</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
-    <item row="3" column="0">
-     <widget class="QGroupBox" name="groupBox_motor_setFreq">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="title">
-       <string>Установка частоты вращения вала двигателя</string>
-      </property>
-      <layout class="QFormLayout" name="formLayout_2">
-       <item row="0" column="0">
-        <widget class="QLabel" name="label_motor_n">
-         <property name="text">
-          <string>Номер:</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QSpinBox" name="spinBox_motor_n"/>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_motor_freq">
-         <property name="text">
-          <string>Частота:</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QSpinBox" name="spinBox_motor_freq">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximum">
-          <number>65535</number>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0" colspan="2">
-        <widget class="QPushButton" name="pushButton_motor_setFreq">
-         <property name="text">
-          <string>Задать</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
-    <item row="4" column="0">
-     <widget class="QGroupBox" name="groupBox_motor_getFreq">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="title">
-       <string>Запрос периода вращения вала двигателя:</string>
-      </property>
-      <layout class="QVBoxLayout" name="verticalLayout_6">
-       <item>
-        <layout class="QHBoxLayout" name="_1">
-         <item>
-          <widget class="QLabel" name="label_moto_x">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>X:</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QSpinBox" name="spinBox_motor_x">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="maximum">
-            <number>15</number>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="lineEdit_motor_freq_x">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="readOnly">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pushButton_motor_getFreq">
-         <property name="text">
-          <string>Запросить</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
-    <item row="5" column="0">
+    <item row="7" column="0">
      <widget class="QGroupBox" name="groupBox_photo">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -557,72 +553,75 @@ color: rgb(32, 74, 135);</string>
       </layout>
      </widget>
     </item>
-    <item row="6" column="0">
-     <widget class="QGroupBox" name="groupBox_taxo">
+    <item row="8" column="0" colspan="2">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QPushButton" name="startButton">
+        <property name="text">
+         <string>Старт</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="stopButton">
+        <property name="text">
+         <string>Стоп</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="cleanButton">
+        <property name="text">
+         <string>Очистить</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="2" column="0">
+     <widget class="QGroupBox" name="groupBox_motor_getFreq">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
       <property name="title">
-       <string>Опрос тахометра</string>
+       <string>Запрос периода вращения вала двигателя:</string>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_4">
+      <layout class="QVBoxLayout" name="verticalLayout_6">
        <item>
-        <layout class="QGridLayout" name="_4">
-         <item row="1" column="0">
-          <widget class="QLineEdit" name="taxoLineEdit_0">
+        <layout class="QHBoxLayout" name="_1">
+         <item>
+          <widget class="QLabel" name="label_moto_x">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
-           <property name="styleSheet">
-            <string notr="true">background-color: rgb(238, 238, 236);
-color: rgb(78, 154, 6);</string>
-           </property>
-           <property name="readOnly">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_1">
            <property name="text">
-            <string>Скорость  (oб/мин):</string>
+            <string>X:</string>
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
-          <widget class="QLineEdit" name="taxoLineEdit_1">
+         <item>
+          <widget class="QSpinBox" name="spinBox_motor_x">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
-           <property name="styleSheet">
-            <string notr="true">background-color: rgb(238, 238, 236);
-color: rgb(78, 154, 6);</string>
-           </property>
-           <property name="readOnly">
-            <bool>true</bool>
+           <property name="maximum">
+            <number>15</number>
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
-          <widget class="QLabel" name="label_2">
-           <property name="text">
-            <string>ADC:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QLineEdit" name="taxoLineEdit_2">
+         <item>
+          <widget class="QLineEdit" name="lineEdit_motor_freq_x">
            <property name="enabled">
-            <bool>true</bool>
+            <bool>false</bool>
            </property>
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -630,54 +629,75 @@ color: rgb(78, 154, 6);</string>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
-           <property name="styleSheet">
-            <string notr="true">background-color: rgb(238, 238, 236)</string>
-           </property>
-           <property name="text">
-            <string>100300010001</string>
-           </property>
            <property name="readOnly">
             <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_3">
-           <property name="text">
-            <string>Команда:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
           </widget>
          </item>
         </layout>
        </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_motor_getFreq">
+         <property name="text">
+          <string>Запросить</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </item>
-    <item row="7" column="0">
-     <widget class="QPushButton" name="startButton">
-      <property name="text">
-       <string>Старт</string>
+    <item row="0" column="1" rowspan="7">
+     <widget class="QGroupBox" name="groupBox_graphs">
+      <property name="title">
+       <string>Графики</string>
       </property>
+      <layout class="QVBoxLayout" name="verticalLayout_5">
+       <item>
+        <widget class="QWidget" name="widget" native="true"/>
+       </item>
+      </layout>
      </widget>
     </item>
-    <item row="8" column="0">
-     <widget class="QPushButton" name="stopButton">
-      <property name="text">
-       <string>Стоп</string>
+    <item row="3" column="0">
+     <widget class="QGroupBox" name="groupBox_vibro_data">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
       </property>
+      <property name="title">
+       <string>Запрос данных с АЦП виброметра</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_vibro_n">
+         <property name="text">
+          <string>Номер фотоприёмника:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QSpinBox" name="spinBox_vibro_n">
+         <property name="maximum">
+          <number>15</number>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="2">
+        <widget class="QPushButton" name="pushButton_vobro_data">
+         <property name="text">
+          <string>Запросить</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </item>
-    <item row="9" column="0">
-     <widget class="QPushButton" name="cleanButton">
-      <property name="text">
-       <string>Очистить</string>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="1" rowspan="4">
+    <item row="7" column="1">
      <widget class="QGroupBox" name="groupBox_messenger">
       <property name="sizePolicy">
        <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
@@ -705,18 +725,6 @@ color: rgb(78, 154, 6);</string>
       </layout>
      </widget>
     </item>
-    <item row="0" column="1" rowspan="6">
-     <widget class="QGroupBox" name="groupBox_graphs">
-      <property name="title">
-       <string>Графики</string>
-      </property>
-      <layout class="QVBoxLayout" name="verticalLayout_5">
-       <item>
-        <widget class="QWidget" name="widget" native="true"/>
-       </item>
-      </layout>
-     </widget>
-    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -724,7 +732,7 @@ color: rgb(78, 154, 6);</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1336</width>
+     <width>1196</width>
      <height>22</height>
     </rect>
    </property>

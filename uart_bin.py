@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # Serial Port Reader by Pavel Golovkin, aka pgg.
 # Feel free to use. No warranty
-# Version 3.6.25a
+# Version 3.7.28a
 
 import sys  # We need sys so that we can pass argv to QApplication
 import os
@@ -26,11 +26,101 @@ import json
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1336, 1295)
+        MainWindow.resize(1196, 1217)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
         self.gridLayout.setObjectName("gridLayout")
+        self.groupBox_motor_setFreq = QtWidgets.QGroupBox(self.centralwidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.groupBox_motor_setFreq.sizePolicy().hasHeightForWidth())
+        self.groupBox_motor_setFreq.setSizePolicy(sizePolicy)
+        self.groupBox_motor_setFreq.setObjectName("groupBox_motor_setFreq")
+        self.formLayout_2 = QtWidgets.QFormLayout(self.groupBox_motor_setFreq)
+        self.formLayout_2.setObjectName("formLayout_2")
+        self.label_motor_n = QtWidgets.QLabel(self.groupBox_motor_setFreq)
+        self.label_motor_n.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.label_motor_n.setObjectName("label_motor_n")
+        self.formLayout_2.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.label_motor_n)
+        self.spinBox_motor_n = QtWidgets.QSpinBox(self.groupBox_motor_setFreq)
+        self.spinBox_motor_n.setMaximum(15)
+        self.spinBox_motor_n.setObjectName("spinBox_motor_n")
+        self.formLayout_2.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.spinBox_motor_n)
+        self.label_motor_freq = QtWidgets.QLabel(self.groupBox_motor_setFreq)
+        self.label_motor_freq.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.label_motor_freq.setObjectName("label_motor_freq")
+        self.formLayout_2.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.label_motor_freq)
+        self.spinBox_motor_freq = QtWidgets.QSpinBox(self.groupBox_motor_setFreq)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.spinBox_motor_freq.sizePolicy().hasHeightForWidth())
+        self.spinBox_motor_freq.setSizePolicy(sizePolicy)
+        self.spinBox_motor_freq.setMaximum(65535)
+        self.spinBox_motor_freq.setObjectName("spinBox_motor_freq")
+        self.formLayout_2.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.spinBox_motor_freq)
+        self.pushButton_motor_setFreq = QtWidgets.QPushButton(self.groupBox_motor_setFreq)
+        self.pushButton_motor_setFreq.setObjectName("pushButton_motor_setFreq")
+        self.formLayout_2.setWidget(2, QtWidgets.QFormLayout.SpanningRole, self.pushButton_motor_setFreq)
+        self.gridLayout.addWidget(self.groupBox_motor_setFreq, 4, 0, 1, 1)
+        self.groupBox_taxo = QtWidgets.QGroupBox(self.centralwidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.groupBox_taxo.sizePolicy().hasHeightForWidth())
+        self.groupBox_taxo.setSizePolicy(sizePolicy)
+        self.groupBox_taxo.setObjectName("groupBox_taxo")
+        self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.groupBox_taxo)
+        self.verticalLayout_4.setObjectName("verticalLayout_4")
+        self._4 = QtWidgets.QGridLayout()
+        self._4.setObjectName("_4")
+        self.taxoLineEdit_0 = QtWidgets.QLineEdit(self.groupBox_taxo)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.taxoLineEdit_0.sizePolicy().hasHeightForWidth())
+        self.taxoLineEdit_0.setSizePolicy(sizePolicy)
+        self.taxoLineEdit_0.setStyleSheet("background-color: rgb(238, 238, 236);\n"
+"color: rgb(78, 154, 6);")
+        self.taxoLineEdit_0.setReadOnly(True)
+        self.taxoLineEdit_0.setObjectName("taxoLineEdit_0")
+        self._4.addWidget(self.taxoLineEdit_0, 1, 0, 1, 1)
+        self.label_1 = QtWidgets.QLabel(self.groupBox_taxo)
+        self.label_1.setObjectName("label_1")
+        self._4.addWidget(self.label_1, 0, 0, 1, 1)
+        self.taxoLineEdit_1 = QtWidgets.QLineEdit(self.groupBox_taxo)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.taxoLineEdit_1.sizePolicy().hasHeightForWidth())
+        self.taxoLineEdit_1.setSizePolicy(sizePolicy)
+        self.taxoLineEdit_1.setStyleSheet("background-color: rgb(238, 238, 236);\n"
+"color: rgb(78, 154, 6);")
+        self.taxoLineEdit_1.setReadOnly(True)
+        self.taxoLineEdit_1.setObjectName("taxoLineEdit_1")
+        self._4.addWidget(self.taxoLineEdit_1, 1, 1, 1, 1)
+        self.label_2 = QtWidgets.QLabel(self.groupBox_taxo)
+        self.label_2.setObjectName("label_2")
+        self._4.addWidget(self.label_2, 0, 1, 1, 1)
+        self.taxoLineEdit_2 = QtWidgets.QLineEdit(self.groupBox_taxo)
+        self.taxoLineEdit_2.setEnabled(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.taxoLineEdit_2.sizePolicy().hasHeightForWidth())
+        self.taxoLineEdit_2.setSizePolicy(sizePolicy)
+        self.taxoLineEdit_2.setStyleSheet("background-color: rgb(238, 238, 236)")
+        self.taxoLineEdit_2.setReadOnly(True)
+        self.taxoLineEdit_2.setObjectName("taxoLineEdit_2")
+        self._4.addWidget(self.taxoLineEdit_2, 2, 1, 1, 1)
+        self.label_3 = QtWidgets.QLabel(self.groupBox_taxo)
+        self.label_3.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.label_3.setObjectName("label_3")
+        self._4.addWidget(self.label_3, 2, 0, 1, 1)
+        self.verticalLayout_4.addLayout(self._4)
+        self.gridLayout.addWidget(self.groupBox_taxo, 6, 0, 1, 1)
         self.groupBox_settings = QtWidgets.QGroupBox(self.centralwidget)
         self.groupBox_settings.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
@@ -118,6 +208,7 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.lineEdit_vibro_status.sizePolicy().hasHeightForWidth())
         self.lineEdit_vibro_status.setSizePolicy(sizePolicy)
         self.lineEdit_vibro_status.setStyleSheet("background-color: rgb(238, 238, 236);")
+        self.lineEdit_vibro_status.setAlignment(QtCore.Qt.AlignCenter)
         self.lineEdit_vibro_status.setObjectName("lineEdit_vibro_status")
         self._5.addWidget(self.lineEdit_vibro_status)
         self.verticalLayout_7.addLayout(self._5)
@@ -125,102 +216,6 @@ class Ui_MainWindow(object):
         self.pushButton_vibro_status.setObjectName("pushButton_vibro_status")
         self.verticalLayout_7.addWidget(self.pushButton_vibro_status)
         self.gridLayout.addWidget(self.groupBox_vibro_status, 1, 0, 1, 1)
-        self.groupBox_vibro_data = QtWidgets.QGroupBox(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.groupBox_vibro_data.sizePolicy().hasHeightForWidth())
-        self.groupBox_vibro_data.setSizePolicy(sizePolicy)
-        self.groupBox_vibro_data.setObjectName("groupBox_vibro_data")
-        self.gridLayout_2 = QtWidgets.QGridLayout(self.groupBox_vibro_data)
-        self.gridLayout_2.setObjectName("gridLayout_2")
-        self.label_vibro_n = QtWidgets.QLabel(self.groupBox_vibro_data)
-        self.label_vibro_n.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.label_vibro_n.setObjectName("label_vibro_n")
-        self.gridLayout_2.addWidget(self.label_vibro_n, 0, 0, 1, 1)
-        self.spinBox_vibro_n = QtWidgets.QSpinBox(self.groupBox_vibro_data)
-        self.spinBox_vibro_n.setMaximum(15)
-        self.spinBox_vibro_n.setObjectName("spinBox_vibro_n")
-        self.gridLayout_2.addWidget(self.spinBox_vibro_n, 0, 1, 1, 1)
-        self.pushButton_vobro_data = QtWidgets.QPushButton(self.groupBox_vibro_data)
-        self.pushButton_vobro_data.setObjectName("pushButton_vobro_data")
-        self.gridLayout_2.addWidget(self.pushButton_vobro_data, 1, 0, 1, 2)
-        self.gridLayout.addWidget(self.groupBox_vibro_data, 2, 0, 1, 1)
-        self.groupBox_motor_setFreq = QtWidgets.QGroupBox(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.groupBox_motor_setFreq.sizePolicy().hasHeightForWidth())
-        self.groupBox_motor_setFreq.setSizePolicy(sizePolicy)
-        self.groupBox_motor_setFreq.setObjectName("groupBox_motor_setFreq")
-        self.formLayout_2 = QtWidgets.QFormLayout(self.groupBox_motor_setFreq)
-        self.formLayout_2.setObjectName("formLayout_2")
-        self.label_motor_n = QtWidgets.QLabel(self.groupBox_motor_setFreq)
-        self.label_motor_n.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.label_motor_n.setObjectName("label_motor_n")
-        self.formLayout_2.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.label_motor_n)
-        self.spinBox_motor_n = QtWidgets.QSpinBox(self.groupBox_motor_setFreq)
-        self.spinBox_motor_n.setObjectName("spinBox_motor_n")
-        self.formLayout_2.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.spinBox_motor_n)
-        self.label_motor_freq = QtWidgets.QLabel(self.groupBox_motor_setFreq)
-        self.label_motor_freq.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.label_motor_freq.setObjectName("label_motor_freq")
-        self.formLayout_2.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.label_motor_freq)
-        self.spinBox_motor_freq = QtWidgets.QSpinBox(self.groupBox_motor_setFreq)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.spinBox_motor_freq.sizePolicy().hasHeightForWidth())
-        self.spinBox_motor_freq.setSizePolicy(sizePolicy)
-        self.spinBox_motor_freq.setMaximum(15)
-        self.spinBox_motor_freq.setObjectName("spinBox_motor_freq")
-        self.formLayout_2.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.spinBox_motor_freq)
-        self.pushButton_motor_setFreq = QtWidgets.QPushButton(self.groupBox_motor_setFreq)
-        self.pushButton_motor_setFreq.setObjectName("pushButton_motor_setFreq")
-        self.formLayout_2.setWidget(2, QtWidgets.QFormLayout.SpanningRole, self.pushButton_motor_setFreq)
-        self.gridLayout.addWidget(self.groupBox_motor_setFreq, 3, 0, 1, 1)
-        self.groupBox_motor_getFreq = QtWidgets.QGroupBox(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.groupBox_motor_getFreq.sizePolicy().hasHeightForWidth())
-        self.groupBox_motor_getFreq.setSizePolicy(sizePolicy)
-        self.groupBox_motor_getFreq.setObjectName("groupBox_motor_getFreq")
-        self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.groupBox_motor_getFreq)
-        self.verticalLayout_6.setObjectName("verticalLayout_6")
-        self._1 = QtWidgets.QHBoxLayout()
-        self._1.setObjectName("_1")
-        self.label_moto_x = QtWidgets.QLabel(self.groupBox_motor_getFreq)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.label_moto_x.sizePolicy().hasHeightForWidth())
-        self.label_moto_x.setSizePolicy(sizePolicy)
-        self.label_moto_x.setObjectName("label_moto_x")
-        self._1.addWidget(self.label_moto_x)
-        self.spinBox_motor_x = QtWidgets.QSpinBox(self.groupBox_motor_getFreq)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.spinBox_motor_x.sizePolicy().hasHeightForWidth())
-        self.spinBox_motor_x.setSizePolicy(sizePolicy)
-        self.spinBox_motor_x.setObjectName("spinBox_motor_x")
-        self._1.addWidget(self.spinBox_motor_x)
-        self.lineEdit_motor_freq_x = QtWidgets.QLineEdit(self.groupBox_motor_getFreq)
-        self.lineEdit_motor_freq_x.setEnabled(False)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.lineEdit_motor_freq_x.sizePolicy().hasHeightForWidth())
-        self.lineEdit_motor_freq_x.setSizePolicy(sizePolicy)
-        self.lineEdit_motor_freq_x.setReadOnly(True)
-        self.lineEdit_motor_freq_x.setObjectName("lineEdit_motor_freq_x")
-        self._1.addWidget(self.lineEdit_motor_freq_x)
-        self.verticalLayout_6.addLayout(self._1)
-        self.pushButton_motor_getFreq = QtWidgets.QPushButton(self.groupBox_motor_getFreq)
-        self.pushButton_motor_getFreq.setObjectName("pushButton_motor_getFreq")
-        self.verticalLayout_6.addWidget(self.pushButton_motor_getFreq)
-        self.gridLayout.addWidget(self.groupBox_motor_getFreq, 4, 0, 1, 1)
         self.groupBox_photo = QtWidgets.QGroupBox(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -315,72 +310,91 @@ class Ui_MainWindow(object):
         self.label_calibr.setObjectName("label_calibr")
         self._2.setWidget(0, QtWidgets.QFormLayout.SpanningRole, self.label_calibr)
         self.verticalLayout_2.addLayout(self._2)
-        self.gridLayout.addWidget(self.groupBox_photo, 5, 0, 1, 1)
-        self.groupBox_taxo = QtWidgets.QGroupBox(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.groupBox_taxo.sizePolicy().hasHeightForWidth())
-        self.groupBox_taxo.setSizePolicy(sizePolicy)
-        self.groupBox_taxo.setObjectName("groupBox_taxo")
-        self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.groupBox_taxo)
-        self.verticalLayout_4.setObjectName("verticalLayout_4")
-        self._4 = QtWidgets.QGridLayout()
-        self._4.setObjectName("_4")
-        self.taxoLineEdit_0 = QtWidgets.QLineEdit(self.groupBox_taxo)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.taxoLineEdit_0.sizePolicy().hasHeightForWidth())
-        self.taxoLineEdit_0.setSizePolicy(sizePolicy)
-        self.taxoLineEdit_0.setStyleSheet("background-color: rgb(238, 238, 236);\n"
-"color: rgb(78, 154, 6);")
-        self.taxoLineEdit_0.setReadOnly(True)
-        self.taxoLineEdit_0.setObjectName("taxoLineEdit_0")
-        self._4.addWidget(self.taxoLineEdit_0, 1, 0, 1, 1)
-        self.label_1 = QtWidgets.QLabel(self.groupBox_taxo)
-        self.label_1.setObjectName("label_1")
-        self._4.addWidget(self.label_1, 0, 0, 1, 1)
-        self.taxoLineEdit_1 = QtWidgets.QLineEdit(self.groupBox_taxo)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.taxoLineEdit_1.sizePolicy().hasHeightForWidth())
-        self.taxoLineEdit_1.setSizePolicy(sizePolicy)
-        self.taxoLineEdit_1.setStyleSheet("background-color: rgb(238, 238, 236);\n"
-"color: rgb(78, 154, 6);")
-        self.taxoLineEdit_1.setReadOnly(True)
-        self.taxoLineEdit_1.setObjectName("taxoLineEdit_1")
-        self._4.addWidget(self.taxoLineEdit_1, 1, 1, 1, 1)
-        self.label_2 = QtWidgets.QLabel(self.groupBox_taxo)
-        self.label_2.setObjectName("label_2")
-        self._4.addWidget(self.label_2, 0, 1, 1, 1)
-        self.taxoLineEdit_2 = QtWidgets.QLineEdit(self.groupBox_taxo)
-        self.taxoLineEdit_2.setEnabled(True)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.taxoLineEdit_2.sizePolicy().hasHeightForWidth())
-        self.taxoLineEdit_2.setSizePolicy(sizePolicy)
-        self.taxoLineEdit_2.setStyleSheet("background-color: rgb(238, 238, 236)")
-        self.taxoLineEdit_2.setReadOnly(True)
-        self.taxoLineEdit_2.setObjectName("taxoLineEdit_2")
-        self._4.addWidget(self.taxoLineEdit_2, 2, 1, 1, 1)
-        self.label_3 = QtWidgets.QLabel(self.groupBox_taxo)
-        self.label_3.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.label_3.setObjectName("label_3")
-        self._4.addWidget(self.label_3, 2, 0, 1, 1)
-        self.verticalLayout_4.addLayout(self._4)
-        self.gridLayout.addWidget(self.groupBox_taxo, 6, 0, 1, 1)
+        self.gridLayout.addWidget(self.groupBox_photo, 7, 0, 1, 1)
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setObjectName("horizontalLayout")
         self.startButton = QtWidgets.QPushButton(self.centralwidget)
         self.startButton.setObjectName("startButton")
-        self.gridLayout.addWidget(self.startButton, 7, 0, 1, 1)
+        self.horizontalLayout.addWidget(self.startButton)
         self.stopButton = QtWidgets.QPushButton(self.centralwidget)
         self.stopButton.setObjectName("stopButton")
-        self.gridLayout.addWidget(self.stopButton, 8, 0, 1, 1)
+        self.horizontalLayout.addWidget(self.stopButton)
         self.cleanButton = QtWidgets.QPushButton(self.centralwidget)
         self.cleanButton.setObjectName("cleanButton")
-        self.gridLayout.addWidget(self.cleanButton, 9, 0, 1, 1)
+        self.horizontalLayout.addWidget(self.cleanButton)
+        self.gridLayout.addLayout(self.horizontalLayout, 8, 0, 1, 2)
+        self.groupBox_motor_getFreq = QtWidgets.QGroupBox(self.centralwidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.groupBox_motor_getFreq.sizePolicy().hasHeightForWidth())
+        self.groupBox_motor_getFreq.setSizePolicy(sizePolicy)
+        self.groupBox_motor_getFreq.setObjectName("groupBox_motor_getFreq")
+        self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.groupBox_motor_getFreq)
+        self.verticalLayout_6.setObjectName("verticalLayout_6")
+        self._1 = QtWidgets.QHBoxLayout()
+        self._1.setObjectName("_1")
+        self.label_moto_x = QtWidgets.QLabel(self.groupBox_motor_getFreq)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.label_moto_x.sizePolicy().hasHeightForWidth())
+        self.label_moto_x.setSizePolicy(sizePolicy)
+        self.label_moto_x.setObjectName("label_moto_x")
+        self._1.addWidget(self.label_moto_x)
+        self.spinBox_motor_x = QtWidgets.QSpinBox(self.groupBox_motor_getFreq)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.spinBox_motor_x.sizePolicy().hasHeightForWidth())
+        self.spinBox_motor_x.setSizePolicy(sizePolicy)
+        self.spinBox_motor_x.setMaximum(15)
+        self.spinBox_motor_x.setObjectName("spinBox_motor_x")
+        self._1.addWidget(self.spinBox_motor_x)
+        self.lineEdit_motor_freq_x = QtWidgets.QLineEdit(self.groupBox_motor_getFreq)
+        self.lineEdit_motor_freq_x.setEnabled(False)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.lineEdit_motor_freq_x.sizePolicy().hasHeightForWidth())
+        self.lineEdit_motor_freq_x.setSizePolicy(sizePolicy)
+        self.lineEdit_motor_freq_x.setReadOnly(True)
+        self.lineEdit_motor_freq_x.setObjectName("lineEdit_motor_freq_x")
+        self._1.addWidget(self.lineEdit_motor_freq_x)
+        self.verticalLayout_6.addLayout(self._1)
+        self.pushButton_motor_getFreq = QtWidgets.QPushButton(self.groupBox_motor_getFreq)
+        self.pushButton_motor_getFreq.setObjectName("pushButton_motor_getFreq")
+        self.verticalLayout_6.addWidget(self.pushButton_motor_getFreq)
+        self.gridLayout.addWidget(self.groupBox_motor_getFreq, 2, 0, 1, 1)
+        self.groupBox_graphs = QtWidgets.QGroupBox(self.centralwidget)
+        self.groupBox_graphs.setObjectName("groupBox_graphs")
+        self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.groupBox_graphs)
+        self.verticalLayout_5.setObjectName("verticalLayout_5")
+        self.widget = QtWidgets.QWidget(self.groupBox_graphs)
+        self.widget.setObjectName("widget")
+        self.verticalLayout_5.addWidget(self.widget)
+        self.gridLayout.addWidget(self.groupBox_graphs, 0, 1, 7, 1)
+        self.groupBox_vibro_data = QtWidgets.QGroupBox(self.centralwidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.groupBox_vibro_data.sizePolicy().hasHeightForWidth())
+        self.groupBox_vibro_data.setSizePolicy(sizePolicy)
+        self.groupBox_vibro_data.setObjectName("groupBox_vibro_data")
+        self.gridLayout_2 = QtWidgets.QGridLayout(self.groupBox_vibro_data)
+        self.gridLayout_2.setObjectName("gridLayout_2")
+        self.label_vibro_n = QtWidgets.QLabel(self.groupBox_vibro_data)
+        self.label_vibro_n.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.label_vibro_n.setObjectName("label_vibro_n")
+        self.gridLayout_2.addWidget(self.label_vibro_n, 0, 0, 1, 1)
+        self.spinBox_vibro_n = QtWidgets.QSpinBox(self.groupBox_vibro_data)
+        self.spinBox_vibro_n.setMaximum(15)
+        self.spinBox_vibro_n.setObjectName("spinBox_vibro_n")
+        self.gridLayout_2.addWidget(self.spinBox_vibro_n, 0, 1, 1, 1)
+        self.pushButton_vobro_data = QtWidgets.QPushButton(self.groupBox_vibro_data)
+        self.pushButton_vobro_data.setObjectName("pushButton_vobro_data")
+        self.gridLayout_2.addWidget(self.pushButton_vobro_data, 1, 0, 1, 2)
+        self.gridLayout.addWidget(self.groupBox_vibro_data, 3, 0, 1, 1)
         self.groupBox_messenger = QtWidgets.QGroupBox(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.MinimumExpanding)
         sizePolicy.setHorizontalStretch(0)
@@ -399,18 +413,10 @@ class Ui_MainWindow(object):
         self.textEdit.setReadOnly(True)
         self.textEdit.setObjectName("textEdit")
         self.verticalLayout.addWidget(self.textEdit)
-        self.gridLayout.addWidget(self.groupBox_messenger, 6, 1, 4, 1)
-        self.groupBox_graphs = QtWidgets.QGroupBox(self.centralwidget)
-        self.groupBox_graphs.setObjectName("groupBox_graphs")
-        self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.groupBox_graphs)
-        self.verticalLayout_5.setObjectName("verticalLayout_5")
-        self.widget = QtWidgets.QWidget(self.groupBox_graphs)
-        self.widget.setObjectName("widget")
-        self.verticalLayout_5.addWidget(self.widget)
-        self.gridLayout.addWidget(self.groupBox_graphs, 0, 1, 6, 1)
+        self.gridLayout.addWidget(self.groupBox_messenger, 7, 1, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1336, 22))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1196, 22))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -424,7 +430,16 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Физприбор 3.7.26а"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Физприбор 3.7.28а"))
+        self.groupBox_motor_setFreq.setTitle(_translate("MainWindow", "Установка частоты вращения вала двигателя"))
+        self.label_motor_n.setText(_translate("MainWindow", "Номер:"))
+        self.label_motor_freq.setText(_translate("MainWindow", "Частота:"))
+        self.pushButton_motor_setFreq.setText(_translate("MainWindow", "Задать"))
+        self.groupBox_taxo.setTitle(_translate("MainWindow", "Опрос тахометра"))
+        self.label_1.setText(_translate("MainWindow", "Скорость  (oб/мин):"))
+        self.label_2.setText(_translate("MainWindow", "ADC:"))
+        self.taxoLineEdit_2.setText(_translate("MainWindow", "100300010001"))
+        self.label_3.setText(_translate("MainWindow", "Команда:"))
         self.groupBox_settings.setTitle(_translate("MainWindow", "Настройка соединения"))
         self.portLabel.setText(_translate("MainWindow", "Номер порта:"))
         self.speedLabel.setText(_translate("MainWindow", "Скорость соединения:"))
@@ -439,16 +454,6 @@ class Ui_MainWindow(object):
         self.groupBox_vibro_status.setTitle(_translate("MainWindow", "Запрос состояния платы фотоприёмника виброметра"))
         self.label_vibro_status_n.setText(_translate("MainWindow", "X:"))
         self.pushButton_vibro_status.setText(_translate("MainWindow", "Запросить"))
-        self.groupBox_vibro_data.setTitle(_translate("MainWindow", "Запрос данных с АЦП виброметра"))
-        self.label_vibro_n.setText(_translate("MainWindow", "Номер фотоприёмника:"))
-        self.pushButton_vobro_data.setText(_translate("MainWindow", "Запросить"))
-        self.groupBox_motor_setFreq.setTitle(_translate("MainWindow", "Установка частоты вращения вала двигателя"))
-        self.label_motor_n.setText(_translate("MainWindow", "Номер:"))
-        self.label_motor_freq.setText(_translate("MainWindow", "Частота:"))
-        self.pushButton_motor_setFreq.setText(_translate("MainWindow", "Задать"))
-        self.groupBox_motor_getFreq.setTitle(_translate("MainWindow", "Запрос периода вращения вала двигателя:"))
-        self.label_moto_x.setText(_translate("MainWindow", "X:"))
-        self.pushButton_motor_getFreq.setText(_translate("MainWindow", "Запросить"))
         self.groupBox_photo.setTitle(_translate("MainWindow", "Опрос фотоприёмника"))
         self.label_temp.setText(_translate("MainWindow", "Температура °C:"))
         self.label_ADC.setText(_translate("MainWindow", "ADC:"))
@@ -459,16 +464,17 @@ class Ui_MainWindow(object):
         self.label_T1.setText(_translate("MainWindow", "T1"))
         self.label_T2.setText(_translate("MainWindow", "T2"))
         self.label_calibr.setText(_translate("MainWindow", "Параметры калибровки:"))
-        self.groupBox_taxo.setTitle(_translate("MainWindow", "Опрос тахометра"))
-        self.label_1.setText(_translate("MainWindow", "Скорость  (oб/мин):"))
-        self.label_2.setText(_translate("MainWindow", "ADC:"))
-        self.taxoLineEdit_2.setText(_translate("MainWindow", "100300010001"))
-        self.label_3.setText(_translate("MainWindow", "Команда:"))
         self.startButton.setText(_translate("MainWindow", "Старт"))
         self.stopButton.setText(_translate("MainWindow", "Стоп"))
         self.cleanButton.setText(_translate("MainWindow", "Очистить"))
-        self.groupBox_messenger.setTitle(_translate("MainWindow", "Ответ:"))
+        self.groupBox_motor_getFreq.setTitle(_translate("MainWindow", "Запрос периода вращения вала двигателя:"))
+        self.label_moto_x.setText(_translate("MainWindow", "X:"))
+        self.pushButton_motor_getFreq.setText(_translate("MainWindow", "Запросить"))
         self.groupBox_graphs.setTitle(_translate("MainWindow", "Графики"))
+        self.groupBox_vibro_data.setTitle(_translate("MainWindow", "Запрос данных с АЦП виброметра"))
+        self.label_vibro_n.setText(_translate("MainWindow", "Номер фотоприёмника:"))
+        self.pushButton_vobro_data.setText(_translate("MainWindow", "Запросить"))
+        self.groupBox_messenger.setTitle(_translate("MainWindow", "Ответ:"))
 
 def chunks(lst, n):
     """Yield successive n-sized chunks from lst."""
@@ -683,35 +689,38 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.start_flag = False
 
-    def setup_window(self, device):
+    def setup_window(self):
+        """
+        Connect all signalls to slots, 
+        """
         # self.timer1.timeout.connect( lambda: {
         #     device.writebincode(self.get_bytes()),
         #     self.show_res(device.readbincode())
         #     })
-        self.device = device
+        self.device = UDevice()
         self.startButton.clicked.connect(self.start_slot)
         self.stopButton.clicked.connect(self.stop_slot)
 
         self.plots_timer.timeout.connect( lambda: {
-            device.writebincode(self.get_ph()),
-            self.show_ph(device.readbincode()),
-            time.sleep(0.02),
-            device.writebincode(self.get_taxo()),
-            self.show_taxo(device.readbincode())
+            self.device.writebincode(self.get_ph()),
+            self.show_ph(self.device.readbincode()),
+            # time.sleep(0.02),
+            self.device.writebincode(self.get_taxo()),
+            self.show_taxo(self.device.readbincode())
         })
 
         self.openButton.clicked.connect( lambda : {
-            self.statusbar.showMessage("Open("+self.portCBox.currentText()+")", 1000),
-            device.open(self.portCBox.currentText(), int(self.speedCBox.currentText()), 0.1)
+            self.statusbar.showMessage("Открытие порта "+self.portCBox.currentText()+".", 3000),
+            self.device.open(self.portCBox.currentText(), int(self.speedCBox.currentText()), 0.1)
             })
 
         self.closeButton.clicked.connect( lambda :{
-            self.statusbar.showMessage("Close()"),
-            device.close()
+            self.statusbar.showMessage("Закрытие порта "+self.device.get_device_name()+".", 3000),
+            self.device.close()
             })
 
         self.refButton.clicked.connect( lambda : {
-            self.statusbar.showMessage("Refresh()"),
+            self.statusbar.showMessage("Обновление устройств.", 3000),
             self.set_devs(UDevice.get_devs())
             })
 
@@ -730,7 +739,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def stop_slot(self):
         self.plots_timer.stop()
-        self.device.flush()
+        # self.device.flush()
         self.start_flag = False
 
     def vibro_data_slot(self):
@@ -739,7 +748,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         Ответ на запрос: 3X 03 01 BN ... B1 CS CS, где
         BN … B1 массив 16 разрядных отсчётов АЦП виброметра (N = 1024)
         """
-        self.statusbar.showMessage("Запрос данных с АЦП виброметра.")
+        self.statusbar.showMessage("Запрос данных с АЦП виброметра.", 3000)
         self.plots_timer.stop()
         fname = QtWidgets.QFileDialog.getSaveFileName(self, 'Open file', '.',"Text files (*.txt)")
         if fname[0] == '':
@@ -748,15 +757,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         code = list(b'\x30\x03\x00\x02\x00\x01') # 3X 03 00 02 00 01
         code[0] = code[0] + self.spinBox_vibro_status_n.value()
-        device.writebincode(bytes(code))
-        time.sleep(1)
+        self.device.writebincode(bytes(code))
+        time.sleep(.1)
         if(self.start_flag):
             self.stop_slot()
-            data = device.readbincode(1029)
+            data = self.device.readbincode(1029)
             self.device.flush()
             self.start_slot()
         else:
-            data = device.readbincode(1029)
+            data = self.device.readbincode(1029)
 
         data_invert = [int.from_bytes(b, byteorder='big') for b in chunks(data[3:-2], 2)][::-1]
         print(data_invert)
@@ -769,20 +778,20 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         Ответ на запрос: 3X 04 01 NN CS CS, где
         NN- состояние платы: 00- исправна, 01- неисправна
         """
-        self.statusbar.showMessage("Запрос состояния платы фотоприёмника виброметра.")
+        self.statusbar.showMessage("Запрос состояния платы фотоприёмника виброметра.", 3000)
         self.plots_timer.stop()
 
         code = list(b'\x30\x04\x00\x01\x00\x01') # 3X 03 00 02 00 01
         code[0] = code[0] + self.spinBox_vibro_status_n.value()
-        device.writebincode(bytes(code))
+        self.device.writebincode(bytes(code))
         time.sleep(.02)
         if(self.start_flag):
             self.stop_slot()
-            data = device.readbincode(6)
+            data = self.device.readbincode(6)
             self.device.flush()
             self.start_slot()
         else:
-            data = device.readbincode(6)
+            data = self.device.readbincode()
 
         if(list(data)[3] != 0x00):
             self.lineEdit_vibro_status.setText("Исправна")
@@ -796,24 +805,49 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         Задать частоту вращения вала двигателя: 3X 06 00 01 HH LL CS CS,
         где HH LL – целое 16-битное число, соответствующее частоте вращения вала двигателя, об/мин
         """
-        self.statusbar.showMessage("Задать частоту вращения вала двигателя.")
+        self.statusbar.showMessage("Задать частоту вращения вала двигателя.", 3000)
         self.plots_timer.stop()
-        x = self.spinBox_motor_freq.value()
-        code = b'\x30\x06\x00\x01\x00\x01'
-        pass
+        code = list(b'\x30\x06\x00\x01\x00\x00')
+        code[0] = code[0] + self.spinBox_motor_n.value()
+        freq = self.spinBox_motor_freq.value().to_bytes(2, 'big')
+        code[4]= freq[0]
+        code[5]= freq[1]
+        self.device.writebincode(bytes(code))
+        time.sleep(.02)
+        if(self.start_flag):
+            self.stop_slot()
+            data = self.device.readbincode()
+            self.device.flush()
+            self.start_slot()
+        else:
+            data = self.device.readbincode()
 
     def motor_getFreq_slot(self):
         """
         Запрос регистра данных периода вращения вала двигателя: 3X 03 00 01 00 01 CS CS,
         где Х- номер фотоприёмника виброметра (указывается или перемычками на плате, или программируется на объекте). По умолчанию 0
         Итоговая команда по-умолчанию: 30 03 00 01 00 01 D1 EB
+        Ответ на запрос: 3X 03 00 01 HH LL CS CS
         """
-        self.statusbar.showMessage("Запрос регистра данных периода вращения вала двигателя.")
+        self.statusbar.showMessage("Запрос регистра данных периода вращения вала двигателя.", 3000)
         self.plots_timer.stop()
-        pass
+        code = list(b'\x30\x03\x00\x01\x00\x01')
+        code[0] = code[0] + self.spinBox_motor_n.value()
+        self.device.writebincode(bytes(code))
+        time.sleep(.02)
+        if(self.start_flag):
+            self.stop_slot()
+            data = self.device.readbincode()
+            self.device.flush()
+            self.start_slot()
+        else:
+            data = self.device.readbincode()
+        self.plots_timer.stop()
 
     def normalOutputWritten(self, text):
-        """Append text to the QTextEdit."""
+        """
+        Append text to the QTextEdit.
+        """
         # Maybe QTextEdit.append() works as well, but this is how I do it:
         cursor = self.textEdit.textCursor()
         cursor.movePosition(QtGui.QTextCursor.End)
@@ -874,7 +908,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         return bl
 
     def _update_ph(self, data):
-        '''Функция добавления новой точки на график фотоприемника'''
+        """
+        Функция добавления новой точки на график фотоприемника
+        """
         if len(self._x2) >= self._num:
             cut = len(self._x2) - self._num + 1
             self._x2 = self._x2[cut:]     # Remove the first
@@ -894,7 +930,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.flag_update_ph = False;
 
     def show_ph(self, data : bytes):
-        """Функция обновления всех значейний фотоприемника"""
+        """
+        Функция обновления всех значейний фотоприемника
+        """
         N = int.from_bytes(data[3:7], byteorder='little', signed=False)
         str_code = str(N)
         # print("show_ph():", str_code, data[3:7].hex())
@@ -915,7 +953,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         # self.textEdit.insertPlainText(str(data)+" "+now.strftime("%H:%M:%S %f")+'\n');
 
     def _update_taxo(self, data):
-        """Функция добавления новой точки на график скрости тахометра"""
+        """
+        Функция добавления новой точки на график скрости тахометра
+        """
         if len(self._x1) >= self._num:
             cut = len(self._x1) - self._num + 1
             self._x1 = self._x1[cut:]     # Remove the first
@@ -936,7 +976,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.flag_update_taxo = False
 
     def show_taxo(self, data : bytes):
-        """Функция обновления всех значейний тахометра"""
+        """
+        Функция обновления в окне всех значейний тахометра
+        """
         t = int.from_bytes(data[3:7], byteorder='little', signed=False)
         msg1 = str(t)
         # print("show_taxo():", msg1, data[3:7].hex())
@@ -961,9 +1003,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self._line2.setData(self._x2, self._y2)
 
 class FixedSerial( serial.Serial ):
-    """To fix bug on Windows 10 system
-        https://github.com/pyserial/pyserial/issues/258
-        https://github.com/pyserial/pyserial/issues/362
+    """
+    To fix bug on Windows 10 system
+    https://github.com/pyserial/pyserial/issues/258
+    https://github.com/pyserial/pyserial/issues/362
     """
     def _reconfigure_port( self, *args, **kwargs ):
         try:
@@ -985,7 +1028,9 @@ class NumbersIterator:
         return x
 
 def _FileLogger(func):
-    '''Wrapper (decorator) for log incomming data from device'''
+    """
+    Wrapper (decorator) for log incomming data from device
+    """
     _file_name = "uart.log" # имя лог файла
     def wrapper(*args, **kwargs):
         data = func(*args, **kwargs)
@@ -1014,12 +1059,12 @@ class UDevice(QtWidgets.QWidget):
             UDevice._dev = dev
             #else: print('The Port '+ dev + ' has been open')
         except serial.serialutil.SerialException as e:
-            print("PortNotFoundError")
+            print("Error: Port "+ dev +" not found.")
             # self.newData.emit(['error', str(e)])
 
     def close(self):
         if UDevice._dev is not None:
-            print('Closed Port '+ UDevice._dev)
+            print('Close Port '+ UDevice._dev)
             UDevice._dev = None
             UDevice._port.close()
 
@@ -1040,19 +1085,24 @@ class UDevice(QtWidgets.QWidget):
         return devices
 
     # @_FileLogger
-    def readbincode(self, len=9):
-        r = UDevice._port.read(len)
-        print("readbincode("+str(len)+"): ", r.hex())
+    def readbincode(self, n=9):
+        r = UDevice._port.read(n)
+        print("readbincode("+str(len(r))+"/"+str(n)+"): ", r.hex())
         return r
 
-    def writebincode(self, data : bytes, len=8) -> bytes:
+    def get_device_name(self):
+        return UDevice._dev
+
+    def writebincode(self, data : bytes, n=8) -> bytes:
         crc_data = self._add_CRC16(data)
-        print("writebincode("+str(len)+"): ", crc_data.hex())
-        UDevice._port.write(crc_data[:len])
+        print("writebincode("+str(n)+"): ", crc_data.hex())
+        UDevice._port.write(crc_data[:n])
         return crc_data
 
     def flush(self):
         UDevice._port.flush()
+        UDevice._port.flushInput()
+        UDevice._port.flushOutput()
 
     def _add_CRC16(self, data: bytes) -> bytes:
         crc16 = libscrc.modbus(data)
@@ -1068,8 +1118,6 @@ if __name__ == '__main__':
     window = MainWindow()
     # print(sys.getsizeof(2 ** 63))
     # print(type(2 ** 63))
-    device = UDevice()
-
-    window.setup_window(device)
+    window.setup_window()
     window.show()
     sys.exit(app.exec_())
