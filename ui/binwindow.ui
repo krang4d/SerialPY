@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Физприбор 3.7.28а</string>
+   <string>Физприбор 3.7.29а</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
@@ -103,6 +103,9 @@
             <string notr="true">background-color: rgb(238, 238, 236);
 color: rgb(78, 154, 6);</string>
            </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
            <property name="readOnly">
             <bool>true</bool>
            </property>
@@ -126,6 +129,9 @@ color: rgb(78, 154, 6);</string>
            <property name="styleSheet">
             <string notr="true">background-color: rgb(238, 238, 236);
 color: rgb(78, 154, 6);</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
            </property>
            <property name="readOnly">
             <bool>true</bool>
@@ -155,6 +161,9 @@ color: rgb(78, 154, 6);</string>
            </property>
            <property name="text">
             <string>100300010001</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
            </property>
            <property name="readOnly">
             <bool>true</bool>
@@ -358,6 +367,9 @@ color: rgb(78, 154, 6);</string>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
            </property>
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
           </widget>
          </item>
         </layout>
@@ -405,6 +417,9 @@ color: rgb(78, 154, 6);</string>
             <string notr="true">background-color: rgb(238, 238, 236);
 color: rgb(32, 74, 135);</string>
            </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
            <property name="readOnly">
             <bool>true</bool>
            </property>
@@ -430,6 +445,9 @@ color: rgb(32, 74, 135);</string>
            </property>
            <property name="text">
             <string>200300010001</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
            </property>
            <property name="readOnly">
             <bool>true</bool>
@@ -457,6 +475,9 @@ color: rgb(32, 74, 135);</string>
            <property name="styleSheet">
             <string notr="true">background-color: rgb(238, 238, 236);
 color: rgb(32, 74, 135);</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
            </property>
            <property name="readOnly">
             <bool>true</bool>
@@ -621,13 +642,22 @@ color: rgb(32, 74, 135);</string>
          <item>
           <widget class="QLineEdit" name="lineEdit_motor_freq_x">
            <property name="enabled">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
+           </property>
+           <property name="whatsThis">
+            <string/>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">background-color: rgb(238, 238, 236);</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
            </property>
            <property name="readOnly">
             <bool>true</bool>

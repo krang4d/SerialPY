@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # Serial Port Reader by Pavel Golovkin, aka pgg.
 # Feel free to use. No warranty
-# Version 3.7.28a
+# Version 3.7.29a
 
 import sys  # We need sys so that we can pass argv to QApplication
 import os
@@ -84,6 +84,7 @@ class Ui_MainWindow(object):
         self.taxoLineEdit_0.setSizePolicy(sizePolicy)
         self.taxoLineEdit_0.setStyleSheet("background-color: rgb(238, 238, 236);\n"
 "color: rgb(78, 154, 6);")
+        self.taxoLineEdit_0.setAlignment(QtCore.Qt.AlignCenter)
         self.taxoLineEdit_0.setReadOnly(True)
         self.taxoLineEdit_0.setObjectName("taxoLineEdit_0")
         self._4.addWidget(self.taxoLineEdit_0, 1, 0, 1, 1)
@@ -98,6 +99,7 @@ class Ui_MainWindow(object):
         self.taxoLineEdit_1.setSizePolicy(sizePolicy)
         self.taxoLineEdit_1.setStyleSheet("background-color: rgb(238, 238, 236);\n"
 "color: rgb(78, 154, 6);")
+        self.taxoLineEdit_1.setAlignment(QtCore.Qt.AlignCenter)
         self.taxoLineEdit_1.setReadOnly(True)
         self.taxoLineEdit_1.setObjectName("taxoLineEdit_1")
         self._4.addWidget(self.taxoLineEdit_1, 1, 1, 1, 1)
@@ -112,6 +114,7 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.taxoLineEdit_2.sizePolicy().hasHeightForWidth())
         self.taxoLineEdit_2.setSizePolicy(sizePolicy)
         self.taxoLineEdit_2.setStyleSheet("background-color: rgb(238, 238, 236)")
+        self.taxoLineEdit_2.setAlignment(QtCore.Qt.AlignCenter)
         self.taxoLineEdit_2.setReadOnly(True)
         self.taxoLineEdit_2.setObjectName("taxoLineEdit_2")
         self._4.addWidget(self.taxoLineEdit_2, 2, 1, 1, 1)
@@ -209,6 +212,7 @@ class Ui_MainWindow(object):
         self.lineEdit_vibro_status.setSizePolicy(sizePolicy)
         self.lineEdit_vibro_status.setStyleSheet("background-color: rgb(238, 238, 236);")
         self.lineEdit_vibro_status.setAlignment(QtCore.Qt.AlignCenter)
+        self.lineEdit_vibro_status.setReadOnly(True)
         self.lineEdit_vibro_status.setObjectName("lineEdit_vibro_status")
         self._5.addWidget(self.lineEdit_vibro_status)
         self.verticalLayout_7.addLayout(self._5)
@@ -238,6 +242,7 @@ class Ui_MainWindow(object):
         self.photoLineEdit_0.setSizePolicy(sizePolicy)
         self.photoLineEdit_0.setStyleSheet("background-color: rgb(238, 238, 236);\n"
 "color: rgb(32, 74, 135);")
+        self.photoLineEdit_0.setAlignment(QtCore.Qt.AlignCenter)
         self.photoLineEdit_0.setReadOnly(True)
         self.photoLineEdit_0.setObjectName("photoLineEdit_0")
         self._3.addWidget(self.photoLineEdit_0, 1, 0, 1, 1)
@@ -251,6 +256,7 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.photoLineEdit_2.sizePolicy().hasHeightForWidth())
         self.photoLineEdit_2.setSizePolicy(sizePolicy)
         self.photoLineEdit_2.setStyleSheet("background-color: rgb(238, 238, 236);")
+        self.photoLineEdit_2.setAlignment(QtCore.Qt.AlignCenter)
         self.photoLineEdit_2.setReadOnly(True)
         self.photoLineEdit_2.setObjectName("photoLineEdit_2")
         self._3.addWidget(self.photoLineEdit_2, 2, 1, 1, 1)
@@ -266,6 +272,7 @@ class Ui_MainWindow(object):
         self.photoLineEdit_1.setSizePolicy(sizePolicy)
         self.photoLineEdit_1.setStyleSheet("background-color: rgb(238, 238, 236);\n"
 "color: rgb(32, 74, 135);")
+        self.photoLineEdit_1.setAlignment(QtCore.Qt.AlignCenter)
         self.photoLineEdit_1.setReadOnly(True)
         self.photoLineEdit_1.setObjectName("photoLineEdit_1")
         self._3.addWidget(self.photoLineEdit_1, 1, 1, 1, 1)
@@ -352,12 +359,15 @@ class Ui_MainWindow(object):
         self.spinBox_motor_x.setObjectName("spinBox_motor_x")
         self._1.addWidget(self.spinBox_motor_x)
         self.lineEdit_motor_freq_x = QtWidgets.QLineEdit(self.groupBox_motor_getFreq)
-        self.lineEdit_motor_freq_x.setEnabled(False)
+        self.lineEdit_motor_freq_x.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.lineEdit_motor_freq_x.sizePolicy().hasHeightForWidth())
         self.lineEdit_motor_freq_x.setSizePolicy(sizePolicy)
+        self.lineEdit_motor_freq_x.setWhatsThis("")
+        self.lineEdit_motor_freq_x.setStyleSheet("background-color: rgb(238, 238, 236);")
+        self.lineEdit_motor_freq_x.setAlignment(QtCore.Qt.AlignCenter)
         self.lineEdit_motor_freq_x.setReadOnly(True)
         self.lineEdit_motor_freq_x.setObjectName("lineEdit_motor_freq_x")
         self._1.addWidget(self.lineEdit_motor_freq_x)
@@ -430,7 +440,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Физприбор 3.7.28а"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Физприбор 3.7.29а"))
         self.groupBox_motor_setFreq.setTitle(_translate("MainWindow", "Установка частоты вращения вала двигателя"))
         self.label_motor_n.setText(_translate("MainWindow", "Номер:"))
         self.label_motor_freq.setText(_translate("MainWindow", "Частота:"))
@@ -608,7 +618,9 @@ class EmittingStream(QtCore.QObject):
         self.textWritten.emit(str(text))
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
-    ''' Основное окно программы    '''
+    """
+    Основное окно программы
+    """
     _num = 100
 
     def __init__(self, *args, obj=None, **kwargs):
@@ -758,7 +770,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         code = list(b'\x30\x03\x00\x02\x00\x01') # 3X 03 00 02 00 01
         code[0] = code[0] + self.spinBox_vibro_status_n.value()
         self.device.writebincode(bytes(code))
-        time.sleep(.1)
+        time.sleep(1)
         if(self.start_flag):
             self.stop_slot()
             data = self.device.readbincode(1029)
@@ -842,7 +854,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.start_slot()
         else:
             data = self.device.readbincode()
-        self.plots_timer.stop()
+
+        freq = int.from_bytes(data[4:6], "big")
+        self.lineEdit_motor_freq_x.setText(str(freq))
 
     def normalOutputWritten(self, text):
         """
@@ -856,6 +870,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.textEdit.ensureCursorVisible()
 
     def closeEvent(self, event):
+        """
+        Обработка события закрытия окна (выхода из программы)
+        """
         self.init.set_N1(self.spinBox_N1.value())
         self.init.set_N2(self.spinBox_N2.value())
         self.init.set_T1(self.spinBox_T1.value())
