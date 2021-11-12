@@ -561,20 +561,28 @@ class Inits:
                 "N2": 1,
                 "T1": 0,
                 "T2": 0
+            },
+            "port" : {
+                "name": "/dev/ttyUSB0",
+                "baudrate" : 9200,
+                "timeout" : .1
             }
         }
         if os.path.isfile("settings.json"):
             with open("settings.json", "r") as read_file:
                 data = json.load(read_file)
             self.calibration = data.get("calibration")
+            self.port = data.get("port")
         else:
             with open("settings.json", "w") as write_file:
                 json.dump(self._settings_box, write_file)
             self.calibration = self._settings_box['calibration']
+            self.port = self._settings_box['port']
 
     def __del__(self):
         print('save_settings')
         self._settings_box['calibration'] = self.calibration
+        self._settings_box['port'] = self.port
         with open("settings.json", "w") as write_file:
             json.dump(self._settings_box, write_file)
 
@@ -588,28 +596,46 @@ class Inits:
             print(id(self.calibration), self.calibration)
             print(id(self._settings_box.get("calibration")), self._settings_box.get("calibration"))
 
-    def get_N1(self):
+    def set_portname(self, value : str):
+        self.port['name'] = value
+
+    def get_portname(self) -> str:
+        return self.port.get('name', "/dev/ttyUSB0")
+
+    def set_baudrate(self, value : str):
+        self.port['baudrate'] = value
+
+    def get_baudrate(self) -> str:
+        return self.port.get('baudrate', 9200)
+
+    def set_timeout(self, value : float):
+        self.port['timeout'] = value
+
+    def get_timeout(self) -> str:
+        return self.port.get('timeout', .1)
+
+    def get_N1(self) -> int:
         return self.calibration.get('N1', 0)
 
-    def set_N1(self, value):
+    def set_N1(self, value : int):
         self.calibration['N1'] = value
 
-    def get_N2(self):
+    def get_N2(self) -> int:
         return self.calibration.get('N2', 1)
 
-    def set_N2(self, value):
+    def set_N2(self, value : int):
         self.calibration['N2'] = value
 
-    def get_T1(self):
+    def get_T1(self) -> int:
         return self.calibration.get('T1', 0)
 
-    def set_T1(self, value):
+    def set_T1(self, value : int):
         self.calibration['T1'] = value
 
-    def get_T2(self):
+    def get_T2(self) -> int:
         return self.calibration.get('T2', 0)
 
-    def set_T2(self, value):
+    def set_T2(self, value : int):
         self.calibration['T2'] = value
 
 class EmittingStream(QtCore.QObject):
@@ -710,6 +736,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         #     self.show_res(device.readbincode())
         #     })
         self.device = UDevice()
+        devs = UDevice.get_devs()
+        self.set_devs(devs)
+        if self.init.get_portname() in devs:
+            self.statusbar.showMessage("Открытие порта "+self.init.get_portname()+".", 3000)
+            self.device.open(self.init.get_portname(), int(self.init.get_baudrate()), self.init.get_timeout())
+
         self.startButton.clicked.connect(self.start_slot)
         self.stopButton.clicked.connect(self.stop_slot)
 
@@ -1069,15 +1101,13 @@ class UDevice(QtWidgets.QWidget):
 
     def open(self, dev: str, baudrate: int, timeout: int):
         try:
-            #if UDevice._dev is None:
             UDevice._port = FixedSerial(port=dev, baudrate=baudrate, timeout=timeout)
             print('Open Port '+ dev)
-            self.timeout = timeout
+            # self.timeout = timeout
             UDevice._dev = dev
-            #else: print('The Port '+ dev + ' has been open')
+            print(UDevice._port.get_settings())
         except serial.serialutil.SerialException as e:
-            print("Error: Port "+ dev +" not found.")
-            # self.newData.emit(['error', str(e)])
+            print("Error: Can not open port "+ dev +".")
 
     def close(self):
         if UDevice._dev is not None:
@@ -1090,15 +1120,11 @@ class UDevice(QtWidgets.QWidget):
         devices = list()
         pts= prtlst.comports()
         for index, pt in enumerate(pts):
-            #print(pt)
             if 'USB' or 'ACM'  in pt[1]:
                 devices.append(pt[0])
                 #print('%d. %s %s'%(index, pt[0], pt[1]))
-
         if len(devices)==0:
-            #print('No USB device found.')
             devices.append('не найдено')
-
         return devices
 
     # @_FileLogger
@@ -1113,7 +1139,10 @@ class UDevice(QtWidgets.QWidget):
     def writebincode(self, data : bytes, n=8) -> bytes:
         crc_data = self._add_CRC16(data)
         print("writebincode("+str(n)+"): ", crc_data.hex())
-        UDevice._port.write(crc_data[:n])
+        try:
+            UDevice._port.write(crc_data[:n])
+        except serial.SerialException as e:
+            print(e)
         return crc_data
 
     def flush(self):

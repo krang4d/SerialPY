@@ -1,1 +1,1 @@
-{"calibration": {"N1": 3540058112, "N2": 3540058122, "T1": -4, "T2": 2}}
+{"calibration": {"N1": 3540058112, "N2": 3540058122, "T1": -4, "T2": 2}, "port": {"name": "/dev/ttyUSB0", "baudrate": 9200, "timeout": 0.1}}
