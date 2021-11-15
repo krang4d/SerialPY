@@ -37,22 +37,42 @@ bool is_equal(byte cmd_1[], byte cmd_2[], int len)
 }
 
 byte data[1029];
+static unsigned int value = 0;
 void prepe(byte x)
 {
-  byte b = 0;
   data[0] = x;
   data[1] = 0x03;
   data[2] = 0x01;
-  for(int i=3; i<1027; i++)
+  byte *d = &data[3];
+  for(unsigned int i=0; i<1024; i++)
   {
-    if(b%2 == 0)
-      data[i] = 0x00;
-    else data[i] = b;
-    b++;
+    if(i%2 == 0)
+    {
+      d[i] = highByte(value);
+      d[i+1] = lowByte(value);
+      value++;
+    }
   }
   // TODO add crc16
   data[1027] = 0x00;
   data[1028] = 0x00;
+}
+
+void start_vobromotor(byte highByte, byte lowByte)
+{
+  value = (highByte << 8) | lowByte ;
+}
+
+bool is_ready()
+{
+  static int n = 1;
+  if(n%10 == 0)
+  {
+    n++;
+    return true;
+  }
+  n++;
+  return false;
 }
 
 byte buffer[9];
@@ -63,6 +83,12 @@ byte cmd_f[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
 //the vibromotor data request 
 byte vib_data[]   = {0x30, 0x03, 0x00, 0x02, 0x00, 0x01, 0x21, 0xEB};
+// start vibromotor request 30 06 00 01 00 00 dc 2b
+byte vib_start[] = {0x30, 0x06, 0x00, 0x01, 0x00, 0x00, 0xDC, 0x2B};
+// get frequency
+byte get_freq_cmd[] = {0x30, 0x03, 0x00, 0x01, 0x00, 0x01, 0xD1, 0xEB};
+// ready data command 3X 04 00 00 00 02 CS CS
+byte ready_data_cmd[] = { 0x30, 0x04, 0x00, 0x00, 0x00, 0x02 };
 
 void serialEvent(){
   Serial.readBytes(buffer, 8);
@@ -70,6 +96,24 @@ void serialEvent(){
   if(is_equal(&buffer[3], &vib_data[3], 3)) {
     prepe(buffer[0]);
     Serial.write(data, 1029);
+  }
+  else if(is_equal(&buffer[1], &vib_start[1], 3))
+  {
+    start_vobromotor(buffer[4], buffer[5]);
+  }
+  else if(is_equal(&buffer[1], &get_freq_cmd[1], 5))
+  {
+    buffer[4] = highByte(value);
+    buffer[5] = lowByte(value);
+    Serial.write(buffer, 9);
+  }
+  else if(is_equal(&buffer[1], &ready_data_cmd[1], 5))
+  {
+    if(is_ready())
+    {
+      buffer[3] = 0x01;
+    }
+    Serial.write(buffer, 6);
   }
   else 
     Serial.write(buffer, 9);

@@ -43,5 +43,5 @@ class Ui_AboutForm(object):
         AboutForm.setWindowTitle(_translate("AboutForm", "About"))
         self.label.setText(_translate("AboutForm", "The Serial Port Reader program by Pavel Golovkin (jzi@inbox.ru).\n"
 "Feel free to use. No warranty.\n"
-"Version 3.7.29a"))
+"Version 3.7.30a"))
         self.pushButton.setText(_translate("AboutForm", "Ok"))

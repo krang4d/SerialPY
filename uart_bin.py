@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # Serial Port Reader by Pavel Golovkin, aka pgg.
 # Feel free to use. No warranty
-# Version 3.7.29a
+# Version 3.7.30a
 
 import sys  # We need sys so that we can pass argv to QApplication
 import os
@@ -397,10 +397,10 @@ class Ui_MainWindow(object):
         self.label_vibro_n.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.label_vibro_n.setObjectName("label_vibro_n")
         self.gridLayout_2.addWidget(self.label_vibro_n, 0, 0, 1, 1)
-        self.spinBox_vibro_n = QtWidgets.QSpinBox(self.groupBox_vibro_data)
-        self.spinBox_vibro_n.setMaximum(15)
-        self.spinBox_vibro_n.setObjectName("spinBox_vibro_n")
-        self.gridLayout_2.addWidget(self.spinBox_vibro_n, 0, 1, 1, 1)
+        self.spinBox_vibro_data_n = QtWidgets.QSpinBox(self.groupBox_vibro_data)
+        self.spinBox_vibro_data_n.setMaximum(15)
+        self.spinBox_vibro_data_n.setObjectName("spinBox_vibro_data_n")
+        self.gridLayout_2.addWidget(self.spinBox_vibro_data_n, 0, 1, 1, 1)
         self.pushButton_vobro_data = QtWidgets.QPushButton(self.groupBox_vibro_data)
         self.pushButton_vobro_data.setObjectName("pushButton_vobro_data")
         self.gridLayout_2.addWidget(self.pushButton_vobro_data, 1, 0, 1, 2)
@@ -440,7 +440,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Физприбор 3.7.29а"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Физприбор 3.7.30а"))
         self.groupBox_motor_setFreq.setTitle(_translate("MainWindow", "Установка частоты вращения вала двигателя"))
         self.label_motor_n.setText(_translate("MainWindow", "Номер:"))
         self.label_motor_freq.setText(_translate("MainWindow", "Частота:"))
@@ -655,12 +655,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         # self.spinBox_N1 = BigIntSpinbox(self.groupBox_photo)
         # self.spinBox_N2 = BigIntSpinbox(self.groupBox_photo)
-
+        self.progressbar = QtWidgets.QProgressBar(self)
+        self.progressbar.setMinimum(0)
+        self.statusbar.addPermanentWidget(self.progressbar, stretch = 0)
+        self.progressbar.setVisible(False)
         # Install the custom output stream
         sys.stdout = EmittingStream(textWritten=self.normalOutputWritten)
 
         # self.timer1 = QtCore.QTimer()
         self.plots_timer = QtCore.QTimer()
+        self.waitdata_timer = QtCore.QTimer()
 
         self.textEdit.setWordWrapMode(QtGui.QTextOption.NoWrap)
         self.cleanButton.clicked.connect( lambda : { self.clean() })
@@ -753,6 +757,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.show_taxo(self.device.readbincode())
         })
 
+        self.waitdata_timer.timeout.connect(self.vibro_data_slot)
+
         self.openButton.clicked.connect( lambda : {
             self.statusbar.showMessage("Открытие порта "+self.portCBox.currentText()+".", 3000),
             self.device.open(self.portCBox.currentText(), int(self.speedCBox.currentText()), 0.1)
@@ -768,10 +774,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.set_devs(UDevice.get_devs())
             })
 
-        self.pushButton_vobro_data.clicked.connect(self.vibro_data_slot)
-        self.pushButton_vibro_status.clicked.connect(self.vibro_status_slot)
-        self.pushButton_motor_getFreq.clicked.connect(self.motor_getFreq_slot)
-        self.pushButton_motor_setFreq.clicked.connect(self.motor_setFreq_slot)
+        self.pushButton_vobro_data.clicked.connect( lambda : {
+            self.waitdata_timer.start(1000)
+            })
+        self.pushButton_vibro_status.clicked.connect(self._slot_wraper(self.vibro_status_slot))
+        self.pushButton_motor_getFreq.clicked.connect(self._slot_wraper(self.motor_getFreq_slot))
+        self.pushButton_motor_setFreq.clicked.connect(self._slot_wraper(self.motor_setFreq_slot))
 
     def __del__(self):
         # Restore sys.stdout
@@ -786,35 +794,82 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         # self.device.flush()
         self.start_flag = False
 
+    def _slot_wraper(self, func):
+        def wrapper():
+            if(self.start_flag):
+                self.stop_slot()
+                func()
+                self.device.flush()
+                self.start_slot()
+            else:
+                func()
+        return wrapper
+
+    def wait_data_slot(self) -> bool:
+        """
+        запрос готовности данных: 3X 04 00 00 00 02 CS CS
+        Ответ на запрос: 3X 04 01 NN CS CS, где
+        """
+        self.statusbar.showMessage("Запрос готовности данных с АЦП виброметра.", 3000)
+        self.progressbar.show()
+        code = list(b'\x30\x04\x00\x00\x00\x02') # 3X 03 00 02 00 01
+        code[0] = code[0] + self.spinBox_vibro_status_n.value()
+        self.device.writebincode(bytes(code))
+        time.sleep(.02)
+        data = self.device.readbincode(6)
+        if data[3]: return True
+        return False
+
     def vibro_data_slot(self):
         """
         Запрос данных с АЦП виброметра: 3X 03 00 02 00 01 CS CS
         Ответ на запрос: 3X 03 01 BN ... B1 CS CS, где
         BN … B1 массив 16 разрядных отсчётов АЦП виброметра (N = 1024)
+
+        Алгоритм для запуска и получения данных с платы виброметра:
+
+        1. Стартуем процесс, запускаем двигатель командой 3X 06 00 01 HH LL CS CS (в протоколе эта команда описана)
+        2. С периодичностью раз в секунду производим опрос платы о готовности данных.
+        Процесс стабилизации режима и снятия показаний АЦП занимает время не менее 10 секунд.
+        Опрос готовности данных производится командой, которую я не описывал в протоколе. Она имеет следующий формат:
+        запрос готовности данных: 3X 04 00 00 00 02 CS CS
+        Ответ на запрос: 3X 04 01 NN CS CS, где
+        NN- готовность данных: 00- данные не готовы для передачи, 01- данные готовы для передачи
+        3. Как только данные собраны, двигатель останавливается (Двигатель можно не останавливать, лучше поставить галочку для этого).
+        4. После получения ответа о готовности данных можно начинать передачу данных командой 3X 03 00 02 00 01 CS CS.
+        Эту команду необходимо повторить 16 раз подряд.
+        Таким образом массив принятых данных составит 16*1024 выборок, где каждая выборка является 16-разрядной.
+        5. Повторный цикл измерений запускается переходом к п.1.
         """
+        if not self.wait_data_slot():
+            return
+        self.waitdata_timer.stop()
         self.statusbar.showMessage("Запрос данных с АЦП виброметра.", 3000)
-        self.plots_timer.stop()
-        fname = QtWidgets.QFileDialog.getSaveFileName(self, 'Open file', '.',"Text files (*.txt)")
-        if fname[0] == '':
-            return 0
-        print(fname, os.path.isfile(fname[0]))
+        self.progressbar.show()
 
         code = list(b'\x30\x03\x00\x02\x00\x01') # 3X 03 00 02 00 01
-        code[0] = code[0] + self.spinBox_vibro_status_n.value()
-        self.device.writebincode(bytes(code))
-        time.sleep(1)
-        if(self.start_flag):
-            self.stop_slot()
-            data = self.device.readbincode(1029)
-            self.device.flush()
-            self.start_slot()
-        else:
-            data = self.device.readbincode(1029)
+        code[0] = code[0] + self.spinBox_vibro_data_n.value()
 
-        data_invert = [int.from_bytes(b, byteorder='big') for b in chunks(data[3:-2], 2)][::-1]
-        print(data_invert)
+        data = list()
+        batches = 16
+        self.progressbar.setMaximum(batches)
+        for i in range(batches):
+            self.progressbar.setValue(i)
+            self.device.writebincode(bytes(code))
+            time.sleep(1) # TODO проверка готовности 3X 04 00 00 00 02 CS CS
+            new_data = self.device.readbincode(1029)
+            batch = [int.from_bytes(b, byteorder='big') for b in chunks(new_data[3:-2], 2)]
+            print("batch("+str(i+1)+"/"+str(batches)+"): ", batch)
+            data = data + batch
+        time.sleep(1)
+        self.progressbar.setVisible(False)
+        self.progressbar.setValue(0)
+        fname = QtWidgets.QFileDialog.getSaveFileName(self, 'Open file', '.',"Text files (*.txt)")
+        if not os.path.isfile(fname[0]):
+            return 0
+        print("Save ", fname[0])
         with open(fname[0], 'w') as f:
-            for b in data_invert: f.write(str(b)+'\n')
+            for b in data[::-1]: f.write(str(b)+'\n')
 
     def vibro_status_slot(self):
         """
@@ -823,19 +878,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         NN- состояние платы: 00- исправна, 01- неисправна
         """
         self.statusbar.showMessage("Запрос состояния платы фотоприёмника виброметра.", 3000)
-        self.plots_timer.stop()
-
         code = list(b'\x30\x04\x00\x01\x00\x01') # 3X 03 00 02 00 01
-        code[0] = code[0] + self.spinBox_vibro_status_n.value()
+        code[0] = code[0] + self.spinBox_vibro_data_n.value()
         self.device.writebincode(bytes(code))
         time.sleep(.02)
-        if(self.start_flag):
-            self.stop_slot()
-            data = self.device.readbincode(6)
-            self.device.flush()
-            self.start_slot()
-        else:
-            data = self.device.readbincode()
+        data = self.device.readbincode()
 
         if(list(data)[3] != 0x00):
             self.lineEdit_vibro_status.setText("Исправна")
@@ -849,22 +896,17 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         Задать частоту вращения вала двигателя: 3X 06 00 01 HH LL CS CS,
         где HH LL – целое 16-битное число, соответствующее частоте вращения вала двигателя, об/мин
         """
-        self.statusbar.showMessage("Задать частоту вращения вала двигателя.", 3000)
-        self.plots_timer.stop()
+        value = self.spinBox_motor_freq.value()
+        num = self.spinBox_motor_n.value()
+        self.statusbar.showMessage("Задать частоту вращения "+str(value)+" об/мин вала двигателя №"+str(num)+".", 3000)
         code = list(b'\x30\x06\x00\x01\x00\x00')
-        code[0] = code[0] + self.spinBox_motor_n.value()
-        freq = self.spinBox_motor_freq.value().to_bytes(2, 'big')
+        code[0] = code[0] + num
+        freq = value.to_bytes(2, 'big')
         code[4]= freq[0]
         code[5]= freq[1]
         self.device.writebincode(bytes(code))
-        time.sleep(.02)
-        if(self.start_flag):
-            self.stop_slot()
-            data = self.device.readbincode()
-            self.device.flush()
-            self.start_slot()
-        else:
-            data = self.device.readbincode()
+        # time.sleep(.02)
+        # data = self.device.readbincode()
 
     def motor_getFreq_slot(self):
         """
@@ -873,19 +915,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         Итоговая команда по-умолчанию: 30 03 00 01 00 01 D1 EB
         Ответ на запрос: 3X 03 00 01 HH LL CS CS
         """
+
         self.statusbar.showMessage("Запрос регистра данных периода вращения вала двигателя.", 3000)
-        self.plots_timer.stop()
         code = list(b'\x30\x03\x00\x01\x00\x01')
         code[0] = code[0] + self.spinBox_motor_n.value()
         self.device.writebincode(bytes(code))
         time.sleep(.02)
-        if(self.start_flag):
-            self.stop_slot()
-            data = self.device.readbincode()
-            self.device.flush()
-            self.start_slot()
-        else:
-            data = self.device.readbincode()
+        data = self.device.readbincode()
 
         freq = int.from_bytes(data[4:6], "big")
         self.lineEdit_motor_freq_x.setText(str(freq))
@@ -1149,6 +1185,8 @@ class UDevice(QtWidgets.QWidget):
         UDevice._port.flush()
         UDevice._port.flushInput()
         UDevice._port.flushOutput()
+        UDevice._port.reset_input_buffer()
+        UDevice._port.reset_output_buffer()
 
     def _add_CRC16(self, data: bytes) -> bytes:
         crc16 = libscrc.modbus(data)

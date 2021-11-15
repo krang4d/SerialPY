@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1196</width>
-    <height>1217</height>
+    <height>1257</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,7 +24,7 @@
        </sizepolicy>
       </property>
       <property name="title">
-       <string>Установка частоты вращения вала двигателя</string>
+       <string>Установка частоты вращения  и запуск двигателя</string>
       </property>
       <layout class="QFormLayout" name="formLayout_2">
        <item row="0" column="0">
@@ -70,7 +70,7 @@
        <item row="2" column="0" colspan="2">
         <widget class="QPushButton" name="pushButton_motor_setFreq">
          <property name="text">
-          <string>Задать</string>
+          <string>Запуск</string>
          </property>
         </widget>
        </item>
@@ -710,17 +710,17 @@ color: rgb(32, 74, 135);</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
-        <widget class="QSpinBox" name="spinBox_vibro_n">
-         <property name="maximum">
-          <number>15</number>
-         </property>
-        </widget>
-       </item>
        <item row="1" column="0" colspan="2">
         <widget class="QPushButton" name="pushButton_vobro_data">
          <property name="text">
           <string>Запросить</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QSpinBox" name="spinBox_vibro_n">
+         <property name="maximum">
+          <number>15</number>
          </property>
         </widget>
        </item>
