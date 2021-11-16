@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # Serial Port Reader by Pavel Golovkin, aka pgg.
 # Feel free to use. No warranty
-# Version 3.7.30a
+# Version 3.8.30a
 
 import sys  # We need sys so that we can pass argv to QApplication
 import os
@@ -757,7 +757,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.show_taxo(self.device.readbincode())
         })
 
-        self.waitdata_timer.timeout.connect(self.vibro_data_slot)
+        self.waitdata_timer.timeout.connect(self._slot_wraper(self.vibro_data_slot))
 
         self.openButton.clicked.connect( lambda : {
             self.statusbar.showMessage("Открытие порта "+self.portCBox.currentText()+".", 3000),
@@ -810,7 +810,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         запрос готовности данных: 3X 04 00 00 00 02 CS CS
         Ответ на запрос: 3X 04 01 NN CS CS, где
         """
-        self.statusbar.showMessage("Запрос готовности данных с АЦП виброметра.", 3000)
+        self.statusbar.showMessage("Ожидание готовности данных с АЦП виброметра.", 3000)
         self.progressbar.show()
         code = list(b'\x30\x04\x00\x00\x00\x02') # 3X 03 00 02 00 01
         code[0] = code[0] + self.spinBox_vibro_status_n.value()
@@ -864,11 +864,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         time.sleep(1)
         self.progressbar.setVisible(False)
         self.progressbar.setValue(0)
-        fname = QtWidgets.QFileDialog.getSaveFileName(self, 'Open file', '.',"Text files (*.txt)")
+        fname = QtWidgets.QFileDialog.getSaveFileName(self, "Open file", ".","Text files (*.txt)")
         if not os.path.isfile(fname[0]):
             return 0
         print("Save ", fname[0])
-        with open(fname[0], 'w') as f:
+        with open(fname[0], "w") as f:
             for b in data[::-1]: f.write(str(b)+'\n')
 
     def vibro_status_slot(self):
