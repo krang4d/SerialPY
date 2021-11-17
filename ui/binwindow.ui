@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Физприбор 3.7.29а</string>
+   <string>Физприбор 3.7.31а</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
@@ -700,6 +700,20 @@ color: rgb(32, 74, 135);</string>
        <string>Запрос данных с АЦП виброметра</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
+       <item row="4" column="0" colspan="2">
+        <widget class="QPushButton" name="pushButton_vibro_data">
+         <property name="text">
+          <string>Запросить</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QSpinBox" name="spinBox_vibro_data_n">
+         <property name="maximum">
+          <number>15</number>
+         </property>
+        </widget>
+       </item>
        <item row="0" column="0">
         <widget class="QLabel" name="label_vibro_n">
          <property name="text">
@@ -710,17 +724,10 @@ color: rgb(32, 74, 135);</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="0" colspan="2">
-        <widget class="QPushButton" name="pushButton_vobro_data">
+       <item row="3" column="0" colspan="2" alignment="Qt::AlignHCenter">
+        <widget class="QCheckBox" name="checkBox_vibro_data_stop">
          <property name="text">
-          <string>Запросить</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QSpinBox" name="spinBox_vobro_data_n">
-         <property name="maximum">
-          <number>15</number>
+          <string>С остановкой двигателя</string>
          </property>
         </widget>
        </item>

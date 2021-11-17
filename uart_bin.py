@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # Serial Port Reader by Pavel Golovkin, aka pgg.
 # Feel free to use. No warranty
-# Version 3.8.30a
+# Version 3.8.31a
 
 import sys  # We need sys so that we can pass argv to QApplication
 import os
@@ -26,7 +26,7 @@ import json
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1196, 1217)
+        MainWindow.resize(1196, 1257)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
@@ -393,17 +393,20 @@ class Ui_MainWindow(object):
         self.groupBox_vibro_data.setObjectName("groupBox_vibro_data")
         self.gridLayout_2 = QtWidgets.QGridLayout(self.groupBox_vibro_data)
         self.gridLayout_2.setObjectName("gridLayout_2")
-        self.label_vibro_n = QtWidgets.QLabel(self.groupBox_vibro_data)
-        self.label_vibro_n.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.label_vibro_n.setObjectName("label_vibro_n")
-        self.gridLayout_2.addWidget(self.label_vibro_n, 0, 0, 1, 1)
+        self.pushButton_vibro_data = QtWidgets.QPushButton(self.groupBox_vibro_data)
+        self.pushButton_vibro_data.setObjectName("pushButton_vibro_data")
+        self.gridLayout_2.addWidget(self.pushButton_vibro_data, 4, 0, 1, 2)
         self.spinBox_vibro_data_n = QtWidgets.QSpinBox(self.groupBox_vibro_data)
         self.spinBox_vibro_data_n.setMaximum(15)
         self.spinBox_vibro_data_n.setObjectName("spinBox_vibro_data_n")
         self.gridLayout_2.addWidget(self.spinBox_vibro_data_n, 0, 1, 1, 1)
-        self.pushButton_vobro_data = QtWidgets.QPushButton(self.groupBox_vibro_data)
-        self.pushButton_vobro_data.setObjectName("pushButton_vobro_data")
-        self.gridLayout_2.addWidget(self.pushButton_vobro_data, 1, 0, 1, 2)
+        self.label_vibro_n = QtWidgets.QLabel(self.groupBox_vibro_data)
+        self.label_vibro_n.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.label_vibro_n.setObjectName("label_vibro_n")
+        self.gridLayout_2.addWidget(self.label_vibro_n, 0, 0, 1, 1)
+        self.checkBox_vibro_data_stop = QtWidgets.QCheckBox(self.groupBox_vibro_data)
+        self.checkBox_vibro_data_stop.setObjectName("checkBox_vibro_data_stop")
+        self.gridLayout_2.addWidget(self.checkBox_vibro_data_stop, 3, 0, 1, 2, QtCore.Qt.AlignHCenter)
         self.gridLayout.addWidget(self.groupBox_vibro_data, 3, 0, 1, 1)
         self.groupBox_messenger = QtWidgets.QGroupBox(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.MinimumExpanding)
@@ -440,11 +443,11 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Физприбор 3.7.30а"))
-        self.groupBox_motor_setFreq.setTitle(_translate("MainWindow", "Установка частоты вращения вала двигателя"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Физприбор 3.7.31а"))
+        self.groupBox_motor_setFreq.setTitle(_translate("MainWindow", "Установка частоты вращения  и запуск двигателя"))
         self.label_motor_n.setText(_translate("MainWindow", "Номер:"))
         self.label_motor_freq.setText(_translate("MainWindow", "Частота:"))
-        self.pushButton_motor_setFreq.setText(_translate("MainWindow", "Задать"))
+        self.pushButton_motor_setFreq.setText(_translate("MainWindow", "Запуск"))
         self.groupBox_taxo.setTitle(_translate("MainWindow", "Опрос тахометра"))
         self.label_1.setText(_translate("MainWindow", "Скорость  (oб/мин):"))
         self.label_2.setText(_translate("MainWindow", "ADC:"))
@@ -482,8 +485,9 @@ class Ui_MainWindow(object):
         self.pushButton_motor_getFreq.setText(_translate("MainWindow", "Запросить"))
         self.groupBox_graphs.setTitle(_translate("MainWindow", "Графики"))
         self.groupBox_vibro_data.setTitle(_translate("MainWindow", "Запрос данных с АЦП виброметра"))
+        self.pushButton_vibro_data.setText(_translate("MainWindow", "Запросить"))
         self.label_vibro_n.setText(_translate("MainWindow", "Номер фотоприёмника:"))
-        self.pushButton_vobro_data.setText(_translate("MainWindow", "Запросить"))
+        self.checkBox_vibro_data_stop.setText(_translate("MainWindow", "С остановкой двигателя"))
         self.groupBox_messenger.setTitle(_translate("MainWindow", "Ответ:"))
 
 def chunks(lst, n):
@@ -774,7 +778,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.set_devs(UDevice.get_devs())
             })
 
-        self.pushButton_vobro_data.clicked.connect( lambda : {
+        self.pushButton_vibro_data.clicked.connect( lambda : {
             self.waitdata_timer.start(1000)
             })
         self.pushButton_vibro_status.clicked.connect(self._slot_wraper(self.vibro_status_slot))
@@ -856,7 +860,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         for i in range(batches):
             self.progressbar.setValue(i)
             self.device.writebincode(bytes(code))
-            time.sleep(1) # TODO проверка готовности 3X 04 00 00 00 02 CS CS
+            time.sleep(.02) # TODO проверка готовности 3X 04 00 00 00 02 CS CS
             new_data = self.device.readbincode(1029)
             batch = [int.from_bytes(b, byteorder='big') for b in chunks(new_data[3:-2], 2)]
             print("batch("+str(i+1)+"/"+str(batches)+"): ", batch)
@@ -864,6 +868,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         time.sleep(1)
         self.progressbar.setVisible(False)
         self.progressbar.setValue(0)
+        if(self.checkBox_vibro_data_stop.isChecked()):
+            self.motor_stop(self.spinBox_vibro_data_n.value())
         fname = QtWidgets.QFileDialog.getSaveFileName(self, "Open file", ".","Text files (*.txt)")
         if not os.path.isfile(fname[0]):
             return 0
@@ -890,6 +896,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         else:
             self.lineEdit_vibro_status.setText("Неисправна")
             self.lineEdit_vibro_status.setStyleSheet("color: red; background-color: rgb(238, 238, 236);")
+
+    def motor_stop(self, num):
+        # остановака двигателя
+        self.statusbar.showMessage("Остановка двигателя.", 3000)
+        code = list(b'\x30\x06\x00\x01\x00\x00')
+        code[0] = code[0] + num
+        self.device.writebincode(bytes(code))
 
     def motor_setFreq_slot(self):
         """
