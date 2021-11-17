@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 # Serial Port Reader by Pavel Golovkin, aka pgg.
 # Feel free to use. No warranty
-# Version 3.8.31a
 
 import sys  # We need sys so that we can pass argv to QApplication
 import os
@@ -443,7 +442,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Физприбор 3.7.31а"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Физприбор"))
         self.groupBox_motor_setFreq.setTitle(_translate("MainWindow", "Установка частоты вращения  и запуск двигателя"))
         self.label_motor_n.setText(_translate("MainWindow", "Номер:"))
         self.label_motor_freq.setText(_translate("MainWindow", "Частота:"))
@@ -652,11 +651,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     Основное окно программы
     """
     _num = 100
+    _version = ""
 
     def __init__(self, *args, obj=None, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
 
         self.setupUi(self)
+        with open("VERSION", "r") as f:
+                MainWindow._version = f.readline()
+        self.setWindowTitle("Физприбор " + MainWindow._version)
         # self.spinBox_N1 = BigIntSpinbox(self.groupBox_photo)
         # self.spinBox_N2 = BigIntSpinbox(self.groupBox_photo)
         self.progressbar = QtWidgets.QProgressBar(self)
@@ -860,7 +863,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         for i in range(batches):
             self.progressbar.setValue(i)
             self.device.writebincode(bytes(code))
-            time.sleep(.02) # TODO проверка готовности 3X 04 00 00 00 02 CS CS
+            time.sleep(1) # TODO проверка готовности 3X 04 00 00 00 02 CS CS
             new_data = self.device.readbincode(1029)
             batch = [int.from_bytes(b, byteorder='big') for b in chunks(new_data[3:-2], 2)]
             print("batch("+str(i+1)+"/"+str(batches)+"): ", batch)
@@ -871,7 +874,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if(self.checkBox_vibro_data_stop.isChecked()):
             self.motor_stop(self.spinBox_vibro_data_n.value())
         fname = QtWidgets.QFileDialog.getSaveFileName(self, "Open file", ".","Text files (*.txt)")
-        if not os.path.isfile(fname[0]):
+        # print(fname, os.path.isfile(fname[0]))
+        if fname[0] == "":
             return 0
         print("Save ", fname[0])
         with open(fname[0], "w") as f:

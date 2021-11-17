@@ -1,0 +1,1 @@
+pyuic5 ui/binwindow.ui -o ui/binwindow.py
