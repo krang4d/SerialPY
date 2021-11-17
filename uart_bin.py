@@ -863,7 +863,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         for i in range(batches):
             self.progressbar.setValue(i)
             self.device.writebincode(bytes(code))
-            time.sleep(1) # TODO проверка готовности 3X 04 00 00 00 02 CS CS
+            time.sleep(0.2) # TODO проверка готовности 3X 04 00 00 00 02 CS CS
             new_data = self.device.readbincode(1029)
             batch = [int.from_bytes(b, byteorder='big') for b in chunks(new_data[3:-2], 2)]
             print("batch("+str(i+1)+"/"+str(batches)+"): ", batch)
@@ -888,11 +888,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         NN- состояние платы: 00- исправна, 01- неисправна
         """
         self.statusbar.showMessage("Запрос состояния платы фотоприёмника виброметра.", 3000)
-        code = list(b'\x30\x04\x00\x01\x00\x01') # 3X 03 00 02 00 01
-        code[0] = code[0] + self.spinBox_vibro_data_n.value()
+        code = list(b'\x30\x04\x00\x00\x00\x01') # 3X 03 00 02 00 01
+        code[0] = code[0] + self.spinBox_vibro_status_n.value()
         self.device.writebincode(bytes(code))
         time.sleep(.02)
-        data = self.device.readbincode()
+        data = self.device.readbincode(6)
 
         if(list(data)[3] != 0x00):
             self.lineEdit_vibro_status.setText("Исправна")
@@ -938,7 +938,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         code[0] = code[0] + self.spinBox_motor_n.value()
         self.device.writebincode(bytes(code))
         time.sleep(.02)
-        data = self.device.readbincode()
+        data = self.device.readbincode(8)
 
         freq = int.from_bytes(data[4:6], "big")
         self.lineEdit_motor_freq_x.setText(str(freq))
@@ -1183,7 +1183,7 @@ class UDevice(QtWidgets.QWidget):
     # @_FileLogger
     def readbincode(self, n=9):
         r = UDevice._port.read(n)
-        print("readbincode("+str(len(r))+"/"+str(n)+"): ", r.hex())
+        print("readbincode("+str(len(r))+"/"+str(n)+"): ", r.hex(), "CRC("+str(self.check_CRC16(r))+")")
         return r
 
     def get_device_name(self):
@@ -1205,7 +1205,8 @@ class UDevice(QtWidgets.QWidget):
         UDevice._port.reset_input_buffer()
         UDevice._port.reset_output_buffer()
 
-    def _add_CRC16(self, data: bytes) -> bytes:
+    @staticmethod
+    def _add_CRC16(data: bytes) -> bytes:
         crc16 = libscrc.modbus(data)
         b78 = crc16.to_bytes(2, byteorder='little')
         # print("_add_CRC16(): b78: ", b78.hex(), "crc16: ", crc16)
@@ -1213,6 +1214,17 @@ class UDevice(QtWidgets.QWidget):
         l.append(int(b78[0]))
         l.append(int(b78[1]))
         return bytes(l)
+
+    @staticmethod
+    def check_CRC16(data : bytes, debug=False) -> bool:
+        crc16 = libscrc.modbus(data[:-2])
+        b78 = crc16.to_bytes(2, byteorder='little')
+        if debug:
+            print("check_CRC16:", b78.hex())
+        if data[-2] == b78[0] and data[-1] == b78[1]:
+            return True
+        else: return False
+
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)

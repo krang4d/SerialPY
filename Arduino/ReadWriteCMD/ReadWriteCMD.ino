@@ -1,6 +1,3 @@
-#include "CRC16.h"
-#include "CRC.h"
-
 /*
   ReadAnalogVoltage
 
@@ -13,6 +10,27 @@
   http://www.arduino.cc/en/Tutorial/ReadAnalogVoltage
 */
 //#include <string.h>
+
+// Compute the MODBUS RTU CRC
+unsigned int ModRTU_CRC(byte *buf, int len)
+{
+  unsigned int crc = 0xFFFF;
+  
+  for (int pos = 0; pos < len; pos++) {
+    crc ^= (unsigned int)buf[pos];          // XOR byte into least sig. byte of crc
+  
+    for (int i = 8; i != 0; i--) {    // Loop over each bit
+      if ((crc & 0x0001) != 0) {      // If the LSB is set
+        crc >>= 1;                    // Shift right and XOR 0xA001
+        crc ^= 0xA001;
+      }
+      else                            // Else LSB is not set
+        crc >>= 1;                    // Just shift right
+    }
+  }
+  // Note, this number has low and high bytes swapped, so use it accordingly (or swap bytes)
+  return crc;  
+}
 
 // the setup routine runs once when you press reset:
 void setup() {
@@ -54,8 +72,9 @@ void prepe(byte x)
     }
   }
   // TODO add crc16
-  data[1027] = 0x00;
-  data[1028] = 0x00;
+  unsigned int myCrc16 = ModRTU_CRC(data, 1027);
+  data[1027] = lowByte(myCrc16);
+  data[1028] = highByte(myCrc16);
 }
 
 void start_vobromotor(byte highByte, byte lowByte)
@@ -76,12 +95,10 @@ bool is_ready()
 }
 
 byte buffer[9];
-byte cmd_0[] = {0x10, 0x03, 0x00, 0x01, 0x00, 0x01, 0xD6, 0x8B};
-byte cmd_1[] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08};
-byte cmd_t[] = {0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01};
-byte cmd_f[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
-//the vibromotor data request 
+// status
+byte status_cmd[] = { 0x30, 0x04, 0x00, 0x00, 0x00, 0x01 };
+//the vibromotor data request
 byte vib_data[]   = {0x30, 0x03, 0x00, 0x02, 0x00, 0x01, 0x21, 0xEB};
 // start vibromotor request 30 06 00 01 00 00 dc 2b
 byte vib_start[] = {0x30, 0x06, 0x00, 0x01, 0x00, 0x00, 0xDC, 0x2B};
@@ -105,7 +122,10 @@ void serialEvent(){
   {
     buffer[4] = highByte(value);
     buffer[5] = lowByte(value);
-    Serial.write(buffer, 9);
+    unsigned int myCrc16 = ModRTU_CRC(buffer, 6);
+    buffer[6] = lowByte(myCrc16);
+    buffer[7] = highByte(myCrc16);
+    Serial.write(buffer, 8);
   }
   else if(is_equal(&buffer[1], &ready_data_cmd[1], 5))
   {
@@ -113,9 +133,20 @@ void serialEvent(){
     {
       buffer[3] = 0x01;
     }
+    unsigned int myCrc16 = ModRTU_CRC(buffer, 4);
+    buffer[4] = lowByte(myCrc16);
+    buffer[5] = highByte(myCrc16);
     Serial.write(buffer, 6);
   }
-  else 
+  else if(is_equal(&buffer[1], &status_cmd[1], 5))
+  {
+    buffer[3] = 0x01;
+    unsigned int myCrc16 = ModRTU_CRC(buffer, 4);
+    buffer[4] = lowByte(myCrc16);
+    buffer[5] = highByte(myCrc16);
+    Serial.write(buffer, 6);
+  }
+  else
     Serial.write(buffer, 9);
 }
 
