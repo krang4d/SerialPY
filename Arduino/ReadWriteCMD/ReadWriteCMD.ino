@@ -100,11 +100,11 @@ byte buffer[9];
 byte status_cmd[] = { 0x30, 0x04, 0x00, 0x00, 0x00, 0x01 };
 //the vibromotor data request
 byte vib_data[]   = {0x30, 0x03, 0x00, 0x02, 0x00, 0x01, 0x21, 0xEB};
-// start vibromotor request 30 06 00 01 00 00 dc 2b
+// start vibromotor request
 byte vib_start[] = {0x30, 0x06, 0x00, 0x01, 0x00, 0x00, 0xDC, 0x2B};
 // get frequency
 byte get_freq_cmd[] = {0x30, 0x03, 0x00, 0x01, 0x00, 0x01, 0xD1, 0xEB};
-// ready data command 3X 04 00 00 00 02 CS CS
+// ready data command
 byte ready_data_cmd[] = { 0x30, 0x04, 0x00, 0x00, 0x00, 0x02 };
 
 void serialEvent(){
@@ -118,7 +118,7 @@ void serialEvent(){
   {
     start_vobromotor(buffer[4], buffer[5]);
   }
-  else if(is_equal(&buffer[1], &get_freq_cmd[1], 5))
+  else if(is_equal(&buffer[1], &get_freq_cmd[1], 5) && buffer[0] >= 0x30 && buffer[0] <= 0x40)
   {
     buffer[4] = highByte(value);
     buffer[5] = lowByte(value);
@@ -147,7 +147,10 @@ void serialEvent(){
     Serial.write(buffer, 6);
   }
   else
+  {
+//    buffer[8] = 0xFF;
     Serial.write(buffer, 9);
+  }
 }
 
 bool alreadyRun = false;

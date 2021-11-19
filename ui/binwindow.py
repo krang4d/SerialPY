@@ -476,4 +476,4 @@ class Ui_MainWindow(object):
         self.pushButton_vibro_data.setText(_translate("MainWindow", "Запросить"))
         self.label_vibro_n.setText(_translate("MainWindow", "Номер фотоприёмника:"))
         self.checkBox_vibro_data_stop.setText(_translate("MainWindow", "С остановкой двигателя"))
-        self.groupBox_messenger.setTitle(_translate("MainWindow", "Ответ:"))
+        self.groupBox_messenger.setTitle(_translate("MainWindow", "Сообщения:"))

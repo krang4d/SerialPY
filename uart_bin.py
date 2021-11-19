@@ -442,7 +442,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Физприбор v3.8.33а"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Физприбор"))
         self.groupBox_motor_setFreq.setTitle(_translate("MainWindow", "Установка частоты вращения  и запуск двигателя"))
         self.label_motor_n.setText(_translate("MainWindow", "Номер:"))
         self.label_motor_freq.setText(_translate("MainWindow", "Частота:"))
@@ -487,7 +487,7 @@ class Ui_MainWindow(object):
         self.pushButton_vibro_data.setText(_translate("MainWindow", "Запросить"))
         self.label_vibro_n.setText(_translate("MainWindow", "Номер фотоприёмника:"))
         self.checkBox_vibro_data_stop.setText(_translate("MainWindow", "С остановкой двигателя"))
-        self.groupBox_messenger.setTitle(_translate("MainWindow", "Ответ:"))
+        self.groupBox_messenger.setTitle(_translate("MainWindow", "Сообщения:"))
 
 def chunks(lst, n):
     """Yield successive n-sized chunks from lst."""
@@ -655,7 +655,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def __init__(self, *args, obj=None, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
-
         self.setupUi(self)
         # with open("VERSION", "r") as f:
         #         MainWindow._version = f.readline()
@@ -1182,7 +1181,7 @@ class UDevice(QtWidgets.QWidget):
     # @_FileLogger
     def readbincode(self, n=9):
         r = UDevice._port.read(n)
-        print("readbincode("+str(len(r))+"/"+str(n)+"): ", r.hex(), "CRC("+str(self.check_CRC16(r))+")")
+        print("Ответ("+str(len(r))+"/"+str(n)+"): ", r.hex(), "CRC("+str(self.check_CRC16(r))+")")
         return r
 
     def get_device_name(self):
@@ -1190,7 +1189,7 @@ class UDevice(QtWidgets.QWidget):
 
     def writebincode(self, data : bytes, n=8) -> bytes:
         crc_data = self._add_CRC16(data)
-        print("writebincode("+str(n)+"): ", crc_data.hex())
+        print("Запрос("+str(n)+"): ", crc_data.hex())
         try:
             UDevice._port.write(crc_data[:n])
         except serial.SerialException as e:
@@ -1206,6 +1205,9 @@ class UDevice(QtWidgets.QWidget):
 
     @staticmethod
     def _add_CRC16(data: bytes) -> bytes:
+        """
+        Add two byte with CRC16 of the input data
+        """
         # crc16 = libscrc.modbus(data)
         crc16 = UDevice._CRC16_MODBUS(data[:-2])
         b78 = crc16.to_bytes(2, byteorder='little')
@@ -1217,6 +1219,10 @@ class UDevice(QtWidgets.QWidget):
 
     @staticmethod
     def check_CRC16(data : bytes, debug=False) -> bool:
+        """
+        Check resived CRC16 in the buffer
+        return True if CRC16 is equal of calcualtion
+        """
         # crc16 = libscrc.modbus(data[:-2])
         crc16 = UDevice._CRC16_MODBUS(data[:-2])
         b78 = crc16.to_bytes(2, byteorder='little')
@@ -1228,6 +1234,10 @@ class UDevice(QtWidgets.QWidget):
 
     @staticmethod
     def _CRC16_MODBUS(data : bytes):
+        """
+        MODBUS CRC16 Calculation
+        retunt calculate summ of CRC16 as int
+        """
         crc = 0xFFFF
         for i in range(len(data)):
             crc ^= data[i]
