@@ -442,7 +442,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Физприбор"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Физприбор v3.8.33а"))
         self.groupBox_motor_setFreq.setTitle(_translate("MainWindow", "Установка частоты вращения  и запуск двигателя"))
         self.label_motor_n.setText(_translate("MainWindow", "Номер:"))
         self.label_motor_freq.setText(_translate("MainWindow", "Частота:"))
@@ -657,9 +657,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         super(MainWindow, self).__init__(*args, **kwargs)
 
         self.setupUi(self)
-        with open("VERSION", "r") as f:
-                MainWindow._version = f.readline()
-        self.setWindowTitle("Физприбор " + MainWindow._version)
+        # with open("VERSION", "r") as f:
+        #         MainWindow._version = f.readline()
+        # self.setWindowTitle("Физприбор " + MainWindow._version)
         # self.spinBox_N1 = BigIntSpinbox(self.groupBox_photo)
         # self.spinBox_N2 = BigIntSpinbox(self.groupBox_photo)
         self.progressbar = QtWidgets.QProgressBar(self)
@@ -868,7 +868,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             batch = [int.from_bytes(b, byteorder='big') for b in chunks(new_data[3:-2], 2)]
             print("batch("+str(i+1)+"/"+str(batches)+"): ", batch)
             data = data + batch
-        time.sleep(1)
         self.progressbar.setVisible(False)
         self.progressbar.setValue(0)
         if(self.checkBox_vibro_data_stop.isChecked()):
