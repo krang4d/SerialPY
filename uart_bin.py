@@ -10,7 +10,7 @@ from datetime import datetime
 import serial
 import serial.tools.list_ports as prtlst
 # import serial.tools.list_ports
-import libscrc
+# import libscrc
 from PyQt5 import QtWidgets, QtGui, QtCore, uic
 from pyqtgraph import PlotWidget, plot
 import pyqtgraph as pg
@@ -1206,7 +1206,8 @@ class UDevice(QtWidgets.QWidget):
 
     @staticmethod
     def _add_CRC16(data: bytes) -> bytes:
-        crc16 = libscrc.modbus(data)
+        # crc16 = libscrc.modbus(data)
+        crc16 = UDevice._CRC16_MODBUS(data[:-2])
         b78 = crc16.to_bytes(2, byteorder='little')
         # print("_add_CRC16(): b78: ", b78.hex(), "crc16: ", crc16)
         l = list(data)
@@ -1216,7 +1217,8 @@ class UDevice(QtWidgets.QWidget):
 
     @staticmethod
     def check_CRC16(data : bytes, debug=False) -> bool:
-        crc16 = libscrc.modbus(data[:-2])
+        # crc16 = libscrc.modbus(data[:-2])
+        crc16 = UDevice._CRC16_MODBUS(data[:-2])
         b78 = crc16.to_bytes(2, byteorder='little')
         if debug:
             print("check_CRC16:", b78.hex())
@@ -1224,6 +1226,18 @@ class UDevice(QtWidgets.QWidget):
             return True
         else: return False
 
+    @staticmethod
+    def _CRC16_MODBUS(data : bytes):
+        crc = 0xFFFF
+        for i in range(len(data)):
+            crc ^= data[i]
+            for bit in range(8):
+                if crc & 0x0001:
+                    crc >>=1
+                    crc^=0xA001
+                else:
+                    crc >>=1
+        return crc
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
