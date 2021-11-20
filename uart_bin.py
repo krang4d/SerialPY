@@ -748,9 +748,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.device = UDevice()
         devs = UDevice.get_devs()
         self.set_devs(devs)
-        if self.init.get_portname() in devs:
-            self.statusbar.showMessage("Открытие порта "+self.init.get_portname()+".", 3000)
-            self.device.open(self.init.get_portname(), int(self.init.get_baudrate()), self.init.get_timeout())
+        # if self.init.get_portname() in devs:
+        #     self.statusbar.showMessage("Открытие порта "+self.init.get_portname()+".", 3000)
+        #     self.device.open(self.init.get_portname(), int(self.init.get_baudrate()), self.init.get_timeout())
 
         self.startButton.clicked.connect(self.start_slot)
         self.stopButton.clicked.connect(self.stop_slot)
