@@ -10,7 +10,7 @@ from datetime import datetime
 import serial
 import serial.tools.list_ports as prtlst
 # import serial.tools.list_ports
-# import libscrc
+import libscrc
 from PyQt5 import QtWidgets, QtGui, QtCore, uic
 from pyqtgraph import PlotWidget, plot
 import pyqtgraph as pg
@@ -442,7 +442,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Физприбор"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Физприбор 3.7.35a"))
         self.groupBox_motor_setFreq.setTitle(_translate("MainWindow", "Установка частоты вращения  и запуск двигателя"))
         self.label_motor_n.setText(_translate("MainWindow", "Номер:"))
         self.label_motor_freq.setText(_translate("MainWindow", "Частота:"))
@@ -748,9 +748,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.device = UDevice()
         devs = UDevice.get_devs()
         self.set_devs(devs)
-        if self.init.get_portname() in devs:
-            self.statusbar.showMessage("Открытие порта "+self.init.get_portname()+".", 3000)
-            self.device.open(self.init.get_portname(), int(self.init.get_baudrate()), self.init.get_timeout())
+        # if self.init.get_portname() in devs:
+        #     self.statusbar.showMessage("Открытие порта "+self.init.get_portname()+".", 3000)
+        #     self.device.open(self.init.get_portname(), int(self.init.get_baudrate()), self.init.get_timeout())
 
         self.startButton.clicked.connect(self.start_slot)
         self.stopButton.clicked.connect(self.stop_slot)
@@ -862,7 +862,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         for i in range(batches):
             self.progressbar.setValue(i)
             self.device.writebincode(bytes(code))
-            time.sleep(0.2) # TODO проверка готовности 3X 04 00 00 00 02 CS CS
+            time.sleep(.2) # TODO проверка готовности 3X 04 00 00 00 02 CS CS
             new_data = self.device.readbincode(1029)
             batch = [int.from_bytes(b, byteorder='big') for b in chunks(new_data[3:-2], 2)]
             print("batch("+str(i+1)+"/"+str(batches)+"): ", batch)
@@ -1208,8 +1208,8 @@ class UDevice(QtWidgets.QWidget):
         """
         Add two byte with CRC16 of the input data
         """
-        # crc16 = libscrc.modbus(data)
-        crc16 = UDevice._CRC16_MODBUS(data[:-2])
+        crc16 = libscrc.modbus(data)
+        # crc16 = UDevice._CRC16_MODBUS(data[:-2])
         b78 = crc16.to_bytes(2, byteorder='little')
         # print("_add_CRC16(): b78: ", b78.hex(), "crc16: ", crc16)
         l = list(data)
@@ -1223,8 +1223,8 @@ class UDevice(QtWidgets.QWidget):
         Check resived CRC16 in the buffer
         return True if CRC16 is equal of calcualtion
         """
-        # crc16 = libscrc.modbus(data[:-2])
-        crc16 = UDevice._CRC16_MODBUS(data[:-2])
+        crc16 = libscrc.modbus(data[:-2])
+        # crc16 = UDevice._CRC16_MODBUS(data[:-2])
         b78 = crc16.to_bytes(2, byteorder='little')
         if debug:
             print("check_CRC16:", b78.hex())
@@ -1232,22 +1232,22 @@ class UDevice(QtWidgets.QWidget):
             return True
         else: return False
 
-    @staticmethod
-    def _CRC16_MODBUS(data : bytes):
-        """
-        MODBUS CRC16 Calculation
-        retunt calculate summ of CRC16 as int
-        """
-        crc = 0xFFFF
-        for i in range(len(data)):
-            crc ^= data[i]
-            for bit in range(8):
-                if crc & 0x0001:
-                    crc >>=1
-                    crc^=0xA001
-                else:
-                    crc >>=1
-        return crc
+    # @staticmethod
+    # def _CRC16_MODBUS(data : bytes):
+    #     """
+    #     MODBUS CRC16 Calculation
+    #     retunt calculate summ of CRC16 as int
+    #     """
+    #     crc = 0xFFFF
+    #     for i in range(len(data)):
+    #         crc ^= data[i]
+    #         for bit in range(8):
+    #             if crc & 0x0001:
+    #                 crc >>=1
+    #                 crc^=0xA001
+    #             else:
+    #                 crc >>=1
+    #     return crc
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
