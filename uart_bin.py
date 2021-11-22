@@ -442,7 +442,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Физприбор 3.7.35a"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Физприбор 3.7.36a"))
         self.groupBox_motor_setFreq.setTitle(_translate("MainWindow", "Установка частоты вращения  и запуск двигателя"))
         self.label_motor_n.setText(_translate("MainWindow", "Номер:"))
         self.label_motor_freq.setText(_translate("MainWindow", "Частота:"))
@@ -797,6 +797,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def stop_slot(self):
         self.plots_timer.stop()
+        self.waitdata_timer.stop()
         # self.device.flush()
         self.start_flag = False
 
@@ -813,12 +814,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def wait_data_slot(self) -> bool:
         """
-        запрос готовности данных: 3X 04 00 00 00 02 CS CS
+        запрос готовности данных: 3X 04 00 01 00 01 CS CS
         Ответ на запрос: 3X 04 01 NN CS CS, где
         """
         self.statusbar.showMessage("Ожидание готовности данных с АЦП виброметра.", 3000)
         self.progressbar.show()
-        code = list(b'\x30\x04\x00\x00\x00\x02') # 3X 03 00 02 00 01
+        code = list(b'\x30\x04\x00\x01\x00\x01') # 3X 03 00 02 00 01
         code[0] = code[0] + self.spinBox_vibro_status_n.value()
         self.device.writebincode(bytes(code))
         time.sleep(.02)

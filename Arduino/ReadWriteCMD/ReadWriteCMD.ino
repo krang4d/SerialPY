@@ -105,7 +105,7 @@ byte vib_start[] = {0x30, 0x06, 0x00, 0x01, 0x00, 0x00, 0xDC, 0x2B};
 // get frequency
 byte get_freq_cmd[] = {0x30, 0x03, 0x00, 0x01, 0x00, 0x01, 0xD1, 0xEB};
 // ready data command
-byte ready_data_cmd[] = { 0x30, 0x04, 0x00, 0x00, 0x00, 0x02 };
+byte ready_data_cmd[] = { 0x30, 0x04, 0x00, 0x01, 0x00, 0x01 };
 
 void serialEvent(){
   Serial.readBytes(buffer, 8);
@@ -132,6 +132,10 @@ void serialEvent(){
     if(is_ready())
     {
       buffer[3] = 0x01;
+    }
+    else 
+    {
+      buffer[3] = 0x00;
     }
     unsigned int myCrc16 = ModRTU_CRC(buffer, 4);
     buffer[4] = lowByte(myCrc16);
