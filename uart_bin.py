@@ -442,7 +442,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Физприбор 3.7.37a"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Физприбор 3.7.38a"))
         self.groupBox_motor_setFreq.setTitle(_translate("MainWindow", "Установка частоты вращения  и запуск двигателя"))
         self.label_motor_n.setText(_translate("MainWindow", "Номер:"))
         self.label_motor_freq.setText(_translate("MainWindow", "Частота:"))
@@ -865,7 +865,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.device.writebincode(bytes(code))
             time.sleep(.2) # TODO проверка готовности 3X 04 00 00 00 02 CS CS
             new_data = self.device.readbincode(2053)
-            batch = [int.from_bytes(b, byteorder='big') for b in chunks(new_data[3:-2], 2)]
+            batch = [int.from_bytes(b, byteorder='little') for b in chunks(new_data[3:-2], 2)]
             print("batch("+str(i+1)+"/"+str(batches)+"): ", batch)
             data = data + batch
         self.progressbar.setVisible(False)
