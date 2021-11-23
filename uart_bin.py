@@ -819,7 +819,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         """
         self.statusbar.showMessage("Ожидание готовности данных с АЦП виброметра.", 3000)
         self.progressbar.show()
-        code = list(b'\x30\x04\x00\x01\x00\x01') # 3X 03 00 02 00 01
+        code = list(b'\x30\x04\x00\x01\x00\x01')
         code[0] = code[0] + self.spinBox_vibro_status_n.value()
         self.device.writebincode(bytes(code))
         time.sleep(.02)
@@ -863,7 +863,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         for i in range(batches):
             self.progressbar.setValue(i)
             self.device.writebincode(bytes(code))
-            time.sleep(.2) # TODO проверка готовности 3X 04 00 00 00 02 CS CS
+            time.sleep(.7)
             new_data = self.device.readbincode(2053)
             batch = [int.from_bytes(b, byteorder='little') for b in chunks(new_data[3:-2], 2)]
             print("batch("+str(i+1)+"/"+str(batches)+"): ", batch)
