@@ -31,7 +31,8 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.viewcode',
     'sphinx.ext.napoleon',
-    'sphinx_rtd_theme'
+    'sphinx_rtd_theme',
+    'rst2pdf.pdfbuilder'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -61,3 +62,22 @@ html_theme = 'sphinx_rtd_theme'
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = []
+
+# Grouping the document tree into PDF files. List of tuples
+# (source start file, target name, title, author, options).
+pdf_use_index = False
+pdf_documents = [
+    ('index', u'rst2pdf', u'Sample rst2pdf doc', u'pgg'),
+]
+
+# Grouping the document tree into LaTeX files. List of tuples
+# (source start file, target name, title, author, documentclass [howto/manual]).
+
+# latex_engine = 'xelatex'
+latex_use_xindy = True
+# latex_elements = {
+#     'preamble': '\\usepackage[UTF8]{ctex}\n',
+# }
+latex_documents = [
+ ('index', 'yourdoc.tex', u'DocName', u'YourName', 'manual'),
+]

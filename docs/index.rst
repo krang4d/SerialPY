@@ -1,4 +1,4 @@
-uart\_drawnow module
+uart\_bin module
 ====================
 
 .. automodule:: uart_bin

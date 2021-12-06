@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Serial Port Reader by Pavel Golovkin, aka pgg.
+# Serial Port Reader by Pavel Gennadievich Golovkin, aka pgg.
 # Feel free to use. No warranty
 
 import sys  # We need sys so that we can pass argv to QApplication
@@ -23,6 +23,11 @@ import json
 # from ui.binwindow import Ui_MainWindow
 
 class Ui_MainWindow(object):
+    """
+    Класс генерируемый 'PyQt5 UI code generator 5.15.4'. Реализация формы, созданная в 'QtDesigner version 5.12.8' при чтении файла пользовательского интерфейса mainwindow.ui.
+
+    .. warning:: Любые ручные изменения, внесенные в этот класс, будут потеряны при повторном запуске pyuic5. Не редактируйте этот файл, если вы не знаете, что делаете.
+    """
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1196, 1257)
@@ -490,12 +495,28 @@ class Ui_MainWindow(object):
         self.groupBox_messenger.setTitle(_translate("MainWindow", "Сообщения:"))
 
 def chunks(lst, n):
-    """Yield successive n-sized chunks from lst."""
+    """
+    Функция делит список lst на последовательные порции размером n.
+
+    Parameters
+    ----------
+    lst : list
+        Список для разделения
+    n : int
+        Число разделений
+
+    Yields
+    ------
+    list
+        Список длиной n из значений списка lst
+    """
     for i in range(0, len(lst), n):
         yield lst[i:i + n]
 
 class BigIntSpinbox(QtWidgets.QAbstractSpinBox):
-
+    """
+    Класс для создания SpinBox cо значениями Int64 от 0 до 4294967295.
+    """
     def __init__(self, parent=None):
         super(BigIntSpinbox, self).__init__(parent)
 
@@ -512,6 +533,14 @@ class BigIntSpinbox(QtWidgets.QAbstractSpinBox):
         self.setLineEdit(self.lineEdit)
 
     def value(self):
+        """
+        Функция для получения текущего знчения SpinBox.
+
+        Return
+        ------
+        out : int
+            Текущуее значение
+        """
         try:
             return int(self.lineEdit.text())
         except:
@@ -519,44 +548,123 @@ class BigIntSpinbox(QtWidgets.QAbstractSpinBox):
             return 0
 
     def setValue(self, value):
+        """
+        Функция для установки значения SpinBox.
+
+        Parameters
+        ----------
+        value : int
+            Значение для установки
+        """
         if self._valueInRange(value):
             self.lineEdit.setText(str(value))
 
     def stepBy(self, steps):
+        """
+        Функция, которая вызывается всякий раз, когда пользователь запускает шага регулировки значения SpinBox в поле окна.
+        Параметр steps указывает, сколько шагов было сделано. Например, нажатие Qt :: Key_Down вызовет вызов stepBy (-1), тогда как нажатие Qt :: Key_PageUp вызовет вызов stepBy (10).
+
+        Parameters
+        ----------
+        streps : int
+            Шаг регулировки
+        """
         self.setValue(self.value() + steps*self.singleStep())
 
     def stepEnabled(self):
+        """
+        Функция, которая определяет, разрешено ли переходить вверх и вниз в любой момент времени.
+        """
         return self.StepUpEnabled | self.StepDownEnabled
 
     def setSingleStep(self, singleStep):
+        """
+        Функция для установки шага singleStep генерации сигнала _singleStep значения SpinBox.
+
+        Parameters
+        ----------
+        singleStep : int
+            Шаг генерации сигнала _singleStep
+        """
         assert isinstance(singleStep, int)
         # don't use negative values
         self._singleStep = abs(singleStep)
 
     def singleStep(self):
+        """
+        Функция для получения значения шаг singleStep генерации сигнала _singleStep значения SpinBox.
+
+        Return
+        ------
+        out : int
+            Шаг генерации сигнала _singleStep
+        """
         return self._singleStep
 
     def minimum(self):
+        """
+        Функция возвращает минимальное значения установки в SpinBox.
+
+        Return
+        ------
+        out : int
+            Минимальное значения установки в SpinBox
+        """
         return self._minimum
 
     def setMinimum(self, minimum):
+        """
+        Функция установки минимального значения в SpinBox.
+
+        Parameters
+        ----------
+        minimum : int
+            Минимальное значения установки в SpinBox
+        """
         assert isinstance(minimum, int) or isinstance(minimum, long)
         self._minimum = minimum
 
     def maximum(self):
+        """
+        Функция возвращает максимальное значения установки в SpinBox.
+
+        Return
+        ------
+        out : int
+            Максимальное значения установки в SpinBox
+        """
         return self._maximum
 
     def setMaximum(self, maximum):
+        """
+        Функция установки максимального значения в SpinBox.
+
+        Parameters
+        ----------
+        minimum : int
+            Максимальное значения установки в SpinBox
+        """
         assert isinstance(maximum, int) or isinstance(maximum, long)
         self._maximum = maximum
 
     def _valueInRange(self, value):
+        """
+        Функция для проверки значения на вхождения его в диапазон значений SpinBox.
+
+        Parameters
+        ----------
+        value : int
+            Проверяемое значение
+        """
         if value >= self.minimum() and value <= self.maximum():
             return True
         else:
             return False
 
 class Inits:
+    """
+    Класс для сохранения и получения всех значений основного окна из файла 'settings.json' в формате json.
+    """
     def __init__(self):
         self._settings_box = {
             "calibration" : {
@@ -590,7 +698,7 @@ class Inits:
             json.dump(self._settings_box, write_file)
 
 
-    def print_debug(self):
+    def _print_debug(self):
         print(self.calibration)
         self._settings_box['calibration'] = self.calibration
         if self.calibration is self._settings_box.get("calibration"):
