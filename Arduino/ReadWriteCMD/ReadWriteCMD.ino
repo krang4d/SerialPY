@@ -54,27 +54,28 @@ bool is_equal(byte cmd_1[], byte cmd_2[], int len)
   return true;
 }
 
-byte data[1029];
+
+byte data[1024];
 static unsigned int value = 0;
 void prepe(byte x)
 {
-  data[0] = x;
-  data[1] = 0x03;
-  data[2] = 0x01;
-  byte *d = &data[3];
+//  data[0] = x;
+//  data[1] = 0x03;
+//  data[2] = 0x01;
+//  byte *d = &data[3];
   for(unsigned int i=0; i<1024; i++)
   {
     if(i%2 == 0)
     {
-      d[i] = highByte(value);
-      d[i+1] = lowByte(value);
+      data[i] = highByte(value);
+      data[i+1] = lowByte(value);
       value++;
     }
   }
   // TODO add crc16
-  unsigned int myCrc16 = ModRTU_CRC(data, 1027);
-  data[1027] = lowByte(myCrc16);
-  data[1028] = highByte(myCrc16);
+//  unsigned int myCrc16 = ModRTU_CRC(data, 1027);
+//  data[1027] = lowByte(myCrc16);
+//  data[1028] = highByte(myCrc16);
 }
 
 void start_vobromotor(byte highByte, byte lowByte)
@@ -112,7 +113,9 @@ void serialEvent(){
   serial_flush_buffer();
   if(is_equal(&buffer[3], &vib_data[3], 3)) {
     prepe(buffer[0]);
-    Serial.write(data, 1029);
+    Serial.write(data, 1024);
+    Serial.write(data, 1024);
+    Serial.write(data, 5);
   }
   else if(is_equal(&buffer[1], &vib_start[1], 3))
   {
@@ -120,8 +123,8 @@ void serialEvent(){
   }
   else if(is_equal(&buffer[1], &get_freq_cmd[1], 5) && buffer[0] >= 0x30 && buffer[0] <= 0x40)
   {
-    buffer[4] = highByte(value);
-    buffer[5] = lowByte(value);
+    buffer[4] = lowByte(value);
+    buffer[5] = highByte(value);
     unsigned int myCrc16 = ModRTU_CRC(buffer, 6);
     buffer[6] = lowByte(myCrc16);
     buffer[7] = highByte(myCrc16);
