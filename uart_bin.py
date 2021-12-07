@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Serial Port Reader by Pavel Gennadievich Golovkin, aka pgg.
+# Serial Port Reader by Pavel Golovkin
 # Feel free to use. No warranty
 
 import sys  # We need sys so that we can pass argv to QApplication
@@ -663,7 +663,7 @@ class BigIntSpinbox(QtWidgets.QAbstractSpinBox):
 
 class Inits:
     """
-    Класс для сохранения и получения всех значений основного окна из файла 'settings.json' в формате json.
+    Класс для сохранения и загрузки всех значений основного окна из файла 'settings.json' в формате json.
     """
     def __init__(self):
         self._settings_box = {
@@ -679,6 +679,12 @@ class Inits:
                 "timeout" : .1
             }
         }
+        self._load()
+
+    def __del__(self):
+        self._save()
+
+    def _load(self):
         if os.path.isfile("settings.json"):
             with open("settings.json", "r") as read_file:
                 data = json.load(read_file)
@@ -690,13 +696,12 @@ class Inits:
             self.calibration = self._settings_box['calibration']
             self.port = self._settings_box['port']
 
-    def __del__(self):
+    def _save(self):
         print('save_settings')
         self._settings_box['calibration'] = self.calibration
         self._settings_box['port'] = self.port
         with open("settings.json", "w") as write_file:
             json.dump(self._settings_box, write_file)
-
 
     def _print_debug(self):
         print(self.calibration)
@@ -708,46 +713,172 @@ class Inits:
             print(id(self._settings_box.get("calibration")), self._settings_box.get("calibration"))
 
     def set_portname(self, value : str):
+        """
+        Функция сохранения имени порта в файл.
+
+        Parameters
+        ----------
+        value : str
+            Имя COM порта
+        """
         self.port['name'] = value
+        self._save()
 
     def get_portname(self) -> str:
+        """
+        Функция получения имени COM порта из файла.
+
+        Return
+        ------
+        out : str
+            Имя COM порта
+        """
+        self._load()
         return self.port.get('name', "/dev/ttyUSB0")
 
     def set_baudrate(self, value : str):
+        """
+        Функция сохранения настройки 'baudrate' в файл.
+
+        Parameters
+        ----------
+        value : str
+            Настройка baudrate
+        """
         self.port['baudrate'] = value
+        self._save()
 
     def get_baudrate(self) -> str:
+        """
+        Функция получения настройки 'baudrate' из файл.
+
+        Return
+        ------
+        out : str
+            Настройка baudrate
+        """
+        self._load()
         return self.port.get('baudrate', 9200)
 
     def set_timeout(self, value : float):
+        """
+        Функция сохранения настройки 'timeout' в файл.
+
+        Parameters
+        ----------
+        value : str
+            Настройка timeout
+        """
         self.port['timeout'] = value
+        self._save()
 
     def get_timeout(self) -> str:
+        """
+        Функция получения настройки 'timeout' из файл.
+
+        Return
+        ------
+        out : str
+            Настройка timeout
+        """
+        self._load()
         return self.port.get('timeout', .1)
 
     def get_N1(self) -> int:
+        """
+        Функция получения настройки 'N1' из файл.
+
+        Return
+        ------
+        out : str
+            Настройка N1
+        """
+        self._load()
         return self.calibration.get('N1', 0)
 
     def set_N1(self, value : int):
+        """
+        Функция сохранения настройки 'N1' в файл.
+
+        Parameters
+        ----------
+        value : str
+            Настройка N1
+        """
         self.calibration['N1'] = value
+        self._save()
 
     def get_N2(self) -> int:
+        """
+        Функция получения настройки 'N2' из файл.
+
+        Return
+        ------
+        out : str
+            Настройка N2
+        """
+        self._load()
         return self.calibration.get('N2', 1)
 
     def set_N2(self, value : int):
+        """
+        Функция сохранения настройки 'N2' в файл.
+
+        Parameters
+        ----------
+        value : str
+            Настройка N2
+        """
         self.calibration['N2'] = value
+        self._save()
 
     def get_T1(self) -> int:
+        """
+        Функция получения настройки 'T1' из файл.
+
+        Return
+        ------
+        out : str
+            Настройка T1
+        """
+        self._load()
         return self.calibration.get('T1', 0)
 
     def set_T1(self, value : int):
+        """
+        Функция сохранения настройки 'T1' в файл.
+
+        Parameters
+        ----------
+        value : str
+            Настройка T1
+        """
         self.calibration['T1'] = value
+        self._save()
 
     def get_T2(self) -> int:
+        """
+        Функция получения настройки 'T2' из файл.
+
+        Return
+        ------
+        out : str
+            Настройка T2
+        """
+        self._load()
         return self.calibration.get('T2', 0)
 
     def set_T2(self, value : int):
+        """
+        Функция сохранения настройки 'T2' в файл.
+
+        Parameters
+        ----------
+        value : str
+            Настройка T2
+        """
         self.calibration['T2'] = value
+        self._save()
 
 class EmittingStream(QtCore.QObject):
     textWritten = QtCore.pyqtSignal(str)

@@ -79,5 +79,5 @@ latex_use_xindy = True
 #     'preamble': '\\usepackage[UTF8]{ctex}\n',
 # }
 latex_documents = [
- ('index', 'yourdoc.tex', u'DocName', u'YourName', 'manual'),
+ ('index', 'PhysSerial.tex', u'PhysSerial', u'Инструкция и руководство пользователя', 'manual'),
 ]
