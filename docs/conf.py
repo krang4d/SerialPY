@@ -73,11 +73,28 @@ pdf_documents = [
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 
-# latex_engine = 'xelatex'
-latex_use_xindy = True
+latex_engine = 'xelatex'
+latex_use_xindy = False
 # latex_elements = {
 #     'preamble': '\\usepackage[UTF8]{ctex}\n',
 # }
+latex_elements = {
+    'fontpkg': r'''
+\setmainfont{DejaVu Serif}
+\setsansfont{DejaVu Sans}
+\setmonofont{DejaVu Sans Mono}
+''',
+    'preamble': r'''
+\usepackage[titles]{tocloft}
+\cftsetpnumwidth {1.25cm}\cftsetrmarg{1.5cm}
+\setlength{\cftchapnumwidth}{0.75cm}
+\setlength{\cftsecindent}{\cftchapnumwidth}
+\setlength{\cftsecnumwidth}{1.25cm}
+''',
+    'fncychap': r'\usepackage[Bjornstrup]{fncychap}',
+    'printindex': r'\footnotesize\raggedright\printindex',
+}
+latex_show_urls = 'footnote'
 latex_documents = [
  ('index', 'PhysSerial.tex', u'PhysSerial', u'Инструкция и руководство пользователя', 'manual'),
 ]

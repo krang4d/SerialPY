@@ -26,6 +26,10 @@ class Ui_MainWindow(object):
     """
     Класс генерируемый 'PyQt5 UI code generator 5.15.4'. Реализация формы, созданная в 'QtDesigner version 5.12.8' при чтении файла пользовательского интерфейса mainwindow.ui.
 
+    .. figure:: ./png/main_window.png
+        :scale: 70 %
+        :align: center
+
     .. warning:: Любые ручные изменения, внесенные в этот класс, будут потеряны при повторном запуске pyuic5. Не редактируйте этот файл, если вы не знаете, что делаете.
     """
     def setupUi(self, MainWindow):
@@ -496,14 +500,14 @@ class Ui_MainWindow(object):
 
 def chunks(lst, n):
     """
-    Функция делит список lst на последовательные порции размером n.
+    Функция генератор списоков размером n из входного списка lst. Делит список на последовательные порции размером n.
 
     Parameters
     ----------
     lst : list
-        Список для разделения
+        Список с данными для разделения
     n : int
-        Число разделений
+        Размер проции
 
     Yields
     ------
@@ -887,7 +891,19 @@ class EmittingStream(QtCore.QObject):
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     """
-    Основное окно программы
+    Класс основного окна программы
+
+    Attributes
+    ----------
+    exposure : float
+        Exposure in seconds.
+
+    Methods
+    -------
+    colorspace(c='rgb')
+        Represent the photo in the given colorspace.
+    gamma(n=1.0)
+        Change the photo's gamma exposure.
     """
     _num = 100
     _version = ""
@@ -978,7 +994,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def setup_window(self):
         """
-        Connect all signalls to slots, 
+        Функция соединения сигналов со слотами, инициализации всех полей в окне.
         """
         # self.timer1.timeout.connect( lambda: {
         #     device.writebincode(self.get_bytes()),
@@ -1031,10 +1047,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         sys.stdout = sys.__stdout__
 
     def start_slot(self):
+        """
+        Функция(слот) запускает сбор данных для отображения на графиках.
+        """
         self.plots_timer.start(100)
         self.start_flag = True
 
     def stop_slot(self):
+        """
+        Функция(слот) останавливает сбор данных для отображения на графиках.
+        """
         self.plots_timer.stop()
         self.waitdata_timer.stop()
         # self.device.flush()
@@ -1045,7 +1067,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             if(self.start_flag):
                 self.stop_slot()
                 func()
-                self.device.flush()
+                self.device._flush()
                 self.start_slot()
             else:
                 func()
@@ -1053,8 +1075,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def wait_data_slot(self) -> bool:
         """
-        запрос готовности данных: 3X 04 00 01 00 01 CS CS
-        Ответ на запрос: 3X 04 01 NN CS CS, где
+        Функция отправляет запрос проверки готовности данных: 3X 04 00 01 00 01 CS CS.
+        Ответ на запрос: 3X 04 01 NN CS CS, где:
+
+        - NN = 00 - данные не готовы,
+        - NN = 01 - данные готовы.
         """
         self.statusbar.showMessage("Ожидание готовности данных с АЦП виброметра.", 3000)
         self.progressbar.show()
@@ -1120,9 +1145,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def vibro_status_slot(self):
         """
-        Запрос состояния платы фотоприёмника виброметра: 3X 04 00 00 00 01 CS CS
+        Функция отправляет запрос состояния платы фотоприёмника виброметра: 3X 04 00 00 00 01 CS CS
         Ответ на запрос: 3X 04 01 NN CS CS, где
-        NN- состояние платы: 00- исправна, 01- неисправна
+        NN- состояние платы:
+
+        - 00- исправна,
+        - 01- неисправна.
         """
         self.statusbar.showMessage("Запрос состояния платы фотоприёмника виброметра.", 3000)
         code = list(b'\x30\x04\x00\x00\x00\x01') # 3X 03 00 02 00 01
@@ -1139,7 +1167,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.lineEdit_vibro_status.setStyleSheet("color: red; background-color: rgb(238, 238, 236);")
 
     def motor_stop(self, num):
-        # остановака двигателя
+        """
+        Функция остановки двигателя: 30 06 00 01 00 00.
+        """
         self.statusbar.showMessage("Остановка двигателя.", 3000)
         code = list(b'\x30\x06\x00\x01\x00\x00')
         code[0] = code[0] + num
@@ -1147,8 +1177,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def motor_setFreq_slot(self):
         """
-        Задать частоту вращения вала двигателя: 3X 06 00 01 HH LL CS CS,
-        где HH LL – целое 16-битное число, соответствующее частоте вращения вала двигателя, об/мин
+        Функция задает частоту вращения вала двигателя: 3X 06 00 01 HH LL CS CS,
+        где HH LL – целое 16-битное число, соответствующее частоте вращения вала двигателя, об/мин.
         """
         value = self.spinBox_motor_freq.value()
         num = self.spinBox_motor_n.value()
@@ -1164,7 +1194,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def motor_getFreq_slot(self):
         """
-        Запрос регистра данных периода вращения вала двигателя: 3X 03 00 01 00 01 CS CS,
+        Функция отправляет запрос регистра данных периода вращения вала двигателя: 3X 03 00 01 00 01 CS CS,
         где Х- номер фотоприёмника виброметра (указывается или перемычками на плате, или программируется на объекте). По умолчанию 0
         Итоговая команда по-умолчанию: 30 03 00 01 00 01 D1 EB
         Ответ на запрос: 3X 03 00 01 HH LL CS CS
@@ -1193,7 +1223,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def closeEvent(self, event):
         """
-        Обработка события закрытия окна (выхода из программы)
+        Функция обработки события закрытия окна (выхода из программы)
         """
         self.init.set_N1(self.spinBox_N1.value())
         self.init.set_N2(self.spinBox_N2.value())
@@ -1203,6 +1233,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         # event.accept()
 
     def set_devs(self, devs):
+        """
+        Функция выводит список открытых протов системы в поле 'Номер порта'
+        """
         self.portCBox.clear()
         for d in devs:
             self.portCBox.addItem(d)
@@ -1331,6 +1364,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self._update_taxo(y)
 
     def clean(self):
+        """
+        Функция сбрасывает все значения на графиках в окне.
+        """
         self.textEdit.clear()
         self._x1.clear()
         self._x2.clear()
@@ -1343,9 +1379,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
 class FixedSerial( serial.Serial ):
     """
-    To fix bug on Windows 10 system
-    https://github.com/pyserial/pyserial/issues/258
-    https://github.com/pyserial/pyserial/issues/362
+    Игнорирует исключения при конфигурации порта, решая проблему соединения с устройством в ОС Windows 10.
+    (`issues 258 <https://github.com/pyserial/pyserial/issues/258>`_, 
+    `issues 362 <https://github.com/pyserial/pyserial/issues/362>`_)
     """
     def _reconfigure_port( self, *args, **kwargs ):
         try:
@@ -1354,6 +1390,9 @@ class FixedSerial( serial.Serial ):
             pass
 
 class NumbersIterator:
+    """
+    Итератор для отображанеия значений на графиках по очи X.
+    """
     def __iter__(self):
         self.a = 1
         return self
@@ -1368,7 +1407,7 @@ class NumbersIterator:
 
 def _FileLogger(func):
     """
-    Wrapper (decorator) for log incomming data from device
+    Дукоратор для ведения лог файла, записыват возвращаемое значение функции в файл.
     """
     _file_name = "uart.log" # имя лог файла
     def wrapper(*args, **kwargs):
@@ -1379,6 +1418,17 @@ def _FileLogger(func):
     return wrapper
 
 class UDevice(QtWidgets.QWidget):
+    """
+    Класс инкапсулирует доступ к последовательному порту.
+
+    Attributes
+    ----------
+        _dev : str
+            Имя устройства
+        _port : serial.Serial
+            Класс для работы с последовательным портом
+            `pySerial API <https://pythonhosted.org/pyserial/pyserial_api.html#classes>`_
+    """
     _dev = None
     _port = None
     # newData = QtCore.pyqtSignal(list)
@@ -1390,6 +1440,18 @@ class UDevice(QtWidgets.QWidget):
         self.close()
 
     def open(self, dev: str, baudrate: int, timeout: int):
+        """
+        Функция открывает последовательный порт в заданными настройками.
+
+        Parameters
+        ----------
+        dev : str
+            Имя устройства
+        baudrate : int
+            Скорость манипуляции (символьная скорость)
+        timeout : int
+            Значение тайм-аута чтения
+        """
         try:
             UDevice._port = FixedSerial(port=dev, baudrate=baudrate, timeout=timeout)
             print('Open Port '+ dev)
@@ -1400,6 +1462,9 @@ class UDevice(QtWidgets.QWidget):
             print("Error: Can not open port "+ dev +".")
 
     def close(self):
+        """
+        Функция закрыват открытый последовательный порт.
+        """
         if UDevice._dev is not None:
             print('Close Port '+ UDevice._dev)
             UDevice._dev = None
@@ -1407,6 +1472,14 @@ class UDevice(QtWidgets.QWidget):
 
     @staticmethod
     def get_devs():
+        """
+        Функция возвращает список подключенных устройств.
+
+        Return
+        ------
+        out : list(str)
+            Список подключенных устройств
+        """
         devices = list()
         pts= prtlst.comports()
         for index, pt in enumerate(pts):
@@ -1419,14 +1492,40 @@ class UDevice(QtWidgets.QWidget):
 
     # @_FileLogger
     def readbincode(self, n=9):
+        """
+        Функция считывает n байт переданных через последовательный порт.
+
+        Parameters
+        ----------
+        n : int
+            Число считываемых байт
+        """
         r = UDevice._port.read(n)
         print("Ответ("+str(len(r))+"/"+str(n)+"): ", r.hex(), "CRC("+str(self.check_CRC16(r))+")")
         return r
 
     def get_device_name(self):
+        """
+        Функция возвращает имя последовательного порта через который идет обмен данными.
+
+        Return
+        ------
+        out : str
+            Имя последовательного порта
+        """
         return UDevice._dev
 
     def writebincode(self, data : bytes, n=8) -> bytes:
+        """
+        Функция отправляет n байт данных через последовательный прот.
+
+        Parameters
+        ----------
+        data : list(bytes)
+            Список данных
+        n : int
+            Количество отправляемых байт
+        """
         crc_data = self._add_CRC16(data)
         print("Запрос("+str(n)+"): ", crc_data.hex())
         try:
@@ -1435,7 +1534,7 @@ class UDevice(QtWidgets.QWidget):
             print(e)
         return crc_data
 
-    def flush(self):
+    def _flush(self):
         UDevice._port.flush()
         UDevice._port.flushInput()
         UDevice._port.flushOutput()
@@ -1445,7 +1544,12 @@ class UDevice(QtWidgets.QWidget):
     @staticmethod
     def _add_CRC16(data: bytes) -> bytes:
         """
-        Add two byte with CRC16 of the input data
+        Функция расчитывает и добавляет во входной список контрольную сумму CRC16 MODBUS.
+
+        Parameters
+        ----------
+        data : list(bytes)
+            Список данных.
         """
         crc16 = libscrc.modbus(data)
         # crc16 = UDevice._CRC16_MODBUS(data[:-2])
@@ -1459,8 +1563,19 @@ class UDevice(QtWidgets.QWidget):
     @staticmethod
     def check_CRC16(data : bytes, debug=False) -> bool:
         """
-        Check resived CRC16 in the buffer
-        return True if CRC16 is equal of calcualtion
+        Функция проверки контрольной суммы CRC16 в переданных данных.
+
+        Parameters
+        ----------
+        data : list(bytes)
+            Список с данными для проверки
+        debug : bool
+            Если True выводит в поток out значение контрольной суммы
+
+        Return
+        ------
+        out : bool
+            True если конотрольная сумма совпала c расчитанной, в противном случае False
         """
         crc16 = libscrc.modbus(data[:-2])
         # crc16 = UDevice._CRC16_MODBUS(data[:-2])
