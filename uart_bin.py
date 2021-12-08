@@ -1374,11 +1374,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
 class FixedSerial( serial.Serial ):
     """
-    Игнорирует исключения при конфигурации порта, решая проблему соединения с устройством в ОС Windows 10.
+    Класс в отличии от базового игнорирует исключения при конфигурации последовательного порта, решая проблему соединения с устройством в ОС Windows 10.
     (`issues 258 <https://github.com/pyserial/pyserial/issues/258>`_, 
     `issues 362 <https://github.com/pyserial/pyserial/issues/362>`_)
     """
     def _reconfigure_port( self, *args, **kwargs ):
+        """
+        Функция конфигурации последовательного порта.
+        """
         try:
             super()._reconfigure_port( *args, **kwargs )
         except serial.SerialException:
@@ -1494,6 +1497,11 @@ class UDevice(QtWidgets.QWidget):
         ----------
         n : int
             Число считываемых байт
+
+        Return
+        ------
+        out : bytes
+            Список считанных байт
         """
         r = UDevice._port.read(n)
         print("Ответ("+str(len(r))+"/"+str(n)+"): ", r.hex(), "CRC("+str(self.check_CRC16(r))+")")
@@ -1520,6 +1528,11 @@ class UDevice(QtWidgets.QWidget):
             Список байт
         n : int
             Количество отправляемых байт
+
+        Return
+        ------
+        out : bytes
+            Входной список data с контрольной суммой CRC16_MODBUS
         """
         crc_data = self._add_CRC16(data)
         print("Запрос("+str(n)+"): ", crc_data.hex())
@@ -1544,7 +1557,12 @@ class UDevice(QtWidgets.QWidget):
         Parameters
         ----------
         data : list(bytes)
-            Список байт.
+            Список байт
+
+        Return
+        ------
+        out : bytes
+            Входной список data с контрольной суммой CRC16_MODBUS
         """
         crc16 = libscrc.modbus(data)
         # crc16 = UDevice._CRC16_MODBUS(data[:-2])
