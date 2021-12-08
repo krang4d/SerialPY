@@ -682,24 +682,24 @@ class Inits:
 
     def set_portname(self, value : str):
         """
-        Функция сохранения имени порта в файл.
+        Функция сохранения имени последовательного порта в файл.
 
         Parameters
         ----------
         value : str
-            Имя COM порта
+            Имя последовательного порта
         """
         self.port['name'] = value
         self._save()
 
     def get_portname(self) -> str:
         """
-        Функция получения имени COM порта из файла.
+        Функция получения имени последовательного порта из файла.
 
         Return
         ------
         out : str
-            Имя COM порта
+            Имя последовательного порта
         """
         self._load()
         return self.port.get('name', "/dev/ttyUSB0")
@@ -859,17 +859,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     Attributes
     ----------
-    exposure : float
-        Exposure in seconds.
-
-    Methods
-    -------
-    colorspace(c='rgb')
-        Represent the photo in the given colorspace.
-    gamma(n=1.0)
-        Change the photo's gamma exposure.
+    _num : int
+        Максимальное число отсчетов на графиках по оси Y.
+    _cycle : int
+        Период запросов для построения графиков в milliseconds.
     """
     _num = 100
+    _cycle = 100
     _version = ""
 
     def __init__(self, *args, obj=None, **kwargs):
@@ -898,7 +894,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self._index2 = iter(NumbersIterator())
         # self._index3 = iter(NumbersIterator())
 
-        self.flag_update_ph = True
+        self.flag_update_termo = True
         self.flag_update_taxo = True
 
         self._y1 = list()
@@ -1009,14 +1005,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def start_slot(self):
         """
-        Функция(слот) запускает сбор данных для отображения на графиках.
+        Функция(слот) запускает периодические запросы по тоймеру для простроения графиков.
         """
-        self.plots_timer.start(100)
+        self.plots_timer.start(self._cycle)
         self.start_flag = True
 
     def stop_slot(self):
         """
-        Функция(слот) останавливает сбор данных для отображения на графиках.
+        Функция(слот) останавливает периодические запросы по тоймерам для простроения графиков и проверки готовности.
         """
         self.plots_timer.stop()
         self.waitdata_timer.stop()
@@ -1054,23 +1050,17 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def vibro_data_slot(self):
         """
-        Запрос данных с АЦП виброметра: 3X 03 00 02 00 01 CS CS
-        Ответ на запрос: 3X 03 01 BN ... B1 CS CS, где
+        Функция отправляет запрос данных с АЦП виброметра.
+        Запрос отправляется только, если проверка готовности данных прошла успешно.
+        Запрос: 3X 03 00 02 00 01 CS CS
+        Ответ: 3X 03 01 BN ... B1 CS CS, где
         BN … B1 массив 16 разрядных отсчётов АЦП виброметра (N = 1024)
 
-        Алгоритм для запуска и получения данных с платы виброметра:
-        1. Стартуем процесс, запускаем двигатель командой 3X 06 00 01 HH LL CS CS (в протоколе эта команда описана)
-        2. С периодичностью раз в секунду производим опрос платы о готовности данных.
-        Процесс стабилизации режима и снятия показаний АЦП занимает время не менее 10 секунд.
-        Опрос готовности данных производится командой, которую я не описывал в протоколе. Она имеет следующий формат:
-        запрос готовности данных: 3X 04 00 00 00 02 CS CS
-        Ответ на запрос: 3X 04 01 NN CS CS, где
-        NN- готовность данных: 00- данные не готовы для передачи, 01- данные готовы для передачи
-        3. Как только данные собраны, двигатель останавливается (Двигатель можно не останавливать, лучше поставить галочку для этого).
-        4. После получения ответа о готовности данных можно начинать передачу данных командой 3X 03 00 02 00 01 CS CS.
-        Эту команду необходимо повторить 16 раз подряд.
+        Запрос повторяется 16 раз подряд.
         Таким образом массив принятых данных составит 16*1024 выборок, где каждая выборка является 16-разрядной.
-        5. Повторный цикл измерений запускается переходом к п.1.
+
+        1. Стартуем процесс, запускаем двигатель командой 3X 06 00 01 HH LL CS CS (в протоколе эта команда описана)
+        3. Как только данные собраны, двигатель останавливается (Двигатель можно не останавливать, лучше поставить галочку для этого).
         """
         if not self.wait_data_slot():
             return
@@ -1129,7 +1119,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def motor_stop(self, num):
         """
-        Функция остановки двигателя: 30 06 00 01 00 00.
+        Функция остановки двигателя.
+        Команда: 3X 06 00 01 00 00 CS CS.
         """
         self.statusbar.showMessage("Остановка двигателя.", 3000)
         code = list(b'\x30\x06\x00\x01\x00\x00')
@@ -1138,7 +1129,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def motor_setFreq_slot(self):
         """
-        Функция задает частоту вращения вала двигателя: 3X 06 00 01 HH LL CS CS,
+        Функция запускает двигатель с заданной в окне частотй вращения вала.
+        Команда : 3X 06 00 01 HH LL CS CS,
         где HH LL – целое 16-битное число, соответствующее частоте вращения вала двигателя, об/мин.
         """
         value = self.spinBox_motor_freq.value()
@@ -1155,10 +1147,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def motor_getFreq_slot(self):
         """
-        Функция отправляет запрос регистра данных периода вращения вала двигателя: 3X 03 00 01 00 01 CS CS,
+        Функция отправляет запрос регистра данных периода вращения вала двигателя.
+        Запрос : 3X 03 00 01 00 01 CS CS,
         где Х- номер фотоприёмника виброметра (указывается или перемычками на плате, или программируется на объекте). По умолчанию 0
         Итоговая команда по-умолчанию: 30 03 00 01 00 01 D1 EB
-        Ответ на запрос: 3X 03 00 01 HH LL CS CS
+        Ответ : 3X 03 00 01 HH LL CS CS
         """
 
         self.statusbar.showMessage("Запрос регистра данных периода вращения вала двигателя.", 3000)
@@ -1173,7 +1166,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def normalOutputWritten(self, text):
         """
-        Append text to the QTextEdit.
+        Функция добаволения текста в поле 'Сообщения' окна
+
+        Parameters
+        ----------
+        text : str
+            Текст сообщения
         """
         # Maybe QTextEdit.append() works as well, but this is how I do it:
         cursor = self.textEdit.textCursor()
@@ -1203,6 +1201,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     @staticmethod
     def set_num(i: int):
+        """
+        Функция задает максимальное число отсчетов на графиках по оси Y.
+        """
         MainWindow._num = i
 
     # def get_bytes(self):
@@ -1246,9 +1247,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     #         self.statusbar.showMessage(str(e), 3000)
     #     return bl
 
-    def _termo_update(self, data):
+    def _termo_update(self, data : float):
         """
         Функция добавляет новую точку на график фотоприемника
+
+        Parameters
+        ----------
+        data : float
+            Новое значение температуры
         """
         if len(self._x2) >= self._num:
             cut = len(self._x2) - self._num + 1
@@ -1261,12 +1267,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         axY = self.graphWidget2.getAxis('left')
 
-        if data > axY.range[1] or data < axY.range[0] or self.flag_update_ph:
+        if data > axY.range[1] or data < axY.range[0] or self.flag_update_termo:
             # avg = sum(self._y2) / len(self._y2)
             ymin = min(self._y2)
             ymax = max(self._y2)
             self.graphWidget2.setRange(yRange=[ymax+0.25, ymin-0.25])
-            self.flag_update_ph = False;
+            self.flag_update_termo = False;
 
     def termo_slot(self):
         """
@@ -1299,9 +1305,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         # self.textEdit.insertPlainText(str(data)+" "+now.strftime("%H:%M:%S %f")+'\n');
 
-    def _taxo_update(self, data):
+    def _taxo_update(self, data : float):
         """
         Функция добавляет новую точку на график скрости тахометра
+
+        Parameters
+        ----------
+        data : float
+            Новое значение скорости
         """
         if len(self._x1) >= self._num:
             cut = len(self._x1) - self._num + 1
