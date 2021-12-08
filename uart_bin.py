@@ -34,7 +34,6 @@ class Ui_MainWindow(object):
     """
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1196, 1257)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
@@ -84,52 +83,36 @@ class Ui_MainWindow(object):
         self.verticalLayout_4.setObjectName("verticalLayout_4")
         self._4 = QtWidgets.QGridLayout()
         self._4.setObjectName("_4")
-        self.taxoLineEdit_0 = QtWidgets.QLineEdit(self.groupBox_taxo)
+        self.lineEdit_taxo_1 = QtWidgets.QLineEdit(self.groupBox_taxo)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.taxoLineEdit_0.sizePolicy().hasHeightForWidth())
-        self.taxoLineEdit_0.setSizePolicy(sizePolicy)
-        self.taxoLineEdit_0.setStyleSheet("background-color: rgb(238, 238, 236);\n"
+        sizePolicy.setHeightForWidth(self.lineEdit_taxo_1.sizePolicy().hasHeightForWidth())
+        self.lineEdit_taxo_1.setSizePolicy(sizePolicy)
+        self.lineEdit_taxo_1.setStyleSheet("background-color: rgb(238, 238, 236);\n"
 "color: rgb(78, 154, 6);")
-        self.taxoLineEdit_0.setAlignment(QtCore.Qt.AlignCenter)
-        self.taxoLineEdit_0.setReadOnly(True)
-        self.taxoLineEdit_0.setObjectName("taxoLineEdit_0")
-        self._4.addWidget(self.taxoLineEdit_0, 1, 0, 1, 1)
-        self.label_1 = QtWidgets.QLabel(self.groupBox_taxo)
-        self.label_1.setObjectName("label_1")
-        self._4.addWidget(self.label_1, 0, 0, 1, 1)
-        self.taxoLineEdit_1 = QtWidgets.QLineEdit(self.groupBox_taxo)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.taxoLineEdit_1.sizePolicy().hasHeightForWidth())
-        self.taxoLineEdit_1.setSizePolicy(sizePolicy)
-        self.taxoLineEdit_1.setStyleSheet("background-color: rgb(238, 238, 236);\n"
-"color: rgb(78, 154, 6);")
-        self.taxoLineEdit_1.setAlignment(QtCore.Qt.AlignCenter)
-        self.taxoLineEdit_1.setReadOnly(True)
-        self.taxoLineEdit_1.setObjectName("taxoLineEdit_1")
-        self._4.addWidget(self.taxoLineEdit_1, 1, 1, 1, 1)
+        self.lineEdit_taxo_1.setAlignment(QtCore.Qt.AlignCenter)
+        self.lineEdit_taxo_1.setReadOnly(True)
+        self.lineEdit_taxo_1.setObjectName("lineEdit_taxo_1")
+        self._4.addWidget(self.lineEdit_taxo_1, 1, 1, 1, 1)
         self.label_2 = QtWidgets.QLabel(self.groupBox_taxo)
         self.label_2.setObjectName("label_2")
         self._4.addWidget(self.label_2, 0, 1, 1, 1)
-        self.taxoLineEdit_2 = QtWidgets.QLineEdit(self.groupBox_taxo)
-        self.taxoLineEdit_2.setEnabled(True)
+        self.label_1 = QtWidgets.QLabel(self.groupBox_taxo)
+        self.label_1.setObjectName("label_1")
+        self._4.addWidget(self.label_1, 0, 0, 1, 1)
+        self.lineEdit_taxo_0 = QtWidgets.QLineEdit(self.groupBox_taxo)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.taxoLineEdit_2.sizePolicy().hasHeightForWidth())
-        self.taxoLineEdit_2.setSizePolicy(sizePolicy)
-        self.taxoLineEdit_2.setStyleSheet("background-color: rgb(238, 238, 236)")
-        self.taxoLineEdit_2.setAlignment(QtCore.Qt.AlignCenter)
-        self.taxoLineEdit_2.setReadOnly(True)
-        self.taxoLineEdit_2.setObjectName("taxoLineEdit_2")
-        self._4.addWidget(self.taxoLineEdit_2, 2, 1, 1, 1)
-        self.label_3 = QtWidgets.QLabel(self.groupBox_taxo)
-        self.label_3.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.label_3.setObjectName("label_3")
-        self._4.addWidget(self.label_3, 2, 0, 1, 1)
+        sizePolicy.setHeightForWidth(self.lineEdit_taxo_0.sizePolicy().hasHeightForWidth())
+        self.lineEdit_taxo_0.setSizePolicy(sizePolicy)
+        self.lineEdit_taxo_0.setStyleSheet("background-color: rgb(238, 238, 236);\n"
+"color: rgb(78, 154, 6);")
+        self.lineEdit_taxo_0.setAlignment(QtCore.Qt.AlignCenter)
+        self.lineEdit_taxo_0.setReadOnly(True)
+        self.lineEdit_taxo_0.setObjectName("lineEdit_taxo_0")
+        self._4.addWidget(self.lineEdit_taxo_0, 1, 0, 1, 1)
         self.verticalLayout_4.addLayout(self._4)
         self.gridLayout.addWidget(self.groupBox_taxo, 6, 0, 1, 1)
         self.groupBox_settings = QtWidgets.QGroupBox(self.centralwidget)
@@ -228,104 +211,89 @@ class Ui_MainWindow(object):
         self.pushButton_vibro_status.setObjectName("pushButton_vibro_status")
         self.verticalLayout_7.addWidget(self.pushButton_vibro_status)
         self.gridLayout.addWidget(self.groupBox_vibro_status, 1, 0, 1, 1)
-        self.groupBox_photo = QtWidgets.QGroupBox(self.centralwidget)
+        self.groupBox_termo = QtWidgets.QGroupBox(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.groupBox_photo.sizePolicy().hasHeightForWidth())
-        self.groupBox_photo.setSizePolicy(sizePolicy)
-        self.groupBox_photo.setObjectName("groupBox_photo")
-        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.groupBox_photo)
+        sizePolicy.setHeightForWidth(self.groupBox_termo.sizePolicy().hasHeightForWidth())
+        self.groupBox_termo.setSizePolicy(sizePolicy)
+        self.groupBox_termo.setObjectName("groupBox_termo")
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.groupBox_termo)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self._3 = QtWidgets.QGridLayout()
         self._3.setObjectName("_3")
-        self.label_temp = QtWidgets.QLabel(self.groupBox_photo)
+        self.label_temp = QtWidgets.QLabel(self.groupBox_termo)
         self.label_temp.setObjectName("label_temp")
         self._3.addWidget(self.label_temp, 0, 0, 1, 1)
-        self.photoLineEdit_0 = QtWidgets.QLineEdit(self.groupBox_photo)
+        self.lineEdit_termo_1 = QtWidgets.QLineEdit(self.groupBox_termo)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.photoLineEdit_0.sizePolicy().hasHeightForWidth())
-        self.photoLineEdit_0.setSizePolicy(sizePolicy)
-        self.photoLineEdit_0.setStyleSheet("background-color: rgb(238, 238, 236);\n"
+        sizePolicy.setHeightForWidth(self.lineEdit_termo_1.sizePolicy().hasHeightForWidth())
+        self.lineEdit_termo_1.setSizePolicy(sizePolicy)
+        self.lineEdit_termo_1.setStyleSheet("background-color: rgb(238, 238, 236);\n"
 "color: rgb(32, 74, 135);")
-        self.photoLineEdit_0.setAlignment(QtCore.Qt.AlignCenter)
-        self.photoLineEdit_0.setReadOnly(True)
-        self.photoLineEdit_0.setObjectName("photoLineEdit_0")
-        self._3.addWidget(self.photoLineEdit_0, 1, 0, 1, 1)
-        self.label_ADC = QtWidgets.QLabel(self.groupBox_photo)
+        self.lineEdit_termo_1.setAlignment(QtCore.Qt.AlignCenter)
+        self.lineEdit_termo_1.setReadOnly(True)
+        self.lineEdit_termo_1.setObjectName("lineEdit_termo_1")
+        self._3.addWidget(self.lineEdit_termo_1, 1, 1, 1, 1)
+        self.lineEdit_termo_0 = QtWidgets.QLineEdit(self.groupBox_termo)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.lineEdit_termo_0.sizePolicy().hasHeightForWidth())
+        self.lineEdit_termo_0.setSizePolicy(sizePolicy)
+        self.lineEdit_termo_0.setStyleSheet("background-color: rgb(238, 238, 236);\n"
+"color: rgb(32, 74, 135);")
+        self.lineEdit_termo_0.setAlignment(QtCore.Qt.AlignCenter)
+        self.lineEdit_termo_0.setReadOnly(True)
+        self.lineEdit_termo_0.setObjectName("lineEdit_termo_0")
+        self._3.addWidget(self.lineEdit_termo_0, 1, 0, 1, 1)
+        self.label_ADC = QtWidgets.QLabel(self.groupBox_termo)
         self.label_ADC.setObjectName("label_ADC")
         self._3.addWidget(self.label_ADC, 0, 1, 1, 1)
-        self.photoLineEdit_2 = QtWidgets.QLineEdit(self.groupBox_photo)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.photoLineEdit_2.sizePolicy().hasHeightForWidth())
-        self.photoLineEdit_2.setSizePolicy(sizePolicy)
-        self.photoLineEdit_2.setStyleSheet("background-color: rgb(238, 238, 236);")
-        self.photoLineEdit_2.setAlignment(QtCore.Qt.AlignCenter)
-        self.photoLineEdit_2.setReadOnly(True)
-        self.photoLineEdit_2.setObjectName("photoLineEdit_2")
-        self._3.addWidget(self.photoLineEdit_2, 2, 1, 1, 1)
-        self.label_cmd = QtWidgets.QLabel(self.groupBox_photo)
-        self.label_cmd.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.label_cmd.setObjectName("label_cmd")
-        self._3.addWidget(self.label_cmd, 2, 0, 1, 1)
-        self.photoLineEdit_1 = QtWidgets.QLineEdit(self.groupBox_photo)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.photoLineEdit_1.sizePolicy().hasHeightForWidth())
-        self.photoLineEdit_1.setSizePolicy(sizePolicy)
-        self.photoLineEdit_1.setStyleSheet("background-color: rgb(238, 238, 236);\n"
-"color: rgb(32, 74, 135);")
-        self.photoLineEdit_1.setAlignment(QtCore.Qt.AlignCenter)
-        self.photoLineEdit_1.setReadOnly(True)
-        self.photoLineEdit_1.setObjectName("photoLineEdit_1")
-        self._3.addWidget(self.photoLineEdit_1, 1, 1, 1, 1)
         self.verticalLayout_2.addLayout(self._3)
         self._2 = QtWidgets.QFormLayout()
         self._2.setObjectName("_2")
-        self.label_N1 = QtWidgets.QLabel(self.groupBox_photo)
+        self.label_N1 = QtWidgets.QLabel(self.groupBox_termo)
         self.label_N1.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.label_N1.setObjectName("label_N1")
         self._2.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.label_N1)
-        self.spinBox_N1 = BigIntSpinbox(self.groupBox_photo)
+        self.spinBox_N1 = BigIntSpinbox(self.groupBox_termo)
         # self.spinBox_N1.setMaximum(999999999)
         self.spinBox_N1.setObjectName("spinBox_N1")
         self._2.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.spinBox_N1)
-        self.label_N2 = QtWidgets.QLabel(self.groupBox_photo)
+        self.label_N2 = QtWidgets.QLabel(self.groupBox_termo)
         self.label_N2.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.label_N2.setObjectName("label_N2")
         self._2.setWidget(2, QtWidgets.QFormLayout.LabelRole, self.label_N2)
-        self.spinBox_N2 = BigIntSpinbox(self.groupBox_photo)
+        self.spinBox_N2 = BigIntSpinbox(self.groupBox_termo)
         # self.spinBox_N2.setMaximum(999999999)
         self.spinBox_N2.setObjectName("spinBox_N2")
         self._2.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.spinBox_N2)
-        self.label_T1 = QtWidgets.QLabel(self.groupBox_photo)
+        self.label_T1 = QtWidgets.QLabel(self.groupBox_termo)
         self.label_T1.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.label_T1.setObjectName("label_T1")
         self._2.setWidget(3, QtWidgets.QFormLayout.LabelRole, self.label_T1)
-        self.spinBox_T1 = QtWidgets.QSpinBox(self.groupBox_photo)
+        self.spinBox_T1 = QtWidgets.QSpinBox(self.groupBox_termo)
         self.spinBox_T1.setMinimum(-999999999)
         self.spinBox_T1.setMaximum(999999999)
         self.spinBox_T1.setObjectName("spinBox_T1")
         self._2.setWidget(3, QtWidgets.QFormLayout.FieldRole, self.spinBox_T1)
-        self.label_T2 = QtWidgets.QLabel(self.groupBox_photo)
+        self.label_T2 = QtWidgets.QLabel(self.groupBox_termo)
         self.label_T2.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.label_T2.setObjectName("label_T2")
         self._2.setWidget(4, QtWidgets.QFormLayout.LabelRole, self.label_T2)
-        self.spinBox_T2 = QtWidgets.QSpinBox(self.groupBox_photo)
+        self.spinBox_T2 = QtWidgets.QSpinBox(self.groupBox_termo)
         self.spinBox_T2.setMinimum(-999999999)
         self.spinBox_T2.setMaximum(999999999)
         self.spinBox_T2.setObjectName("spinBox_T2")
         self._2.setWidget(4, QtWidgets.QFormLayout.FieldRole, self.spinBox_T2)
-        self.label_calibr = QtWidgets.QLabel(self.groupBox_photo)
+        self.label_calibr = QtWidgets.QLabel(self.groupBox_termo)
         self.label_calibr.setObjectName("label_calibr")
         self._2.setWidget(0, QtWidgets.QFormLayout.SpanningRole, self.label_calibr)
         self.verticalLayout_2.addLayout(self._2)
-        self.gridLayout.addWidget(self.groupBox_photo, 7, 0, 1, 1)
+        self.gridLayout.addWidget(self.groupBox_termo, 7, 0, 1, 1)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.startButton = QtWidgets.QPushButton(self.centralwidget)
@@ -437,7 +405,7 @@ class Ui_MainWindow(object):
         self.gridLayout.addWidget(self.groupBox_messenger, 7, 1, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1196, 22))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1223, 22))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -451,16 +419,14 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Физприбор 3.7.38a"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Физприбор 3.7.39a"))
         self.groupBox_motor_setFreq.setTitle(_translate("MainWindow", "Установка частоты вращения  и запуск двигателя"))
         self.label_motor_n.setText(_translate("MainWindow", "Номер:"))
         self.label_motor_freq.setText(_translate("MainWindow", "Частота:"))
         self.pushButton_motor_setFreq.setText(_translate("MainWindow", "Запуск"))
         self.groupBox_taxo.setTitle(_translate("MainWindow", "Опрос тахометра"))
-        self.label_1.setText(_translate("MainWindow", "Скорость  (oб/мин):"))
         self.label_2.setText(_translate("MainWindow", "ADC:"))
-        self.taxoLineEdit_2.setText(_translate("MainWindow", "100300010001"))
-        self.label_3.setText(_translate("MainWindow", "Команда:"))
+        self.label_1.setText(_translate("MainWindow", "Скорость  (oб/мин):"))
         self.groupBox_settings.setTitle(_translate("MainWindow", "Настройка соединения"))
         self.portLabel.setText(_translate("MainWindow", "Номер порта:"))
         self.speedLabel.setText(_translate("MainWindow", "Скорость соединения:"))
@@ -475,11 +441,9 @@ class Ui_MainWindow(object):
         self.groupBox_vibro_status.setTitle(_translate("MainWindow", "Запрос состояния платы фотоприёмника виброметра"))
         self.label_vibro_status_n.setText(_translate("MainWindow", "X:"))
         self.pushButton_vibro_status.setText(_translate("MainWindow", "Запросить"))
-        self.groupBox_photo.setTitle(_translate("MainWindow", "Опрос фотоприёмника"))
+        self.groupBox_termo.setTitle(_translate("MainWindow", "Опрос термометра"))
         self.label_temp.setText(_translate("MainWindow", "Температура °C:"))
         self.label_ADC.setText(_translate("MainWindow", "ADC:"))
-        self.photoLineEdit_2.setText(_translate("MainWindow", "200300010001"))
-        self.label_cmd.setText(_translate("MainWindow", "Команда:"))
         self.label_N1.setText(_translate("MainWindow", "N1"))
         self.label_N2.setText(_translate("MainWindow", "N2"))
         self.label_T1.setText(_translate("MainWindow", "T1"))
@@ -1011,11 +975,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.stopButton.clicked.connect(self.stop_slot)
 
         self.plots_timer.timeout.connect( lambda: {
-            self.device.writebincode(self.get_ph()),
-            self.show_ph(self.device.readbincode()),
-            # time.sleep(0.02),
-            self.device.writebincode(self.get_taxo()),
-            self.show_taxo(self.device.readbincode())
+            self.termo_slot(),
+            self.taxo_slot()
         })
 
         self.waitdata_timer.timeout.connect(self._slot_wraper(self.vibro_data_slot))
@@ -1234,7 +1195,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def set_devs(self, devs):
         """
-        Функция выводит список открытых протов системы в поле 'Номер порта'
+        Функция отображает список последовательных портов ОС в поле 'Номер порта' окна .
         """
         self.portCBox.clear()
         for d in devs:
@@ -1261,27 +1222,33 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     #     sb.setValue(sb.maximum())
     #     # print('show_res(): ', data.hex())
 
-    def get_ph(self):
-        cmd = self.photoLineEdit_2.text()
-        try:
-            bl = bytes.fromhex(cmd)
-            # print('get_ph():', bl)
-        except Exception as e:
-            self.statusbar.showMessage(str(e), 3000)
-        return bl
+    # def get_ph(self):
+    #     """
+    #     code = list(b'\x20\x03\x00\x01\x00\x01')
+    #     """
+    #     cmd = self.photoLineEdit_2.text()
+    #     try:
+    #         bl = bytes.fromhex(cmd)
+    #         # print('get_ph():', bl)
+    #     except Exception as e:
+    #         self.statusbar.showMessage(str(e), 3000)
+    #     return bl
 
-    def get_taxo(self):
-        cmd = self.taxoLineEdit_2.text()
-        try:
-            bl = bytes.fromhex(cmd)
-            # print('get_taxo():', bl)
-        except Exception as e:
-            self.statusbar.showMessage(str(e), 3000)
-        return bl
+    # def get_taxo(self):
+    #     """
+    #     code = list(b'\x10\x03\x00\x01\x00\x01')
+    #     """
+    #     cmd = self.taxoLineEdit_2.text()
+    #     try:
+    #         bl = bytes.fromhex(cmd)
+    #         # print('get_taxo():', bl)
+    #     except Exception as e:
+    #         self.statusbar.showMessage(str(e), 3000)
+    #     return bl
 
-    def _update_ph(self, data):
+    def _termo_update(self, data):
         """
-        Функция добавления новой точки на график фотоприемника
+        Функция добавляет новую точку на график фотоприемника
         """
         if len(self._x2) >= self._num:
             cut = len(self._x2) - self._num + 1
@@ -1301,14 +1268,22 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.graphWidget2.setRange(yRange=[ymax+0.25, ymin-0.25])
             self.flag_update_ph = False;
 
-    def show_ph(self, data : bytes):
+    def termo_slot(self):
         """
-        Функция обновления всех значейний фотоприемника
+        Функция отправоляет запрос регистра данных термометра и выводит полученный ответ.
+        Запрос: 2X 03 00 01 00 01 CS CS,
+        где Х- номер термометра (указывается или перемычками на плате, или программируется на объекте). По умолчанию 0
+        Итоговая команда по-умолчанию: 20 03 00 01 00 01 D3 7B
+        Ответ на запрос: 2X 03 04 B4 B3 B2 B1 CS CS, где
+        B4B3B2B1 составляют 32 разрядное значение температуры (формат температуры требует уточнения)
         """
+        self.device.writebincode(b'\x20\x03\x00\x01\x00\x01')
+        data = self.device.readbincode()
+
         N = int.from_bytes(data[3:7], byteorder='little', signed=False)
         str_code = str(N)
         # print("show_ph():", str_code, data[3:7].hex())
-        self.photoLineEdit_1.setText(str_code)
+        self.lineEdit_termo_1.setText(str_code)
 
         N1 = self.spinBox_N1.value()
         N2 = self.spinBox_N2.value()
@@ -1316,17 +1291,17 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         T2 = self.spinBox_T2.value()
         try: 
             T = (N-N1)*(T2-T1)/(N2-N1)+T1
-            self.photoLineEdit_0.setText( "%.1f" % (T) )
-            self._update_ph(T)
+            self.lineEdit_termo_0.setText( "%.1f" % (T) )
+            self._termo_update(T)
         except ZeroDivisionError:
-            self.photoLineEdit_0.setText( "-" )
+            self.lineEdit_termo_0.setText( "-" )
             self.statusbar.showMessage("ZeroDivisionError", 3000)
 
         # self.textEdit.insertPlainText(str(data)+" "+now.strftime("%H:%M:%S %f")+'\n');
 
-    def _update_taxo(self, data):
+    def _taxo_update(self, data):
         """
-        Функция добавления новой точки на график скрости тахометра
+        Функция добавляет новую точку на график скрости тахометра
         """
         if len(self._x1) >= self._num:
             cut = len(self._x1) - self._num + 1
@@ -1347,25 +1322,34 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.graphWidget1.setRange(yRange=[ ymax+limit, ymin-limit])
             self.flag_update_taxo = False
 
-    def show_taxo(self, data : bytes):
+    def taxo_slot(self):
         """
-        Функция обновления в окне всех значейний тахометра
+        Функция отправоляет запрос регистра данных тахометра и выводит полученный ответ.
+        Запрос : 1X 03 00 01 00 01 CS CS,
+        где Х- номер тахометра (указывается или перемычками на плате, или программируется на объекте). По умолчанию 0
+        03- функция Read Holding Registers
+        CS- контрольная сумма
+        Итоговая команда по-умолчанию: 10 03 00 01 00 01 D6 8B (все числа шестнадцатиричные)
+        Ответ на запрос: 1X 03 04 B4 B3 B2 B1 CS CS, где
+        B4B3B2B1 составляют 32 разрядное значение периода вращения вала двигателя в микросекундах.
         """
+        self.device.writebincode(b'\x10\x03\x00\x01\x00\x01')
+        data = self.device.readbincode()
         t = int.from_bytes(data[3:7], byteorder='little', signed=False)
         msg1 = str(t)
         # print("show_taxo():", msg1, data[3:7].hex())
-        self.taxoLineEdit_1.setText(msg1)
+        self.lineEdit_taxo_1.setText(msg1)
         if (t == 0):
-            self.taxoLineEdit_0.setText("-")
+            self.lineEdit_taxo_0.setText("-")
         else:
             y = 60000000/t
             msg0 = "%.1f" % (60000000/t)
-            self.taxoLineEdit_0.setText(msg0)
-            self._update_taxo(y)
+            self.lineEdit_taxo_0.setText(msg0)
+            self._taxo_update(y)
 
     def clean(self):
         """
-        Функция сбрасывает все значения на графиках в окне.
+        Функция удаляет все значения на графиках в окне.
         """
         self.textEdit.clear()
         self._x1.clear()
@@ -1391,7 +1375,7 @@ class FixedSerial( serial.Serial ):
 
 class NumbersIterator:
     """
-    Итератор для отображанеия значений на графиках по очи X.
+    Итератор для отображанеия значений на графиках по оси X.
     """
     def __iter__(self):
         self.a = 1
@@ -1407,7 +1391,7 @@ class NumbersIterator:
 
 def _FileLogger(func):
     """
-    Дукоратор для ведения лог файла, записыват возвращаемое значение функции в файл.
+    Декоратор для ведения лог файла, записыват возвращаемое значение функции в файл.
     """
     _file_name = "uart.log" # имя лог файла
     def wrapper(*args, **kwargs):
@@ -1441,7 +1425,7 @@ class UDevice(QtWidgets.QWidget):
 
     def open(self, dev: str, baudrate: int, timeout: int):
         """
-        Функция открывает последовательный порт в заданными настройками.
+        Функция открывает последовательный порт c заданными настройками.
 
         Parameters
         ----------
@@ -1463,7 +1447,7 @@ class UDevice(QtWidgets.QWidget):
 
     def close(self):
         """
-        Функция закрыват открытый последовательный порт.
+        Функция закрыват последовательный порт.
         """
         if UDevice._dev is not None:
             print('Close Port '+ UDevice._dev)
@@ -1473,12 +1457,12 @@ class UDevice(QtWidgets.QWidget):
     @staticmethod
     def get_devs():
         """
-        Функция возвращает список подключенных устройств.
+        Функция возвращает список последовательных портов ОС.
 
         Return
         ------
         out : list(str)
-            Список подключенных устройств
+            Список портов
         """
         devices = list()
         pts= prtlst.comports()
@@ -1493,7 +1477,7 @@ class UDevice(QtWidgets.QWidget):
     # @_FileLogger
     def readbincode(self, n=9):
         """
-        Функция считывает n байт переданных через последовательный порт.
+        Функция считывает n байт переданных через открытый последовательный порт.
 
         Parameters
         ----------
@@ -1511,18 +1495,18 @@ class UDevice(QtWidgets.QWidget):
         Return
         ------
         out : str
-            Имя последовательного порта
+            Имя порта
         """
         return UDevice._dev
 
     def writebincode(self, data : bytes, n=8) -> bytes:
         """
-        Функция отправляет n байт данных через последовательный прот.
+        Функция отправляет n байт данных через открытый последовательный прот.
 
         Parameters
         ----------
         data : list(bytes)
-            Список данных
+            Список байт
         n : int
             Количество отправляемых байт
         """
@@ -1544,12 +1528,12 @@ class UDevice(QtWidgets.QWidget):
     @staticmethod
     def _add_CRC16(data: bytes) -> bytes:
         """
-        Функция расчитывает и добавляет во входной список контрольную сумму CRC16 MODBUS.
+        Функция расчитывает и добавляет во входной список байт контрольную сумму CRC16 MODBUS.
 
         Parameters
         ----------
         data : list(bytes)
-            Список данных.
+            Список байт.
         """
         crc16 = libscrc.modbus(data)
         # crc16 = UDevice._CRC16_MODBUS(data[:-2])
@@ -1563,12 +1547,12 @@ class UDevice(QtWidgets.QWidget):
     @staticmethod
     def check_CRC16(data : bytes, debug=False) -> bool:
         """
-        Функция проверки контрольной суммы CRC16 в переданных данных.
+        Функция проверки контрольной суммы CRC16 в переданном списке байт.
 
         Parameters
         ----------
         data : list(bytes)
-            Список с данными для проверки
+            Список байт для проверки
         debug : bool
             Если True выводит в поток out значение контрольной суммы
 

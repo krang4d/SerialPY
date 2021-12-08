@@ -23,7 +23,7 @@ author = 'Pavel Golovkin'
 
 
 # -- General configuration ---------------------------------------------------
-
+html_show_sphinx = False
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
