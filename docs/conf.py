@@ -96,5 +96,5 @@ latex_elements = {
 }
 latex_show_urls = 'footnote'
 latex_documents = [
- ('index', 'PhysSerial.tex', u'PhysSerial', u'Инструкция и руководство пользователя', 'manual'),
+ ('index', 'PhysSerial.tex', u'PhysSerial', u'Описание API', 'manual'),
 ]
