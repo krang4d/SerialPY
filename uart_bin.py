@@ -26,7 +26,7 @@ class Ui_MainWindow(object):
     """
     Класс генерируемый 'PyQt5 UI code generator 5.15.4'. Реализация формы, созданная в 'QtDesigner version 5.12.8' при чтении файла пользовательского интерфейса mainwindow.ui.
 
-    .. figure:: ./png/main_window.png
+    .. figure:: ./png/main.png
         :scale: 70 %
         :align: center
 
@@ -1159,12 +1159,17 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         """
         Функция строит график по входным данным.
 
+        .. figure:: ./png/graph.png
+            :scale: 70 %
+            :align: center
+
         Parameters
         ----------
         data : list(int)
             Список данных для простроения графиков
         """
         self.graphWidget3 = pg.PlotWidget()
+        # self.graphWidget3.setWindowModality(Qt::WindowModal)
         self.graphWidget3.setBackground((100,50,255,0))
         self.graphWidget3.setLabel('left', 'Y', **self.styles)
         self.graphWidget3.addLegend()
@@ -1281,7 +1286,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     @staticmethod
     def set_num(i: int):
         """
-        Функция задает максимальное число отсчетов на графиках по оси Y.
+        Функция задает максимальное число отсчетов на графиках по оси X.
         """
         MainWindow._num = i
 
