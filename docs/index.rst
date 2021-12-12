@@ -1,7 +1,12 @@
-uart\_bin module
-====================
+.. index:: Project Title
 
-.. automodule:: uart_bin
-   :members:
-   :undoc-members:
-   :show-inheritance:
+*******************************************
+Описание программного обеспечение Физприбор
+*******************************************
+
+.. toctree::
+    :maxdepth: 3
+    :caption: Содержание:
+
+    install
+    uart_bin

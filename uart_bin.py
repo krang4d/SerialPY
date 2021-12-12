@@ -944,11 +944,13 @@ class GraphPlot(QtWidgets.QWidget):
         self.line = self.graphWidget.plot(range(len(data)), data, symbolBrush='b', symbolSize=6, pen=pen)
 
 
-    def _debug(self, str):
-        print(str)
+    def _debug(self, msg):
+        print(msg)
 
     def save_dialog(self):
-        # диалог для сохранения данных в файл
+        """
+        Функция выводит диалог для сохранения данных в файл.
+        """
         fname = QtWidgets.QFileDialog.getSaveFileName(self, "Open file", ".","Text files (*.txt)")
         # print(fname, os.path.isfile(fname[0]))
         if fname[0] == "":
@@ -962,19 +964,12 @@ class GraphPlot(QtWidgets.QWidget):
 
     def filter(self, n):
         """
-        Функция усредненя списка данных по n точкам.
+        Функция усредняет списка данных по n точкам и перерисовывает график в окне по усредненным точкам.
 
         Parameters
         ----------
-        data : list
-            Список со значениями для усредненния
         n : int
             Число точек усреднения
-
-        Return
-        ------
-        out : list
-            Список усредненных значений
         """
         if(n == "откл."):
             self.line.setData(self.data)
@@ -1217,6 +1212,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.progressbar.setMaximum(batches)
         for i in range(batches):
             self.progressbar.setValue(i)
+            # TODO перенести отдельный поток, тк вызывает подвисание GUI
             self.device.writebincode(bytes(code))
             time.sleep(t)                              # Здержка перед чтением данных 0.7 с
             new_data = self.device.readbincode(2053)
@@ -1246,13 +1242,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         graphWidget3 = GraphPlot()
         self.plots.append(graphWidget3)
         graphWidget3.plot(data)
-        # self.graphWidget3.setWindowModality(Qt::WindowModal)
-        # graphWidget3.setBackground((100,50,255,0))
-        # graphWidget3.setLabel('left', 'Y', **self.styles)
-        # graphWidget3.addLegend()
-        # graphWidget3.showGrid(x=True, y=True)
-        # pen3 = pg.mkPen(color='b', width=2, style=QtCore.Qt.SolidLine)
-        # graphWidget3.plot(range(len(data)), data, name=u'АЦП виброметра', symbolBrush='b', symbolSize=6, pen=pen3)
         graphWidget3.show()
 
     def vibro_status_slot(self):
@@ -1782,9 +1771,6 @@ if __name__ == '__main__':
     window = MainWindow()
     # print(sys.getsizeof(2 ** 63))
     # print(type(2 ** 63))
-    plot = GraphPlot()
-    plot.plot(range(1024))
-    plot.show()
     window.setup_window()
     window.show()
 
