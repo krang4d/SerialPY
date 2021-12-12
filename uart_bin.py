@@ -881,6 +881,111 @@ class EmittingStream(QtCore.QObject):
     def write(self, text):
         self.textWritten.emit(str(text))
 
+class GraphPlot(QtWidgets.QWidget):
+    """
+    Класс строит график по входным данным в отдельном окне.
+
+    .. figure:: ./png/graph.png
+        :scale: 70 %
+        :align: center
+
+    Parameters
+    ----------
+    data : list(int)
+        Список данных для построения графиков
+    """
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+        self.avg = None
+        self.data = None
+
+    def initUI(self):
+        # self.setWindowModality(Qt::WindowModal)
+
+        self.graphWidget = pg.PlotWidget()
+        # self.checkBox_filter = QtWidgets.QCheckBox()
+        # self.checkBox_filter.setText("Фильтр")
+        self.comboBox_filter = QtWidgets.QComboBox()
+        self.label_filter = QtWidgets.QLabel("Фильтр: ")
+        self.label_filter.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignRight);
+        # self.comboBox_filter.setEnabled(False)
+        self.comboBox_filter.addItem("откл.")
+        self.comboBox_filter.addItem("2")
+        self.comboBox_filter.addItem("4")
+        self.comboBox_filter.addItem("6")
+        self.comboBox_filter.addItem("8")
+        self.comboBox_filter.addItem("16")
+        self.filterLayout = QtWidgets.QHBoxLayout()
+        self.filterLayout.addWidget(self.label_filter)
+        self.filterLayout.addWidget(self.comboBox_filter)
+
+        self.saveButton = QtWidgets.QPushButton("Сохранить")
+        self.mainLayout = QtWidgets.QVBoxLayout()
+        self.mainLayout.addWidget(self.graphWidget)
+        self.mainLayout.addLayout(self.filterLayout)
+        self.mainLayout.addWidget(self.saveButton)
+        self.setLayout(self.mainLayout)
+
+        # self.checkBox_filter.toggled['bool'].connect(self.comboBox_filter.setEnabled)
+        self.comboBox_filter.currentTextChanged.connect(self.filter)
+        self.saveButton.clicked.connect(self.save_dialog)
+
+    def plot(self, data : list):
+        datetime = QtCore.QDateTime.currentDateTime()
+        self.setWindowTitle(datetime.toString())
+        self.data = data
+        styles = {'color':'b', 'font-size':'14px'}
+        pen = pg.mkPen(color='b', width=2, style=QtCore.Qt.SolidLine)
+        self.graphWidget.setBackground((100,50,255,0))
+        self.graphWidget.setLabel('left', 'Y', **styles)
+        self.graphWidget.addLegend()
+        self.graphWidget.showGrid(x=True, y=True)
+        self.line = self.graphWidget.plot(range(len(data)), data, symbolBrush='b', symbolSize=6, pen=pen)
+
+
+    def _debug(self, str):
+        print(str)
+
+    def save_dialog(self):
+        # диалог для сохранения данных в файл
+        fname = QtWidgets.QFileDialog.getSaveFileName(self, "Open file", ".","Text files (*.txt)")
+        # print(fname, os.path.isfile(fname[0]))
+        if fname[0] == "":
+            return 0
+        print("Save ", fname[0])
+        with open(fname[0], "w") as f:
+            save_data = self.data
+            if self.avg != None:
+                save_data = self.avg
+            for b in save_data: f.write(str(b)+'\n')
+
+    def filter(self, n):
+        """
+        Функция усредненя списка данных по n точкам.
+
+        Parameters
+        ----------
+        data : list
+            Список со значениями для усредненния
+        n : int
+            Число точек усреднения
+
+        Return
+        ------
+        out : list
+            Список усредненных значений
+        """
+        if(n == "откл."):
+            self.line.setData(self.data)
+            self.avg = None
+            return
+        self.avg = [ sum(x)/len(x) for x in chunks(self.data, int(n)) ]
+        self.line.setData(range(len(self.avg)), self.avg)
+        #     self.vibro_plot(avg)
+        # else: self.vibro_plot(data)
+
+
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     """
     Класс основного окна программы
@@ -983,6 +1088,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.spinBox_T2.setValue(self.init.get_T2())
 
         self.start_flag = False
+        self.plots = list()
 
     def setup_window(self):
         """
@@ -1097,7 +1203,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         t : float
             Задержка между отправкой команды и чтением данных
         """
-        avg = list()
         if not self.wait_data_slot():
             return
         self.waitdata_timer.stop()
@@ -1123,37 +1228,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         # остановка двигателя
         if(self.checkBox_vibro_data_stop.isChecked()):
             self.motor_stop(self.spinBox_vibro_data_n.value())
-        # усреднение данных
-        if self.checkBox_filter.isChecked():
-            avg = self.filter(data, int(self.comboBox_filter.currentText()))
-        self.vibro_plot(avg) #[::-1])
-        # диалог для сохранения данных в файл
-        fname = QtWidgets.QFileDialog.getSaveFileName(self, "Open file", ".","Text files (*.txt)")
-        # print(fname, os.path.isfile(fname[0]))
-        if fname[0] == "":
-            return 0
-        print("Save ", fname[0])
-        with open(fname[0], "w") as f:
-            for b in avg: f.write(str(b)+'\n')
-
-    def filter(self, data : list, n : int = 8) -> list:
-        """
-        Функция усредненя списка данных по n точкам.
-
-        Parameters
-        ----------
-        data : list
-            Список со значениями для усредненния
-        n : int
-            Число точек усреднения
-
-        Return
-        ------
-        out : list
-            Список усредненных значений
-        """
-        print("Filter", n)
-        return [ sum(x)/len(x) for x in chunks(data, n) ]
+        self.vibro_plot(data[::-1])
 
     def vibro_plot(self, data : list):
         """
@@ -1168,15 +1243,17 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         data : list(int)
             Список данных для простроения графиков
         """
-        self.graphWidget3 = pg.PlotWidget()
+        graphWidget3 = GraphPlot()
+        self.plots.append(graphWidget3)
+        graphWidget3.plot(data)
         # self.graphWidget3.setWindowModality(Qt::WindowModal)
-        self.graphWidget3.setBackground((100,50,255,0))
-        self.graphWidget3.setLabel('left', 'Y', **self.styles)
-        self.graphWidget3.addLegend()
-        self.graphWidget3.showGrid(x=True, y=True)
-        pen3 = pg.mkPen(color='b', width=2, style=QtCore.Qt.SolidLine)
-        self.line3 = self.graphWidget3.plot(range(len(data)), data, name=u'АЦП виброметра', symbolBrush='b', symbolSize=6, pen=pen3)
-        self.graphWidget3.show()
+        # graphWidget3.setBackground((100,50,255,0))
+        # graphWidget3.setLabel('left', 'Y', **self.styles)
+        # graphWidget3.addLegend()
+        # graphWidget3.showGrid(x=True, y=True)
+        # pen3 = pg.mkPen(color='b', width=2, style=QtCore.Qt.SolidLine)
+        # graphWidget3.plot(range(len(data)), data, name=u'АЦП виброметра', symbolBrush='b', symbolSize=6, pen=pen3)
+        graphWidget3.show()
 
     def vibro_status_slot(self):
         """
@@ -1705,6 +1782,9 @@ if __name__ == '__main__':
     window = MainWindow()
     # print(sys.getsizeof(2 ** 63))
     # print(type(2 ** 63))
+    plot = GraphPlot()
+    plot.plot(range(1024))
+    plot.show()
     window.setup_window()
     window.show()
 
