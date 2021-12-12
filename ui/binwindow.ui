@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>927</width>
-    <height>1217</height>
+    <width>1093</width>
+    <height>1070</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -473,17 +473,13 @@ color: rgb(32, 74, 135);</string>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
       <property name="title">
        <string>Запрос данных с АЦП виброметра</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="6" column="0" colspan="2">
-        <widget class="QPushButton" name="pushButton_vibro_data">
-         <property name="text">
-          <string>Запросить</string>
-         </property>
-        </widget>
-       </item>
        <item row="0" column="0">
         <widget class="QLabel" name="label_vibro_n">
          <property name="text">
@@ -494,10 +490,10 @@ color: rgb(32, 74, 135);</string>
          </property>
         </widget>
        </item>
-       <item row="4" column="0">
-        <widget class="QCheckBox" name="checkBox_vibro_data_stop">
+       <item row="5" column="0" colspan="2">
+        <widget class="QPushButton" name="pushButton_vibro_data">
          <property name="text">
-          <string>С остановкой двигателя</string>
+          <string>Запросить</string>
          </property>
         </widget>
        </item>
@@ -509,53 +505,14 @@ color: rgb(32, 74, 135);</string>
         </widget>
        </item>
        <item row="3" column="0" colspan="2">
-        <layout class="QHBoxLayout" name="_6">
-         <item>
-          <widget class="QCheckBox" name="checkBox_filter">
-           <property name="text">
-            <string>Фильтр</string>
-           </property>
-           <property name="checked">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QComboBox" name="comboBox_filter">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <item>
-            <property name="text">
-             <string>2</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>4</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>6</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>8</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>16</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-        </layout>
+        <widget class="QCheckBox" name="checkBox_vibro_data_stop">
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
+         </property>
+         <property name="text">
+          <string>С остановкой двигателя</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -638,108 +595,110 @@ color: rgb(32, 74, 135);</string>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
-        <widget class="QLabel" name="portLabel">
-         <property name="text">
-          <string>Номер порта:</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-         </property>
-         <property name="margin">
-          <number>1</number>
-         </property>
-         <property name="buddy">
-          <cstring>portCBox</cstring>
-         </property>
-        </widget>
+        <layout class="QGridLayout" name="gridLayout_3">
+         <item row="0" column="0">
+          <widget class="QLabel" name="portLabel">
+           <property name="text">
+            <string>Номер порта:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           </property>
+           <property name="margin">
+            <number>1</number>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QComboBox" name="portCBox">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>140</width>
+             <height>0</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QComboBox" name="speedCBox">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <item>
+            <property name="text">
+             <string>9600</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>19200</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>38400</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>57600</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>115200</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QLabel" name="speedLabel">
+           <property name="text">
+            <string>Скорость соединения:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           </property>
+           <property name="margin">
+            <number>1</number>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
        <item>
-        <widget class="QComboBox" name="portCBox">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>140</width>
-           <height>0</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="speedLabel">
-         <property name="text">
-          <string>Скорость соединения:</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-         </property>
-         <property name="margin">
-          <number>1</number>
-         </property>
-         <property name="buddy">
-          <cstring>speedCBox</cstring>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QComboBox" name="speedCBox">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
-          <property name="text">
-           <string>9600</string>
-          </property>
+          <widget class="QPushButton" name="refButton">
+           <property name="text">
+            <string>Обновить</string>
+           </property>
+          </widget>
          </item>
          <item>
-          <property name="text">
-           <string>19200</string>
-          </property>
+          <widget class="QPushButton" name="openButton">
+           <property name="text">
+            <string>Открыть</string>
+           </property>
+          </widget>
          </item>
          <item>
-          <property name="text">
-           <string>38400</string>
-          </property>
+          <widget class="QPushButton" name="closeButton">
+           <property name="text">
+            <string>Закрыть</string>
+           </property>
+          </widget>
          </item>
-         <item>
-          <property name="text">
-           <string>57600</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>115200</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="refButton">
-         <property name="text">
-          <string>Обновить</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="openButton">
-         <property name="text">
-          <string>Открыть</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="closeButton">
-         <property name="text">
-          <string>Закрыть</string>
-         </property>
-        </widget>
+        </layout>
        </item>
       </layout>
      </widget>
@@ -751,7 +710,7 @@ color: rgb(32, 74, 135);</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>927</width>
+     <width>1093</width>
      <height>22</height>
     </rect>
    </property>
@@ -759,22 +718,5 @@ color: rgb(32, 74, 135);</string>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>checkBox_filter</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>comboBox_filter</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>116</x>
-     <y>561</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>312</x>
-     <y>561</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>
