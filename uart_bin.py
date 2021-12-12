@@ -863,6 +863,8 @@ class EmittingStream(QtCore.QObject):
 class GraphPlot(QtWidgets.QWidget):
     """
     Класс строит график по входным данным в отдельном окне.
+    В окне в поле 'Фильтр' можно выбрать количество точек для усрежнения, после этого график перестроится автоматически.
+    По нажатию на кнопку 'Сохранить' с помщью диалога для сохранения можно записать значения по которым построен график в файл.
 
     .. figure:: ./png/graph.png
         :scale: 70 %
@@ -1207,11 +1209,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def vibro_plot(self, data : list):
         """
-        Функция строит график по входным данным.
-
-        .. figure:: ./png/graph.png
-            :scale: 70 %
-            :align: center
+        Функция создает новый график
 
         Parameters
         ----------
