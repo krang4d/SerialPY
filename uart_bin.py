@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Serial Port Reader by Pavel Golovkin
+# Author: Pavel Golovkin
 # Feel free to use. No warranty
 
 import sys  # We need sys so that we can pass argv to QApplication
@@ -426,7 +426,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Физприбор"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Физприбор 3.7.40a"))
         self.groupBox_taxo.setTitle(_translate("MainWindow", "Опрос тахометра"))
         self.label_2.setText(_translate("MainWindow", "ADC:"))
         self.label_1.setText(_translate("MainWindow", "Скорость  (oб/мин):"))
@@ -856,6 +856,9 @@ class Inits:
         self._save()
 
 class EmittingStream(QtCore.QObject):
+    """
+    Класс для перенаправления стандартного потока sys.stdout
+    """
     textWritten = QtCore.pyqtSignal(str)
     def write(self, text):
         self.textWritten.emit(str(text))
@@ -1162,7 +1165,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if data[3]: return True
         return False
 
-    def vibro_data_slot(self, t = 2.3):
+    def vibro_data_slot(self, t = 0.7):
         """
         Функция отправляет запрос данных с АЦП виброметра.
         Запрос отправляется только, если проверка готовности данных прошла успешно.
@@ -1532,7 +1535,7 @@ class NumbersIterator:
 
 def _FileLogger(func):
     """
-    Декоратор для ведения лог файла, записыват возвращаемое значение функции в файл.
+    Декоратор для ведения лог файла, записывает возвращаемое значение функции в файл.
     """
     _file_name = "uart.log" # имя лог файла
     def wrapper(*args, **kwargs):
